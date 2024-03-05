@@ -1,8 +1,12 @@
 /* This CSS stylesheet will be implemented for all pages. It changes the background color */
 
 body {
-    /* background-color: rgb(31, 31, 31); */
+    background-color: rgb(31, 31, 31);
   }
+
+h1,h3,p {
+    color: white;
+}
 
 input[type=text], input[type=password] {
    border: 2px solid black;
