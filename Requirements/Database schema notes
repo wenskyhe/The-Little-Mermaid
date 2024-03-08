@@ -1,0 +1,105 @@
+E-Learning Platform Database Overview:
+
+	1.	Users
+	•	Contains: Everyone who uses the site (students, professors, admins).
+	•	Details Stored: Name, contact info, unique username, and securely stored password.
+	•	Purpose: Identifies and authenticates users on the platform.
+	2.	Admins
+	•	Contains: Special users who manage the platform.
+	•	Special Power: Can change anything on the platform, depending on their access level.
+	3.	Students
+	•	Contains: Users enrolled to learn.
+	•	Details Stored: Their academic progress and GPA.
+	4.	Professors
+	•	Contains: Users teaching courses.
+	•	Details Stored: Which department they belong to.
+	5.	Courses
+	•	Contains: All the courses available.
+	•	Details Stored: What the course covers, where it’s located, and its credit value.
+	6.	Course Assignments
+	•	Links: Which professors teach which courses.
+	•	Details Stored: When the course is being taught.
+	7.	Grades
+	•	Links: Students’ performance in their courses.
+	•	Purpose: Used to calculate GPAs based on course achievements.
+
+
+CREATE TABLE Users (
+    UserID INT AUTO_INCREMENT PRIMARY KEY,
+    Username VARCHAR(255) NOT NULL UNIQUE,
+    FirstName VARCHAR(255) NOT NULL
+    LastName VARCHAR(255) NOT NULL,
+    PhoneNumber VARCHAR(15),
+    Email VARCHAR(255) NOT NULL UNIQUE,
+    PasswordHash VARBINARY(255) NOT NULL,
+    UserType ENUM('Admin', 'Student', 'Professor') NOT NULL
+);
+
+CREATE TABLE Admins (
+    AdminID INT PRIMARY KEY,
+    FullAccess BOOLEAN NOT NULL DEFAULT TRUE,
+    FOREIGN KEY (AdminID) REFERENCES Users(UserID)
+);
+
+CREATE TABLE Students (
+    StudentID INT PRIMARY KEY,
+    GPA DECIMAL(3, 2) DEFAULT NULL,
+    FOREIGN KEY (StudentID) REFERENCES Users(UserID)
+);
+
+
+CREATE TABLE Professors (
+    ProfessorID INT PRIMARY KEY,
+    Department VARCHAR(255) NOT NULL,
+    FOREIGN KEY (ProfessorID) REFERENCES Users(UserID)
+);
+
+CREATE TABLE Courses (
+    CourseID INT AUTO_INCREMENT PRIMARY KEY,
+    Subject VARCHAR(255) NOT NULL,
+    CourseNumber VARCHAR(255) NOT NULL,
+    Section VARCHAR(255) NOT NULL,
+    Credits INT,
+    Location VARCHAR(255)
+);
+
+
+CREATE TABLE CourseAssignments (
+    AssignmentID INT AUTO_INCREMENT PRIMARY KEY,
+    ProfessorID INT,
+    CourseID INT,
+    Semester VARCHAR(255) NOT NULL,
+    Year INT NOT NULL,
+    FOREIGN KEY (ProfessorID) REFERENCES Professors(ProfessorID),
+    FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
+);
+
+
+CREATE TABLE Grades (
+    GradeID INT AUTO_INCREMENT PRIMARY KEY,
+    StudentID INT,
+    CourseID INT,
+    GradeValue DECIMAL(3, 2),
+    FOREIGN KEY (StudentID) REFERENCES Students(StudentID),
+    FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
+);
+
+CREATE TABLE PasswordPolicy (
+    PolicyID INT AUTO_INCREMENT PRIMARY KEY,
+    MinimumLength INT NOT NULL,
+    RequiresSpecial CHAR(1) NOT NULL,
+    RequiresNumber CHAR(1) NOT NULL,
+    RequiresUpper CHAR(1) NOT NULL,
+    RequiresLower CHAR(1) NOT NULL,
+    PolicyDescription TEXT
+);
+
+
+
+
+
+
+
+
+
+
