@@ -54,25 +54,27 @@ CREATE TABLE Professors (
     FOREIGN KEY (ProfessorID) REFERENCES Users(UserID)
 );
 
-CREATE TABLE Courses (
-    CourseID INT AUTO_INCREMENT PRIMARY KEY,
-    Subject VARCHAR(255) NOT NULL,
-    CourseNumber VARCHAR(255) NOT NULL,
-    Section VARCHAR(255) NOT NULL,
-    Credits INT,
-    Location VARCHAR(255)
-);
+CREATE TABLE CourseAssignments(
+	AssignmentName VARCHAR(50),
+CourseID INT,
+ProfrssorID INT,
+ReleaseDate TimeStamp,
+DueDate TimeStamp,
+PRIMARY KEY(CourseID, AssignmentName),
+FOREIGN KEY (ProfessorID) REFERENCES Professors(ProfessorID),
+FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
+)
 
-
-CREATE TABLE CourseAssignments (
-    AssignmentID INT AUTO_INCREMENT PRIMARY KEY,
-    ProfessorID INT,
-    CourseID INT,
-    Semester VARCHAR(255) NOT NULL,
-    Year INT NOT NULL,
-    FOREIGN KEY (ProfessorID) REFERENCES Professors(ProfessorID),
-    FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
-);
+CREATE TABLE Assignments(
+	AssignmentName VARCHAR(50),
+CourseID INT,
+StudentID INT,
+Grade INT DEFAULT 0,
+SubmissionTime TimeStamp,
+FOREIGN KEY (AssignmentName) REFERENCES CourseAssignments(AssignmentName),
+FOREIGN KEY (CourseID) REFERENCES Courses(CourseID),
+FOREIGN KEY (StudentID) REFERENCES Students(StudentID ),
+)
 
 
 CREATE TABLE Grades (
