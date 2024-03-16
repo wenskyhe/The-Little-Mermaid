@@ -56,24 +56,25 @@ CREATE TABLE Professors (
 
 CREATE TABLE CourseAssignments(
 	AssignmentName VARCHAR(50),
-CourseID INT,
-ProfrssorID INT,
-ReleaseDate TimeStamp,
-DueDate TimeStamp,
-PRIMARY KEY(CourseID, AssignmentName),
-FOREIGN KEY (ProfessorID) REFERENCES Professors(ProfessorID),
-FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
+	CourseID INT,
+	ProfrssorID INT,
+	ReleaseDate TimeStamp,
+	DueDate TimeStamp,
+	PRIMARY KEY(CourseID, AssignmentName),
+	FOREIGN KEY (ProfessorID) REFERENCES Professors(ProfessorID),
+	FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
 )
 
 CREATE TABLE Assignments(
 	AssignmentName VARCHAR(50),
-CourseID INT,
-StudentID INT,
-Grade INT DEFAULT 0,
-SubmissionTime TimeStamp,
-FOREIGN KEY (AssignmentName) REFERENCES CourseAssignments(AssignmentName),
-FOREIGN KEY (CourseID) REFERENCES Courses(CourseID),
-FOREIGN KEY (StudentID) REFERENCES Students(StudentID ),
+	CourseID INT,
+	StudentID INT,
+	Grade INT DEFAULT 0,
+	SubmissionTime TimeStamp,
+	PRIMARY KEY(AssignmentName, CourseID, AssignmentName),
+	FOREIGN KEY (AssignmentName) REFERENCES CourseAssignments(AssignmentName),
+	FOREIGN KEY (CourseID) REFERENCES Courses(CourseID),
+	FOREIGN KEY (StudentID) REFERENCES Students(StudentID ),
 )
 
 
