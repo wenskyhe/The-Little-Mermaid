@@ -15,16 +15,17 @@ $lastName = $conn ->real_escape_string($_POST["lname"]);
 $userName = $firstName . '_' . $lastName;
 $email = $conn ->real_escape_string($_POST["email"]);
 $phoneNumber = $conn ->real_escape_string($_POST["phoneNumber"]); // Corrected variable name
-$password = $conn->real_escape_string($_POST["confirmPassword"]);
+$userPassword = $conn->real_escape_string($_POST["confirmPassword"]);
 $systemType = $conn ->real_escape_string($_POST["TeacherOrStudent"]);
 
-$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+// $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
 $stmt = $conn -> prepare("INSERT INTO Users (userType, firstName, lastName, userName, email, phoneNumber, passwordHash) VALUES (?, ?, ?, ?, ?, ?, ?)"); // Corrected SQL statement
-$stmt ->bind_param("sssssss", $systemType, $firstName, $lastName, $userName, $email, $phoneNumber, $hashedPassword);
+$stmt ->bind_param("sssssss", $systemType, $firstName, $lastName, $userName, $email, $phoneNumber, $userPassword);
 
 if ($stmt->execute()) {
     echo "Welcome to AquaDemia ". $firstName ." ". $lastName ." ";
+    header("Location: ../../Pages/login.html");
 } else {
     echo "Error: ". $stmt->error;
 }

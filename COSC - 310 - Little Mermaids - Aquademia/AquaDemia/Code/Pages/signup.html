@@ -12,11 +12,11 @@
     <h1 class="h1 logo" style="text-align: center; padding-top: 0%;">AQUADEMIA</h1>
      <h3 style="font-family: Arial, Helvetica, sans-serif; text-align: center;">Sign up as a teacher or student:</h3>
 
-    <form style="text-align: center;">
+    <form action="../Assets/PHP/signupPage.php" style="text-align: center;" method="post">
         <input type="text" placeholder="Enter your first name"  id="fname" name="fname"><br>
         <input type="text" placeholder="Enter your last name" id="lname" name="lname"><br>
         <input type="text" placeholder="Enter your email" id="email" name="email"><br>
-        <input type="text" placeholder="Enter your phone number" id="phoneNumber" name="fname"><br>
+        <input type="text" placeholder="Enter your phone number" id="phoneNumber" name="phoneNumber"><br>
         <input type="password" placeholder="Create a password" id="password" name="password"><br>  
         <input type="password" placeholder="Confirm your password" id="confirmPassword" name="confirmPassword"><br>
         <div style="padding-top: 1%; accent-color: #40026f;">   
@@ -25,11 +25,10 @@
         <input type="radio" name = "TeacherOrStudent" value="Student"><b style="font-family: Arial, Helvetica, sans-serif; font-size: 20px;" >Student</b>
     </input> 
         </div> 
-    </form> 
-
-    <div style="text-align: center; padding-top: 1%;">
+    
         <button class="button button1" style="align-self: center;">Sign Up</button> 
     </div>
+    </form>
 
     <div style="font-family: Arial, Helvetica, sans-serif; text-align: center;">
         <p>Already a member? <a href="login.html">Sign In</a> </p>

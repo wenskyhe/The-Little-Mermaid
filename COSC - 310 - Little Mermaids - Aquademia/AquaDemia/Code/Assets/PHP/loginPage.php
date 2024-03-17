@@ -13,13 +13,13 @@
     $uname = $_POST['uname'];
     $psw = $_POST['psw'];
 
-    $stmt = $conn->prepare("SELECT UserID, PasswordHash FROM Users WHERE Username = :uname");
+    $stmt = $conn->prepare("SELECT UserID, PasswordHash, UserType FROM Users WHERE Username = :uname");
     $stmt->bindParam(':uname', $uname);
     $stmt->execute();
     
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user && password_verify($psw, $user['PasswordHash'])) {
+    if ($user && ($psw == $user['PasswordHash'])) {
         // Password is correct
         $_SESSION["loggedin"] = true;
         $_SESSION["UserID"] = $user['UserID'];
@@ -27,10 +27,23 @@
 
         // Redirect to welcome page
         echo "Welcome back " . $uname . " we are Happy to see you Again!";
+
+        if($user['UserType'] == "Admin"){
+            header("Location: ../../Pages/adminView.php");
+        }
+        else if($user['UserType'] == "Student"){
+            header("Location: ../../Pages/studentView.php");
+        }
+        else if($user['UserType'] == "Teacher"){
+            header("Location: ../../Pages/teacherView.php");
+        }
     } else {
         // Display an error message
-        echo "The password you entered was not valid.";
+        $alertMessage = "The password you entered was incorrect!";
+        echo $alertMessage;
+        header("Location: ../../Pages/login.html");
     }
+
     } catch(PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
     }
