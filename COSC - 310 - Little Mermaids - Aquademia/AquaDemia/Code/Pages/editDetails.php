@@ -6,28 +6,29 @@ $username = "root";
 $password = "";
 $dbname = "aquademia";
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Connection Failed". $conn->connect_error);
+try {
+    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    //Grab the username from the universal global variable "Username"
+    $uname = $_SESSION["Username"];
+    
+    //SQL statement to grab user's existing firstname, lastname, phonenumber, email and password. These are what will be updated
+    $stmt = $conn->prepare("SELECT FirstName, LastName, PhoneNumber, Email, PasswordHash FROM Users WHERE Username = :uname");
+    $stmt->bindParam(':uname', $uname);
+    $stmt->execute();
+
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    //Assign these to variables that will be used in the html code down below
+    $firstname = $user["FirstName"];
+    $lastname = $user["LastName"];
+    $email = $user["Email"];
+    $phonenumber = $user["PhoneNumber"];
 }
-
-$sql = "SELECT Username, FirstName, LastName, PhoneNumber, Email, PasswordHash FROM Users";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    // output data of each row
-    while($row = $result->fetch_assoc()) {
-        $firstname = $row["FirstName"];
-        $lastname = $row["LastName"];
-        $phonenumber = $row["PhoneNumber"];
-        $email = $row["Email"];
-        $user_password = $row["PasswordHash"];
-        $_SESSION["user_password"] = $user_password;
-    }
-  } else {
-    echo "0 results";
-  }
-  $conn->close();
+catch (Exception $e){
+    echo "Connection failed: " . $e->getMessage();
+}
   ?>
 
 <!DOCTYPE html>
@@ -52,12 +53,13 @@ if ($result->num_rows > 0) {
     <a id = "pnumLabel"><?= $phonenumber?></a>
         <input type="text" value="<?= $phonenumber?>" id="phoneNumber" name="phoneNumber" hidden><input type="checkbox" id="editPnum"><br>
     <!-- Once we get the database working, the placeholder will be the user's previous details     -->
-        <input type="password" placeholder="Enter your old password" id="password" name="oldPassword"><br>
+    <!-- Add eye option -->
+    <input type="password" placeholder="Enter your old password" id="password" name="oldPassword"><br>
         <input type="password" placeholder="Create a password" id="password" name="password"><br>  
         <input type="password" placeholder="Confirm your password" id="confirmPassword" name="confirmPassword"><br>
     <button class="button button1" style="margin-top: 5%;" id="buttonSaveChanges">Save changes</button>
 </form> 
-    <button class="button button1" id="buttonGoBack" onclick="goBack()">Back</button>
+    <button class="button button1" id="buttonGoBack" onclick="history.back()">Back</button>
 
     <script>
         // Get references to form elements
@@ -70,6 +72,7 @@ if ($result->num_rows > 0) {
         const email = document.getElementById('email');
         const pnum = document.getElementById('phoneNumber');
 
+        //If user clicks on a checkbox, they will have the option to change that field
         editFname.addEventListener('change', function() {
             fname.hidden = !this.checked;
             fnameLabel.hidden = this.checked;});
@@ -83,9 +86,6 @@ if ($result->num_rows > 0) {
             pnum.hidden = !this.checked;
             pnumLabel.hidden = this.checked;});
 
-        function goBack() {
-            window.location.href = 'adminView.php';
-        }
     </script>
 
 </body>

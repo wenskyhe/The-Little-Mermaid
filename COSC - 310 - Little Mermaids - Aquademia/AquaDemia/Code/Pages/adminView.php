@@ -1,6 +1,10 @@
 <?php 
 session_start();
-?>
+
+$usertype = $_SESSION["UserType"];
+// Only display this page if the user is an admin;
+if($usertype == "Admin"){
+    echo '
 
 <!DOCTYPE html>
 <html lang="en">
@@ -19,3 +23,10 @@ session_start();
 
 </body>
 </html>
+';
+}
+
+//Else if the user is not an admin, give them an error;
+else {echo 'ERROR! You must be an admin to access this page! <br>';
+    echo '<a href="login.html">Go back to login</a>';}
+?>

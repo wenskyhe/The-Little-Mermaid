@@ -24,17 +24,15 @@
         $_SESSION["loggedin"] = true;
         $_SESSION["UserID"] = $user['UserID'];
         $_SESSION["Username"] = $uname;
-
-        // Redirect to welcome page
-        echo "Welcome back " . $uname . " we are Happy to see you Again!";
+        $_SESSION["UserType"] = $user['UserType'];
 
         if($user['UserType'] == "Admin"){
             header("Location: ../../Pages/adminView.php");
         }
-        else if($user['UserType'] == "Student"){
+        elseif($user['UserType'] == "Student"){
             header("Location: ../../Pages/studentView.php");
         }
-        else if($user['UserType'] == "Teacher"){
+        elseif($user['UserType'] == "Teacher"){
             header("Location: ../../Pages/teacherView.php");
         }
     } else {
