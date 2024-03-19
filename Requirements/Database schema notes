@@ -27,7 +27,7 @@ E-Learning Platform Database Overview:
 CREATE TABLE Users (
     UserID INT AUTO_INCREMENT PRIMARY KEY,
     Username VARCHAR(255) NOT NULL UNIQUE,
-    FirstName VARCHAR(255) NOT NULL
+    FirstName VARCHAR(255) NOT NULL,
     LastName VARCHAR(255) NOT NULL,
     PhoneNumber VARCHAR(15),
     Email VARCHAR(255) NOT NULL UNIQUE,
@@ -54,6 +54,15 @@ CREATE TABLE Professors (
     FOREIGN KEY (ProfessorID) REFERENCES Users(UserID)
 );
 
+CREATE TABLE Courses (
+    CourseID INT AUTO_INCREMENT PRIMARY KEY,
+    Subject VARCHAR(255) NOT NULL,
+    CourseNumber VARCHAR(255) NOT NULL,
+    Section VARCHAR(255) NOT NULL,
+    Credits INT,
+    Location VARCHAR(255)
+);
+
 CREATE TABLE CourseAssignments(
 	AssignmentName VARCHAR(50),
 	CourseID INT,
@@ -71,7 +80,7 @@ CREATE TABLE Assignments(
 	StudentID INT,
 	Grade INT DEFAULT -1,
 	SubmissionTime TimeStamp,
-	PRIMARY KEY(AssignmentName, CourseID, AssignmentName),
+	PRIMARY KEY(AssignmentName, CourseID, StudentID),
 	FOREIGN KEY (AssignmentName) REFERENCES CourseAssignments(AssignmentName),
 	FOREIGN KEY (CourseID) REFERENCES Courses(CourseID),
 	FOREIGN KEY (StudentID) REFERENCES Students(StudentID ),
