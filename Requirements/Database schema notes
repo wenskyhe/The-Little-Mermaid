@@ -47,11 +47,18 @@ CREATE TABLE Students (
     FOREIGN KEY (StudentID) REFERENCES Users(UserID)
 );
 
-
 CREATE TABLE Professors (
     ProfessorID INT PRIMARY KEY,
     Department VARCHAR(255) NOT NULL,
     FOREIGN KEY (ProfessorID) REFERENCES Users(UserID)
+);
+
+CREATE TABLE studentRegistration (
+    StudentID INT,
+    CourseID INT,
+    PRIMARY KEY(StudentID, CourseID),
+    FOREIGN KEY (StudentID) REFERENCES Users(UserID),
+    FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
 );
 
 CREATE TABLE Courses (
