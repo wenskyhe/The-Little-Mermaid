@@ -27,7 +27,7 @@ E-Learning Platform Database Overview:
 CREATE TABLE Users (
     UserID INT AUTO_INCREMENT PRIMARY KEY,
     Username VARCHAR(255) NOT NULL UNIQUE,
-    FirstName VARCHAR(255) NOT NULL
+    FirstName VARCHAR(255) NOT NULL,
     LastName VARCHAR(255) NOT NULL,
     PhoneNumber VARCHAR(15),
     Email VARCHAR(255) NOT NULL UNIQUE,
@@ -60,28 +60,38 @@ CREATE TABLE Courses (
     CourseNumber VARCHAR(255) NOT NULL,
     Section VARCHAR(255) NOT NULL,
     Credits INT,
-    Location VARCHAR(255)
 );
 
-
-CREATE TABLE CourseAssignments (
-    AssignmentID INT AUTO_INCREMENT PRIMARY KEY,
-    ProfessorID INT,
-    CourseID INT,
-    Semester VARCHAR(255) NOT NULL,
-    Year INT NOT NULL,
-    FOREIGN KEY (ProfessorID) REFERENCES Professors(ProfessorID),
-    FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
-);
-
-
-CREATE TABLE Grades (
-    GradeID INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE studentRegistration (
     StudentID INT,
     CourseID INT,
-    GradeValue DECIMAL(3, 2),
-    FOREIGN KEY (StudentID) REFERENCES Students(StudentID),
+    PRIMARY KEY(StudentID, CourseID),
+    FOREIGN KEY (StudentID) REFERENCES Users(UserID),
     FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
+);
+
+
+CREATE TABLE CourseAssignments(
+	AssignmentName VARCHAR(50),
+	CourseID INT,
+	ProfrssorID INT,
+	ReleaseDate TimeStamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	DueDate TimeStamp,
+	PRIMARY KEY(CourseID, AssignmentName),
+	FOREIGN KEY (ProfessorID) REFERENCES Professors(ProfessorID),
+	FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
+);
+
+CREATE TABLE Assignments(
+	AssignmentName VARCHAR(50),
+	CourseID INT,
+	StudentID INT,
+	Grade INT DEFAULT -1,
+	SubmissionTime TimeStamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	PRIMARY KEY(AssignmentName, CourseID, StudentID),
+	FOREIGN KEY (AssignmentName) REFERENCES CourseAssignments(AssignmentName),
+	FOREIGN KEY (CourseID) REFERENCES Courses(CourseID),
+	FOREIGN KEY (StudentID) REFERENCES Students(StudentID ),
 );
 
 CREATE TABLE PasswordPolicy (
