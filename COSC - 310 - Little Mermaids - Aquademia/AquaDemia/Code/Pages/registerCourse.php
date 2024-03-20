@@ -7,9 +7,19 @@
     <link rel="stylesheet" href="../Assets/CSS/central.css">
 </head>
 <body>
-    <header>
-        <!-- Navigation bar, similar structure to createCourses.html -->
-    </header>
+    <header>  
+        <div class="container">
+          <img src="../Assets/Images/logo.png" width="60" height="75" class = "logo">
+            <navBar>
+              <navBarElements>
+                <li><a href="#">Classes v</a></li>
+                <li><a href="#">Assignments</a></li>
+                <li><a href="#">Grades</a></li>
+                <li><a href="#">Settings</a></li>
+              </navBarElements>
+            </navbar>
+        </div>
+      </header>
     <div style="padding-left: 10%;">
         <h1 style="padding-top: 5%;">Register for a Course</h1>
         <form action="../Assets/PHP/registerCourseManager.php" method="post">
