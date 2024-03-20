@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $conn->close();
 } else {
     // Redirect to the registration form if the page is accessed directly without posting form data
-    header("Location: ../registerCourse.php");
+    header("Location: ../registerCourse.html");
     exit();
 }
 ?>
