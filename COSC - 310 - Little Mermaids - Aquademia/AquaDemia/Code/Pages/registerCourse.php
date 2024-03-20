@@ -10,14 +10,14 @@
     <header>
         <div class="container">
             <img src="../Assets/Images/logo.png" width="60" height="75" class = "logo">
-            <nav>
-                <ul>
+            <navBar>
+              <navBarElements>
                     <li><a href="#">Classes</a></li>
                     <li><a href="#">Assignments</a></li>
                     <li><a href="#">Grades</a></li>
                     <li><a href="#">Settings</a></li>
-                </ul>
-            </nav>
+                <navBar>
+              <navBarElements>
         </div>
     </header>
     <div style="padding-left: 10%;">
