@@ -9,15 +9,15 @@
 <body>
     <header>
         <div class="container">
-            <img src="../Assets/Images/logo.png" width="60" height="75" class="logo">
-            <navBar>
-                <navBarElements>
-                    <li><a href="#">Classes v</a></li>
+            <img src="../Assets/Images/logo.png" alt="logo" width="60" height="75" class="logo">
+            <nav>
+                <ul>
+                    <li><a href="#">Classes</a></li>
                     <li><a href="#">Assignments</a></li>
                     <li><a href="#">Grades</a></li>
                     <li><a href="#">Settings</a></li>
-                </navBarElements>
-            </navBar>
+                </ul>
+            </nav>
         </div>
     </header>
     <div style="padding-left: 10%;">
