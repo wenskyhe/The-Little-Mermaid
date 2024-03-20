@@ -23,7 +23,8 @@
     <div style="padding-left: 10%;">
         <h1 style="padding-top: 5%;">Register for a Course</h1>
         <form action="../Assets/PHP/registerCourseManager.php" method="post">
-            <input type="text" placeholder="Enter course ID" id="courseId" name="courseId"><br>
+            <input type="text" placeholder="Enter Course ID" id="courseId" name="courseId"><br>
+            <input type="text" placeholder="Enter Student ID" id="studentId" name="studentId"><br>
             <button class="button button1" style="margin-top: 5%;">Register</button>
         </form>
     </div>
