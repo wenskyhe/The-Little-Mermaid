@@ -9,7 +9,7 @@
 <body>
     <header>
         <div class="container">
-            <img src="../Assets/Images/logo.png" alt="logo" width="60" height="75" class="logo">
+            <img src="../Assets/Images/logo.png" width="60" height="75" class = "logo">
             <nav>
                 <ul>
                     <li><a href="#">Classes</a></li>
