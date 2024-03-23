@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "<script>alert('You are already registered for this course.'); window.location.href='../registerCourse.php';</script>";
     } else {
 
-        $insertQuery = "INSERT INTO course_registrations (courseId, studentId) VALUES ('$courseId', '$studentId')";
+        $insertQuery = "INSERT INTO course_registrations (courseId, studentId) VALUES ('$courseId')";
         
         if ($conn->query($insertQuery) === TRUE) {
 
