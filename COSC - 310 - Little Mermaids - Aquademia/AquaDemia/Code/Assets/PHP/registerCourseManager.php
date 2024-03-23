@@ -1,10 +1,10 @@
 <?php
 
 
-$host = 'localhost'; 
-$username = 'your_username'; 
-$password = 'your_password'; 
-$database = 'your_database_name';
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "aquademia";
 
 
 $conn = new mysqli($host, $username, $password, $database);
