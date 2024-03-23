@@ -7,7 +7,7 @@ $password = "";
 $dbname = "aquademia";
 
 
-$conn = new mysqli($host, $username, $password, $database);
+$conn = new mysqli($servername, $username, $password, $dbname);
 
 
 if ($conn->connect_error) {
