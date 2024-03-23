@@ -18,10 +18,10 @@ if ($conn->connect_error) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $courseId = $_POST['courseId'];
-    $studentId = $_POST['studentId'];
+   // $studentId = $_POST['studentId'];
 
     $courseId = $conn->real_escape_string($courseId);
-    $studentId = $conn->real_escape_string($studentId);
+   // $studentId = $conn->real_escape_string($studentId);
 
     $query = "SELECT * FROM course_registrations WHERE courseId = '$courseId' AND studentId = '$studentId'";
     $result = $conn->query($query);
