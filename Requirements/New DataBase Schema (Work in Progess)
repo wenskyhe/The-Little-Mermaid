@@ -11,14 +11,15 @@
 - **CourseID** (Primary Key): Unique identifier for each course.
 - **CourseName**: Name of the course.
 - **CourseDescription**: A brief description of what the course is about.
-- **CoursePrequiste**: The prequistes for the course.
-- **InstructorID** (Foreign Key): ID of the instructor teaching the course.
+- **CoursePrequiste**: A statement describing the prequisite for the course.
+- **AdminID** (Foreign Key): ID of the instructor teaching the course.
 
 #3. Enrollments Table
 - **EnrollmentID** (Primary Key): Unique identifier for each enrollment.
 - **UserID** (Foreign Key): ID of the user enrolled in the course.
 - **CourseID** (Foreign Key): ID of the course the user is enrolled in.
 - **EnrollmentDate**: Date when the user enrolled in the course.
+- **Pending**: Boolean: True if userID meets the courseID course prerequisites.
 
 #4. Assignments Table
 - **AssignmentID** (Primary Key): Unique identifier for each assignment.
@@ -48,98 +49,203 @@
 - **ResponseText**: The text of the response.
 - **ResponseDate**: Date and time the response was made.
 
+Considerations:
+
+Assigning Instructors to Courses: Since courses are created by admins, you'll need a mechanism to assign instructors to courses. This could be a new table or an adjustment to existing structures.
+Prerequisite Checking Logic: The CoursePrerequisite format and the logic to evaluate these prerequisites need to be designed thoughtfully. It might involve application logic outside the database to interpret these prerequisites and update the Pending status accordingly. 
 
 
-Example of How 4 users would interact with the database:
+
+Example of How 5 users would interact with the database:
+
+To illustrate how the five users would interact with the updated database schema, let's first define our users, then a course, and demonstrate the interactions across the tables.
 
 #Step 1: Define Users
 
-| UserID | Username     | Password | FirstName | LastName | Email                    | Role        |
-|--------|--------------|----------|-----------|----------|--------------------------|-------------|
-| 1      | teacher_anna | ******** | Anna      | Bell     | anna.bell@example.com    | Instructor  |
-| 2      | teacher_john | ******** | John      | Doe      | john.doe@example.com     | Instructor  |
-| 3      | student_alex | ******** | Alex      | Young    | alex.young@example.com   | Student     |
-| 4      | student_emma | ******** | Emma      | Stone    | emma.stone@example.com   | Student     |
+#Users Table
 
-#Step 2: Define Courses
+| UserID | Username       | Password | FirstName | LastName | Email                       | Role          |
+|--------|----------------|----------|-----------|----------|-----------------------------|---------------|
+| 1      | admin_mary     | ******** | Mary      | Johnson  | mary.johnson@example.com    | Administrator |
+| 2      | teacher_anna   | ******** | Anna      | Bell     | anna.bell@example.com       | Instructor    |
+| 3      | teacher_john   | ******** | John      | Doe      | john.doe@example.com        | Instructor    |
+| 4      | student_alex   | ******** | Alex      | Young    | alex.young@example.com      | Student       |
+| 5      | student_emma   | ******** | Emma      | Stone    | emma.stone@example.com      | Student       |
 
-| CourseID | CourseName               | CourseDescription               | CoursePrequisite | InstructorID |
-|----------|--------------------------|---------------------------------|------------------|--------------|
-| 1        | Intro to Programming     | Basics of programming           | None             | 1            |
-| 2        | Advanced Mathematics     | In-depth study of mathematics   | Intro to Programming | 2          |
+#Step 2: Create Courses
 
-# Step 3: Enrollments
+Admin Mary creates two courses, assigning each course to a teacher.
 
-Alex and Emma decide to enroll in both courses:
+#Courses Table
 
-| EnrollmentID | UserID | CourseID | EnrollmentDate |
-|--------------|--------|----------|----------------|
-| 1            | 3      | 1        | 2024-03-01     |
-| 2            | 3      | 2        | 2024-03-02     |
-| 3            | 4      | 1        | 2024-03-01     |
-| 4            | 4      | 2        | 2024-03-02     |
+| CourseID | CourseName                  | CourseDescription            | CoursePrequiste   | AdminID |
+|----------|-----------------------------|------------------------------|-------------------|---------|
+| 1        | Intro to Programming        | Basics of programming        | None              | 1       |
+| 2        | Advanced Mathematics        | In-depth study of mathematics| Intro to Programming | 1     |
 
-#Step 4: Assignments by Instructors
+#Step 3: Teachers and Courses Interaction
 
-Anna creates an assignment for "Intro to Programming":
+Since Mary, the Admin, assigns teachers to courses after creation, let's assume she assigns Anna to "Intro to Programming" and John to "Advanced Mathematics".
+
+#Step 4: Student Enrollments
+
+Both students attempt to enroll in both courses. Given "Advanced Mathematics" has a prerequisite, their enrollment in this course will be pending until they complete "Intro to Programming".
+
+#Enrollments Table
+
+| EnrollmentID | UserID | CourseID | EnrollmentDate | Pending  |
+|--------------|--------|----------|----------------|----------|
+| 1            | 4      | 1        | 2024-03-01     | False    |
+| 2            | 4      | 2        | 2024-03-02     | True     |
+| 3            | 5      | 1        | 2024-03-01     | False    |
+| 4            | 5      | 2        | 2024-03-02     | True     |
+
+#Step 5: Assignments and Submissions
+
+Anna creates an assignment for "Intro to Programming".
+
+#Assignments Table
 
 | AssignmentID | CourseID | Title           | Description             | DueDate   |
 |--------------|----------|-----------------|-------------------------|-----------|
 | 1            | 1        | Hello World     | Create a simple program | 2024-03-15|
 
-John creates an assignment for "Advanced Mathematics":
+Alex and Emma submit their assignments.
 
-| AssignmentID | CourseID | Title          | Description               | DueDate   |
-|--------------|----------|----------------|---------------------------|-----------|
-| 2            | 2        | Solve Equations| Solve the given equations | 2024-03-20|
-
-#Step 5: Submissions by Students
-
-Alex submits to both assignments:
+#Submissions Table
 
 | SubmissionID | AssignmentID | UserID | SubmissionDate | Grade |
 |--------------|--------------|--------|----------------|-------|
-| 1            | 1            | 3      | 2024-03-14     | NULL  |
-| 2            | 2            | 3      | 2024-03-19     | NULL  |
+| 1            | 1            | 4      | 2024-03-14     | 90    |
+| 2            | 1            | 5      | 2024-03-14     | 95    |
 
-Emma also submits to both assignments:
+#Step 6: Discussions and Responses
 
-| SubmissionID | AssignmentID | UserID | SubmissionDate | Grade |
-|--------------|--------------|--------|----------------|-------|
-| 3            | 1            | 4      | 2024-03-14     | NULL  |
-| 4            | 2            | 4      | 2024-03-19     | NULL  |
+John initiates a discussion in "Advanced Mathematics".
 
-#Step 6: Discussions Initiated by a Teacher
-
-Anna initiates a discussion in "Intro to Programming":
+#Discussions Table
 
 | DiscussionID | CourseID | UserID | Title          | InitialPost                    |
 |--------------|----------|--------|----------------|--------------------------------|
-| 1            | 1        | 1      | Program Ideas  | "What projects interest you?"  |
+| 1            | 2        | 3      | Math Concepts  | "Discuss the latest math concepts." |
 
-#Step 7: Discussion Responses by Students
+Alex and Emma participate in the discussion.
 
-Alex responds to the discussion:
+#DiscussionResponses Table
 
-| ResponseID | DiscussionID | UserID | ResponseText                  | ResponseDate |
-|------------|--------------|--------|-------------------------------|--------------|
-| 1          | 1            | 3      | "Interested in game development!" | 2024-03-05 |
-
-Emma responds to the discussion:
-
-| ResponseID | DiscussionID | UserID | ResponseText                  | ResponseDate |
-|------------|--------------|--------|-------------------------------|--------------|
-| 2          | 1            | 4      | "I'm curious about web apps." | 2024-03-06 |
+| ResponseID | DiscussionID | UserID | ResponseText                     | ResponseDate |
+|------------|--------------|--------|----------------------------------|--------------|
+| 1          | 1            | 4      | "I'm curious about algebraic geometry." | 2024-03-05 |
+| 2          | 1            | 5      | "What about non-Euclidean geometry?" | 2024-03-06 |
 
 
 Illustration and Explanation:
 
-1. **User Creation**: Four users are created, two instructors (Anna and John) and two students (Alex and Emma). Each user has a unique role that determines their interaction with the course material.
+1. **Admin Role**: Mary creates courses and assigns instructors. This role is critical for setting up the structure of the learning platform.
+2. **Instructor Role**: Anna and John are responsible for their assigned courses, including creating assignments and initiating discussions. They guide the learning process and evaluate student submissions.
+3. **Student Role**: Alex and Emma enroll in courses, submit assignments, and engage in course discussions. Their enrollment in "Advanced Mathematics" is pending until they meet the prerequisite, illustrating the logic behind course prerequisites and enrollment status.
 
-2. **Course Enrollment**: Both students enroll in both available courses, establishing a relationship between users and courses they are interested in or required to take.
 
-3. **Assignment Creation and Submission**: The instructors create assignments for their courses, which are then submitted to by the students. This illustrates how coursework is distributed, completed, and tracked within the system.
+HERE IS THE MODIFIED SQL SCHEMA FOR THE DATABASE:
 
-4. **Discussions and Engagement**: Anna initiates a discussion related to her course, prompting students to engage with each other and the instructor. This fosters a sense of community and provides a platform for sharing ideas and interests.
+-- Dropping existing view if it exists to avoid conflicts during recreation
+DROP VIEW IF EXISTS StudentInformationAndGrades;
+
+-- 1. Users Table
+CREATE TABLE IF NOT EXISTS Users (
+    UserID INT AUTO_INCREMENT PRIMARY KEY,
+    Username VARCHAR(255) NOT NULL UNIQUE,
+    Password VARCHAR(255) NOT NULL, -- Assume passwords are securely hashed
+    FirstName VARCHAR(255) NOT NULL,
+    LastName VARCHAR(255),
+    Email VARCHAR(255) NOT NULL UNIQUE,
+    Role ENUM('Student', 'Instructor', 'Administrator') NOT NULL
+);
+
+-- 2. Courses Table
+CREATE TABLE IF NOT EXISTS Courses (
+    CourseID INT AUTO_INCREMENT PRIMARY KEY,
+    CourseName VARCHAR(255) NOT NULL,
+    CourseDescription TEXT,
+    CoursePrerequisite TEXT,
+    InstructorID INT,
+    FOREIGN KEY (InstructorID) REFERENCES Users(UserID)
+);
+
+-- 3. Enrollments Table
+CREATE TABLE IF NOT EXISTS Enrollments (
+    EnrollmentID INT AUTO_INCREMENT PRIMARY KEY,
+    UserID INT,
+    CourseID INT,
+    EnrollmentDate DATE NOT NULL,
+    Pending BOOLEAN NOT NULL DEFAULT TRUE,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
+);
+
+-- 4. Assignments Table
+CREATE TABLE IF NOT EXISTS Assignments (
+    AssignmentID INT AUTO_INCREMENT PRIMARY KEY,
+    CourseID INT,
+    Title VARCHAR(255) NOT NULL,
+    Description TEXT,
+    DueDate DATE NOT NULL,
+    FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
+);
+
+-- 5. Submissions Table
+CREATE TABLE IF NOT EXISTS Submissions (
+    SubmissionID INT AUTO_INCREMENT PRIMARY KEY,
+    AssignmentID INT,
+    UserID INT,
+    SubmissionDate DATE NOT NULL,
+    Grade INT,
+    FOREIGN KEY (AssignmentID) REFERENCES Assignments(AssignmentID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
+-- 6. Discussions Table
+CREATE TABLE IF NOT EXISTS Discussions (
+    DiscussionID INT AUTO_INCREMENT PRIMARY KEY,
+    CourseID INT,
+    UserID INT,
+    Title VARCHAR(255) NOT NULL,
+    InitialPost TEXT NOT NULL,
+    FOREIGN KEY (CourseID) REFERENCES Courses(CourseID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
+-- 7. DiscussionResponses Table
+CREATE TABLE IF NOT EXISTS DiscussionResponses (
+    ResponseID INT AUTO_INCREMENT PRIMARY KEY,
+    DiscussionID INT,
+    UserID INT,
+    ResponseText TEXT NOT NULL,
+    ResponseDate DATETIME NOT NULL,
+    FOREIGN KEY (DiscussionID) REFERENCES Discussions(DiscussionID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
+-- Creating a view to display student information along with their final course grades
+CREATE VIEW StudentInformationAndGrades AS
+SELECT
+    u.UserID,
+    u.Username,
+    u.FirstName,
+    u.LastName,
+    u.Email,
+    u.Role,
+    c.CourseID,
+    c.CourseName,
+    AVG(s.Grade) AS FinalCourseGrade
+FROM
+    Users u
+JOIN Enrollments e ON u.UserID = e.UserID
+JOIN Courses c ON e.CourseID = c.CourseID
+LEFT JOIN Submissions s ON u.UserID = s.UserID AND c.CourseID = s.CourseID
+GROUP BY
+    u.UserID, c.CourseID
+ORDER BY
+    u.LastName, u.FirstName, c.CourseName;
 
 
