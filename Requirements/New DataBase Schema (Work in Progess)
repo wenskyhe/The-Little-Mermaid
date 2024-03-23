@@ -1,0 +1,145 @@
+#1. Users Table
+- **UserID** (Primary Key): Unique identifier for each user.
+- **Username**: User's chosen name.
+- **Password**: Encrypted password for user login.
+- **FirstName**: User's first name.
+- **LastName**: User's last name.
+- **Email**: User's email address.
+- **Role**: Distinguishes between students, instructors, and administrators.
+
+#2. Courses Table
+- **CourseID** (Primary Key): Unique identifier for each course.
+- **CourseName**: Name of the course.
+- **CourseDescription**: A brief description of what the course is about.
+- **CoursePrequiste**: The prequistes for the course.
+- **InstructorID** (Foreign Key): ID of the instructor teaching the course.
+
+#3. Enrollments Table
+- **EnrollmentID** (Primary Key): Unique identifier for each enrollment.
+- **UserID** (Foreign Key): ID of the user enrolled in the course.
+- **CourseID** (Foreign Key): ID of the course the user is enrolled in.
+- **EnrollmentDate**: Date when the user enrolled in the course.
+
+#4. Assignments Table
+- **AssignmentID** (Primary Key): Unique identifier for each assignment.
+- **CourseID** (Foreign Key): ID of the course the assignment is part of.
+- **Title**: Title of the assignment.
+- **Description**: A brief description of the assignment.
+- **DueDate**: When the assignment is due.
+
+#5. Submissions Table
+- **SubmissionID** (Primary Key): Unique identifier for each submission.
+- **AssignmentID** (Foreign Key): ID of the assignment being submitted to.
+- **UserID** (Foreign Key): ID of the user who made the submission.
+- **SubmissionDate**: Date when the assignment was submitted.
+- **Grade**: Grade awarded for the submission.
+
+#6. Discussions Table
+- **DiscussionID** (Primary Key): Unique identifier for each discussion thread.
+- **CourseID** (Foreign Key): ID of the course the discussion is related to.
+- **UserID** (Foreign Key): ID of the user who started the discussion.
+- **Title**: Title of the discussion thread.
+- **InitialPost**: The initial post of the discussion thread.
+
+#7. DiscussionResponses Table
+- **ResponseID** (Primary Key): Unique identifier for each response.
+- **DiscussionID** (Foreign Key): ID of the discussion thread being responded to.
+- **UserID** (Foreign Key): ID of the user making the response.
+- **ResponseText**: The text of the response.
+- **ResponseDate**: Date and time the response was made.
+
+
+
+Example of How 4 users would interact with the database:
+
+#Step 1: Define Users
+
+| UserID | Username     | Password | FirstName | LastName | Email                    | Role        |
+|--------|--------------|----------|-----------|----------|--------------------------|-------------|
+| 1      | teacher_anna | ******** | Anna      | Bell     | anna.bell@example.com    | Instructor  |
+| 2      | teacher_john | ******** | John      | Doe      | john.doe@example.com     | Instructor  |
+| 3      | student_alex | ******** | Alex      | Young    | alex.young@example.com   | Student     |
+| 4      | student_emma | ******** | Emma      | Stone    | emma.stone@example.com   | Student     |
+
+#Step 2: Define Courses
+
+| CourseID | CourseName               | CourseDescription               | CoursePrequisite | InstructorID |
+|----------|--------------------------|---------------------------------|------------------|--------------|
+| 1        | Intro to Programming     | Basics of programming           | None             | 1            |
+| 2        | Advanced Mathematics     | In-depth study of mathematics   | Intro to Programming | 2          |
+
+# Step 3: Enrollments
+
+Alex and Emma decide to enroll in both courses:
+
+| EnrollmentID | UserID | CourseID | EnrollmentDate |
+|--------------|--------|----------|----------------|
+| 1            | 3      | 1        | 2024-03-01     |
+| 2            | 3      | 2        | 2024-03-02     |
+| 3            | 4      | 1        | 2024-03-01     |
+| 4            | 4      | 2        | 2024-03-02     |
+
+#Step 4: Assignments by Instructors
+
+Anna creates an assignment for "Intro to Programming":
+
+| AssignmentID | CourseID | Title           | Description             | DueDate   |
+|--------------|----------|-----------------|-------------------------|-----------|
+| 1            | 1        | Hello World     | Create a simple program | 2024-03-15|
+
+John creates an assignment for "Advanced Mathematics":
+
+| AssignmentID | CourseID | Title          | Description               | DueDate   |
+|--------------|----------|----------------|---------------------------|-----------|
+| 2            | 2        | Solve Equations| Solve the given equations | 2024-03-20|
+
+#Step 5: Submissions by Students
+
+Alex submits to both assignments:
+
+| SubmissionID | AssignmentID | UserID | SubmissionDate | Grade |
+|--------------|--------------|--------|----------------|-------|
+| 1            | 1            | 3      | 2024-03-14     | NULL  |
+| 2            | 2            | 3      | 2024-03-19     | NULL  |
+
+Emma also submits to both assignments:
+
+| SubmissionID | AssignmentID | UserID | SubmissionDate | Grade |
+|--------------|--------------|--------|----------------|-------|
+| 3            | 1            | 4      | 2024-03-14     | NULL  |
+| 4            | 2            | 4      | 2024-03-19     | NULL  |
+
+#Step 6: Discussions Initiated by a Teacher
+
+Anna initiates a discussion in "Intro to Programming":
+
+| DiscussionID | CourseID | UserID | Title          | InitialPost                    |
+|--------------|----------|--------|----------------|--------------------------------|
+| 1            | 1        | 1      | Program Ideas  | "What projects interest you?"  |
+
+#Step 7: Discussion Responses by Students
+
+Alex responds to the discussion:
+
+| ResponseID | DiscussionID | UserID | ResponseText                  | ResponseDate |
+|------------|--------------|--------|-------------------------------|--------------|
+| 1          | 1            | 3      | "Interested in game development!" | 2024-03-05 |
+
+Emma responds to the discussion:
+
+| ResponseID | DiscussionID | UserID | ResponseText                  | ResponseDate |
+|------------|--------------|--------|-------------------------------|--------------|
+| 2          | 1            | 4      | "I'm curious about web apps." | 2024-03-06 |
+
+
+Illustration and Explanation:
+
+1. **User Creation**: Four users are created, two instructors (Anna and John) and two students (Alex and Emma). Each user has a unique role that determines their interaction with the course material.
+
+2. **Course Enrollment**: Both students enroll in both available courses, establishing a relationship between users and courses they are interested in or required to take.
+
+3. **Assignment Creation and Submission**: The instructors create assignments for their courses, which are then submitted to by the students. This illustrates how coursework is distributed, completed, and tracked within the system.
+
+4. **Discussions and Engagement**: Anna initiates a discussion related to her course, prompting students to engage with each other and the instructor. This fosters a sense of community and provides a platform for sharing ideas and interests.
+
+
