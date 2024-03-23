@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register for Course</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="../Assets/Images/logo.png" width="60" height="75" class = "logo">
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="studentView.php">My Courses</a></li>
+                    <li><a href="logout.php">Logout</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <section class="form-section">
+                <h2>Register for Course</h2>
+                <form action="registerCourseManager.php" method="POST">
+                    <div class="form-group">
+                        <label for="courseId">Course ID:</label>
+                        <input type="text" id="courseId" name="courseId" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentId">Student ID:</label>
+                        <input type="text" id="studentId" name="studentId" required>
+                    </div>
+                    <button type="submit">Register</button>
+                </form>
+            </section>
+        </main>
+        <footer>
+            <p>&copy; 2024 AquaDemia. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
