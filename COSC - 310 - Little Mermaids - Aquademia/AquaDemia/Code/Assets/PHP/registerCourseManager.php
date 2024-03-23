@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $courseId = $conn->real_escape_string($courseId);
    // $studentId = $conn->real_escape_string($studentId);
 
-    $query = "SELECT * FROM course_registrations WHERE courseId = '$courseId' AND studentId = '$studentId'";
+    $query = "SELECT * FROM course_registrations WHERE courseId = '$courseId'";
     $result = $conn->query($query);
     
     if ($result->num_rows > 0) {
