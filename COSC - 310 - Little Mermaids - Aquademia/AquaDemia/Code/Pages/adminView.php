@@ -2,7 +2,6 @@
 session_start();
 
 $usertype = $_SESSION["UserType"];
-$username = $_SESSION["Username"];
 // Only display this page if the user is an admin;
 if($usertype == "Admin"){
     echo '
@@ -16,10 +15,11 @@ if($usertype == "Admin"){
     <link rel="stylesheet" href="../Assets/CSS/central.css">
 </head>
 <body>
-    <h1 style="text-align: center;">Welcome, '. $username . ' </h1>
+    <h1 style="text-align: center;">Welcome, '. $_SESSION["Username"] . '</h1>
     
     <a href="createCourses.html">Create a course</a><br>
-    <a href="editDetails.php">Edit your details</a>
+    <a href="editDetails.php">Edit your details</a><br>
+    <a href="acceptStudent.php">Accept students into course</a>
 
 
 </body>
@@ -27,7 +27,7 @@ if($usertype == "Admin"){
 ';
 }
 
-//Else if the user is not an admin, give them an;
+//Else if the user is not an admin, give them an error;
 else {echo 'ERROR! You must be an admin to access this page! <br>';
     echo '<a href="login.html">Go back to login</a>';}
 ?>

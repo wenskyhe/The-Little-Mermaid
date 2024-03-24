@@ -19,8 +19,13 @@
     $stmt = $conn -> prepare("INSERT INTO Courses (Subject, CourseNumber, Section, Credits, Location) VALUES (?,?,?,?,?)"); // Corrected SQL statement
     $stmt ->bind_param("sssss",$subject, $courseNumber, $section, $credits, $location);
 
+    //Send an alert that the course has been created
     if ($stmt->execute()) {
-     echo $subject ." ". $courseNumber ." has been created";
+        echo '<script>
+        alert("Course created!");
+        window.location.href="../../Pages/createCourses.html";
+        </script>';
+        
     } else {
      echo "Error: ". $stmt->error;
     }

@@ -15,7 +15,7 @@
 
     $stmt = $conn->prepare("SELECT UserID, PasswordHash, UserType FROM Users WHERE Username = :uname");
     $stmt->bindParam(':uname', $uname);
-    $stmt->execute(s);
+    $stmt->execute();
     
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 

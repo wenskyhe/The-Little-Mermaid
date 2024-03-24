@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register for Course</title>
+    <link rel="stylesheet" href="../Assets/CSS/central.css">
+</head>
+<body>
+        <main>
+                <h2>Register for Course</h2>
+                <form action="../Assets/PHP/registerCourseManager.php" method="POST">
+                    <div class="form-group">
+                        <a style="color: white;">Course ID:</label>
+                        <input type="text" id="courseId" name="courseId" required>
+                    </div>
+                    
+                    <button class="button button1" type="submit">Register</button>
+                </form>
+
+                <button onclick="location.href = 'studentView.php';" type="button" class="button button1">Back</button>
+
+        </main>
+    
+</body>
+</html>

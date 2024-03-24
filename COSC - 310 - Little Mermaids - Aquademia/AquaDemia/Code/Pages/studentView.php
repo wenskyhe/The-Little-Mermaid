@@ -13,7 +13,7 @@ session_start();
 <body>
     <h1 style="text-align: center;">Welcome, <?php echo $_SESSION["Username"] ?></h1>
     
-    <a href="registerCourse.php">Register for a course</a><br>
+    <a href="registerCourse.html">Register for a course</a><br>
     <a href="editDetails.php">Edit your details</a>
 
 
