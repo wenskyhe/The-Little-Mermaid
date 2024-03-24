@@ -37,7 +37,8 @@ need it, each element has it's own style. -->
                                 <td>EnrollmentID</td>    
                                 <td>UserID</td>    
                                 <td>courseID</td>    
-                                <td>EnrollmentDate</td>    
+                                <td>EnrollmentDate</td>
+                                <td>Accept enrollment</td>
                             </tr>
                             <tr>
                             <?php
@@ -46,10 +47,10 @@ need it, each element has it's own style. -->
                                 {
                                 ?>
                             <td><?php echo $row['EnrollmentID']; ?></td>
-                            <td><?php echo $row['UserID']; ?></td>
-                            <td><?php echo $row['CourseID']; ?></td>
+                            <td><?php $userID = $row['UserID']; echo $userID?></td>
+                            <td><?php $courseID = $row['CourseID']; echo $courseID?></td>
                             <td><?php echo $row['EnrollmentDate']; ?></td>
-
+                            <td><a href="../Assets/PHP/acceptEnrollment.php?userid=<?php echo $userID; ?>&courseid=<?php echo $courseID ?>" class="btn btn-primary">Accept</td>    
                             </tr>    
                             <?php
                                     }
