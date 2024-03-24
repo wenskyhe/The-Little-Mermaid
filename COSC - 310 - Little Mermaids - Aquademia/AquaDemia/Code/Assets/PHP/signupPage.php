@@ -45,7 +45,7 @@ $systemType = $conn->real_escape_string($_POST["TeacherOrStudent"]);
 
 
 $registration = new UserRegistration($conn);
-$postData = $_POST; // For simplicity, assume $_POST is available in your test environment
+$postData = $_POST; 
 $result = $registration->registerUser($postData,$firstName,$lastName,$userName,$email,$phoneNumber, $userPassword, $systemType);
 echo $result;
 
