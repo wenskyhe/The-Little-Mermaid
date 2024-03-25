@@ -15,6 +15,7 @@ if($usertype == "Admin"){
     <link rel="stylesheet" href="../Assets/CSS/central.css">
 </head>
 <body>
+
     <h1 style="text-align: center;">Welcome, '. $_SESSION["Username"] . '</h1>
     
     <a href="createCourses.html">Create a course</a><br>

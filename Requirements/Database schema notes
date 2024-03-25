@@ -103,13 +103,3 @@ CREATE TABLE PasswordPolicy (
     RequiresLower CHAR(1) NOT NULL,
     PolicyDescription TEXT
 );
-
-
-
-
-
-
-
-
-
-

@@ -25,7 +25,6 @@
         alert("Course created!");
         window.location.href="../../Pages/createCourses.html";
         </script>';
-        
     } else {
      echo "Error: ". $stmt->error;
     }
