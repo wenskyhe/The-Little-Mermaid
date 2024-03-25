@@ -15,6 +15,8 @@ session_start();
     
     <a href="registerCourse.php">Register for a course</a><br>
     <a href="editDetails.php">Edit your details</a>
+    <a href="gradeAssignments.php">Assignments Graded</a><br>
+    <a href="viewCourses.php">View Your Courses</a><br>
 
 
 </body>
