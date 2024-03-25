@@ -34,7 +34,6 @@ $username = "root";
 $password = "";
 $dbname = "aquademia";
 
-
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection Failed: " . $conn->connect_error);
@@ -47,7 +46,6 @@ $email = $conn->real_escape_string($_POST["email"]);
 $phoneNumber = $conn->real_escape_string($_POST["phoneNumber"]);
 $userPassword = $conn->real_escape_string($_POST["confirmPassword"]);
 $systemType = $conn->real_escape_string($_POST["TeacherOrStudent"]);
-
 
 
 $registration = new UserRegistration($conn);

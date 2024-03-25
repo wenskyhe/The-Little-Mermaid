@@ -9,7 +9,7 @@
     try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-//testing if git push works :)
+
     $uname = $_POST['uname'];
     $psw = $_POST['psw'];
 
