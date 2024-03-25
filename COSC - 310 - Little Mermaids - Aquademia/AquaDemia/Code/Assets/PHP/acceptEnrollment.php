@@ -12,7 +12,7 @@ if (isset($_GET['userid'])){
         $result = mysqli_query($conn, $query);
         if($result){
             echo '<script>
-            alert("Registration is now pending");
+            alert("Student has been accepted!");
             </script>';
             header('Location: ../../Pages/acceptStudent.php');
         }

@@ -30,7 +30,7 @@ need it, each element has it's own style. -->
             <div class="col">
                 <div class="card mt-5">
                     <div class = "card-header">
-                        <h2 class="text-center text-black"> Students with pending enrollment</h2>
+                    <h2 class="text-center text-dark"> Students with pending enrollment</h2>
                     </div>
                     <div class="card-body">
                         <table class="table table-bordered">
@@ -62,8 +62,9 @@ need it, each element has it's own style. -->
                 </div>
             </div>
         </div>
+        <button class="button button1" id="buttonGoBack" onclick="location.href = 'adminView.php';">Back</button>
     </div>
 
-    <button class="button button1" id="buttonGoBack" onclick="location.href = 'adminView.php';">Back</button>
+    
 </body>
 </html>
