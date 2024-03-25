@@ -13,6 +13,7 @@ $result = mysqli_query($conn, $query);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accept Student</title>
     <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
+    <link rel="stylesheet" href="../Assets/CSS/central.css">
 </head>
 
 <!-- We are using bootstrap.min.css for the table design. However, bootstrap has it's own design for a bunch
@@ -29,7 +30,7 @@ need it, each element has it's own style. -->
             <div class="col">
                 <div class="card mt-5">
                     <div class = "card-header">
-                        <h2 class="text-center"> Students with pending enrollment</h2>
+                        <h2 class="text-center text-black"> Students with pending enrollment</h2>
                     </div>
                     <div class="card-body">
                         <table class="table table-bordered">
@@ -62,5 +63,7 @@ need it, each element has it's own style. -->
             </div>
         </div>
     </div>
+
+    <button class="button button1" id="buttonGoBack" onclick="location.href = 'adminView.php';">Back</button>
 </body>
 </html>

@@ -11,7 +11,9 @@ if (isset($_GET['userid'])){
         $query = "UPDATE enrollment SET Accepted = 1 WHERE UserId = " . $userid . " AND CourseId = " . $courseid;
         $result = mysqli_query($conn, $query);
         if($result){
-            echo "Accepted!";
+            echo '<script>
+            alert("Registration is now pending");
+            </script>';
             header('Location: ../../Pages/acceptStudent.php');
         }
         else{
