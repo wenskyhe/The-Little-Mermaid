@@ -1,26 +1,31 @@
 <?php
 
-class UserRegistration {
+final class UserRegistration {
+    
     private $conn;
 
     public function __construct(mysqli $conn) {
         $this->conn = $conn;
     }
 
-    public function registerUser($postData ,$firstName,$lastName,$userName,$email,$phoneNumber,$userPassword,$systemType) {
+    public function registerUser($firstName,$lastName,$userName,$email,$phoneNumber,$userPassword,$systemType) {
         
         if (empty($firstName) || empty($lastName) || empty($email) || empty($phoneNumber) || empty($userPassword) || empty($systemType)) {
-            return "Error: Please fill all fields";
+            return "Please fill all fields (statement triggers regardless of unit test sucsess)   ";
         }
     
         $stmt = $this->conn->prepare("INSERT INTO Users (userType, firstName, lastName, userName, email, phoneNumber, passwordHash) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("sssssss", $systemType, $firstName, $lastName, $userName, $email, $phoneNumber, $userPassword);
     
         if ($stmt->execute()) {
+            $stmt->close();
             return "Welcome to AquaDemia " . $firstName . " " . $lastName . " ";
+            
         } else {
+            $stmt->close();
             return "Error: " . $stmt->error;
         }
+        
     }
 }
 
@@ -46,7 +51,7 @@ $systemType = $conn->real_escape_string($_POST["TeacherOrStudent"]);
 
 $registration = new UserRegistration($conn);
 $postData = $_POST; 
-$result = $registration->registerUser($postData,$firstName,$lastName,$userName,$email,$phoneNumber, $userPassword, $systemType);
+$result = $registration->registerUser($firstName,$lastName,$userName,$email,$phoneNumber, $userPassword, $systemType);
 echo $result;
 
 $conn->close();
