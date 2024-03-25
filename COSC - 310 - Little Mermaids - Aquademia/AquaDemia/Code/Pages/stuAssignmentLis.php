@@ -1,6 +1,6 @@
 <?php
-require_once 'config.php';
-require_once 'dbh.inc.php';
+require_once 'Aquademia/AquaDemia/Code/Assets/PHP/config.php';
+require_once 'Aquademia/AquaDemia/Code/Assets/PHP/dbh.inc.php';
 
 // just for the test
 $UserID = 1;
