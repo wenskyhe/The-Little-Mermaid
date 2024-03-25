@@ -1,7 +1,7 @@
 <?php 
 
-include_once 'config.php';
-include_once 'dbh.inc.php';
+include_once 'Aquademia/AquaDemia/Code/Assets/PHP/config.php';
+include_once 'Aquademia/AquaDemia/Code/Assets/PHP/dbh.inc.php';
 
 $UserID = 1;
 $sql = "SELECT CourseID
