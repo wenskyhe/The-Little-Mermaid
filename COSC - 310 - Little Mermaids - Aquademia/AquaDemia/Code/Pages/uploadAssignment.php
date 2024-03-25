@@ -1,8 +1,8 @@
 
 <?php
 
-require_once 'config.php';
-require_once 'dbh.inc.php';
+include_once 'Aquademia/AquaDemia/Code/Assets/PHP/config.php';
+include_once 'Aquademia/AquaDemia/Code/Assets/PHP/dbh.inc.php';
 
 
 // Function to handle file upload and insertion into the database
