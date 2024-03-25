@@ -73,7 +73,7 @@ navBarElements li{
   position: relative;
   z-index: 1;
   display: inline-block;
-  padding: 5px 160px;
+  padding: 5px 130px;
 }
 navBarElements a{
   top: -25px;
