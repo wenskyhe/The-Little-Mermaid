@@ -49,6 +49,7 @@ $userPassword = $conn->real_escape_string($_POST["confirmPassword"]);
 $systemType = $conn->real_escape_string($_POST["TeacherOrStudent"]);
 
 
+
 $registration = new UserRegistration($conn);
 $postData = $_POST; 
 $result = $registration->registerUser($firstName,$lastName,$userName,$email,$phoneNumber, $userPassword, $systemType);
