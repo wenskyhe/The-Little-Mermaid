@@ -1,3 +1,18 @@
+<?php
+// Assuming session_start() and database connection are included at the top of every script
+require 'path_to_your_database_connection_script.php';
+session_start();
+
+// Check if the user is logged in as a student
+if ($_SESSION['userType'] != 'Student') {
+    // If not a student, redirect to the appropriate page
+    header("Location: loginPage.php");
+    exit();
+}
+
+$studentId = $_SESSION['studentId']; // Using the logged-in student's ID from the session
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,26 +39,21 @@
         <h1>Registered Courses</h1>
         <div id="coursesContainer">
             <?php
-            // Assuming session_start() and database connection are already done in header or a required file
-            $studentId = $_SESSION['studentId']; // The logged-in student ID
-            $query = "SELECT c.CourseID, c.Subject, c.CourseNumber, c.Section FROM Courses c JOIN studentRegistration sr ON c.CourseID = sr.CourseID WHERE sr.StudentID = ?";
+            // Fetch courses from the database
+            $stmt = $conn->prepare("SELECT CourseID, Subject, CourseNumber, Section FROM Courses WHERE StudentID = ?");
+            $stmt->bind_param("i", $studentId);
+            $stmt->execute();
+            $result = $stmt->get_result();
             
-            // Prepared statement to prevent SQL injection
-            if ($stmt = $conn->prepare($query)) {
-                $stmt->bind_param("i", $studentId);
-                $stmt->execute();
-                $result = $stmt->get_result();
-
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<p>" . htmlspecialchars($row['Subject']) . " " . htmlspecialchars($row['CourseNumber']) . " Section " . htmlspecialchars($row['Section']) . " - <a href='courseDetails.php?courseId=" . urlencode($row['CourseID']) . "'>Details</a></p>";
-                    }
-                } else {
-                    echo "<p>No courses found.</p>";
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    echo "<p>" . htmlspecialchars($row['Subject']) . " " . htmlspecialchars($row['CourseNumber']) . " Section " . htmlspecialchars($row['Section']) . " - <a href='courseDetails.php?courseId=" . urlencode($row['CourseID']) . "'>Details</a></p>";
                 }
             } else {
-                echo "<p>Error preparing query: " . htmlspecialchars($conn->error) . "</p>";
+                echo "<p>You are not registered for any courses.</p>";
             }
+
+            $stmt->close();
             ?>
         </div>
     </main>
