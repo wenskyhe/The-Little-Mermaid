@@ -1,31 +1,41 @@
 <?php
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "aquademia";
+    session_start();
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+    $servername = "localhost";
+    $username = "root"; // default XAMPP MySQL username
+    $password = ""; // default XAMPP MySQL password is empty
+    $dbname = "aquademia";
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $courseId = $_POST['courseId'];
-    $courseId = $conn->real_escape_string($courseId);
-
-    $query = "INSERT INTO course_registrations (courseId) VALUES ('$courseId')";
-
-    if ($conn->query($query) === TRUE) {
-        echo "<script>alert('Registration successful.'); window.location.href='../studentView.php';</script>";
-    } else {
-        echo "<script>alert('Error registering for course: " . $conn->error . "'); window.location.href='../registerCourse.php';</script>";
+    //create a connection
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    if ($conn->connect_error) {
+        die("Connection Failed". $conn->connect_error);
     }
-    
+
+    $course = $conn -> real_escape_string($_POST["courseId"]);
+ 
+    registerCourse($_SESSION["UserID"], $course, $conn);
+
     $conn->close();
-} else {
-    header("Location: ../registerCourse.html");
-    exit();
-}
+
+
+    //function that takes in a courseID and userID and adds a pending enrollment to the enrollment table.
+    function registerCourse($userID, $courseID, $connection){
+        $stmt = $connection -> prepare("INSERT INTO Enrollment (UserID, CourseID, EnrollmentDate, Accepted) VALUES (?,?,CURDATE(),0)");
+        $stmt ->bind_param("ss",$userID, $courseID);
+
+        if ($stmt->execute()) {
+            echo '<script>
+            alert("Registration is now pending");
+            window.location.href="../../Pages/registerCourse.html";
+            </script>';
+        } else {
+         echo "Error: ". $stmt->error;
+        }
+
+        $stmt->close();
+    }
+
 ?>

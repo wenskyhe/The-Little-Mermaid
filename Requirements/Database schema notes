@@ -72,28 +72,26 @@ CREATE TABLE studentRegistration (
 
 
 CREATE TABLE CourseAssignments(
-    AssignmentName VARCHAR(50),
-    CourseID INT,
-    ProfessorID INT,
-    ReleaseDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    DueDate TIMESTAMP,
-    Description TEXT, -- New column
-    PRIMARY KEY(CourseID, AssignmentName),
-    FOREIGN KEY (ProfessorID) REFERENCES Professors(ProfessorID),
-    FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
+	AssignmentName VARCHAR(50),
+	CourseID INT,
+	ProfrssorID INT,
+	ReleaseDate TimeStamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	DueDate TimeStamp,
+	PRIMARY KEY(CourseID, AssignmentName),
+	FOREIGN KEY (ProfessorID) REFERENCES Professors(ProfessorID),
+	FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
 );
 
 CREATE TABLE Assignments(
-    AssignmentName VARCHAR(50),
-    CourseID INT,
-    StudentID INT,
-    Grade INT DEFAULT -1,
-    SubmissionTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FilePath VARCHAR(255), -- New column
-    PRIMARY KEY(AssignmentName, CourseID, StudentID),
-    FOREIGN KEY (AssignmentName) REFERENCES CourseAssignments(AssignmentName),
-    FOREIGN KEY (CourseID) REFERENCES Courses(CourseID),
-    FOREIGN KEY (StudentID) REFERENCES Students(StudentID)
+	AssignmentName VARCHAR(50),
+	CourseID INT,
+	StudentID INT,
+	Grade INT DEFAULT -1,
+	SubmissionTime TimeStamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	PRIMARY KEY(AssignmentName, CourseID, StudentID),
+	FOREIGN KEY (AssignmentName) REFERENCES CourseAssignments(AssignmentName),
+	FOREIGN KEY (CourseID) REFERENCES Courses(CourseID),
+	FOREIGN KEY (StudentID) REFERENCES Students(StudentID ),
 );
 
 CREATE TABLE PasswordPolicy (
@@ -105,13 +103,3 @@ CREATE TABLE PasswordPolicy (
     RequiresLower CHAR(1) NOT NULL,
     PolicyDescription TEXT
 );
-
-
-
-
-
-
-
-
-
-

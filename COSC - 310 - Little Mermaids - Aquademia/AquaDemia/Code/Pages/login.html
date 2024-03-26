@@ -151,10 +151,12 @@
         xhttp.send();
     }
 
+    // Fetch alert when the page loads
     window.onload = function() {
         fetchAlert();
     };
-  </script>
+</script>
+
 
   <img src="../Assets/Images/logo.png" style="display: block; margin-left: auto; margin-right: auto;">
   <h1 style="text-align: center; padding-top: 0%;
@@ -164,10 +166,14 @@
     <button onclick="document.getElementById('id01').style.display='block'">Login</button>
   </div>
   <div id="id01" class="modal">
+
+
     <form class="modal-content animate" action="../Assets/PHP/loginPage.php" method="post">
       <div class="container">
         <label for="uname"><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" name="uname" required>
+        <input type="text" placeholder="Firstname_Lastname" name="uname" required>
+
+
         <label for="psw"><b>Password</b></label>
         <input type="password" placeholder="Enter Password" name="psw" required>
         <button type="submit">Login</button>
@@ -191,4 +197,3 @@
   </script>
 </body>
 </html>
-

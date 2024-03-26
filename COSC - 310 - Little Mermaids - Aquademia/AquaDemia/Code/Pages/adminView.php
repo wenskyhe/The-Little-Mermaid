@@ -15,10 +15,12 @@ if($usertype == "Admin"){
     <link rel="stylesheet" href="../Assets/CSS/central.css">
 </head>
 <body>
-    <h1 style="text-align: center;">Welcome, <?php echo $_SESSION["Username"] ?></h1>
+
+    <h1 style="text-align: center;">Welcome, '. $_SESSION["Username"] . '</h1>
     
     <a href="createCourses.html">Create a course</a><br>
-    <a href="editDetails.php">Edit your details</a>
+    <a href="editDetails.php">Edit your details</a><br>
+    <a href="acceptStudent.php">Accept students into course</a>
 
 
 </body>
