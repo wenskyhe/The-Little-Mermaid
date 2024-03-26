@@ -1,15 +1,11 @@
 <?php
 
+session_start();
 $servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "aquademia";
 
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Connection Failed: " . $conn->connect_error);
-    
 
 require 'path_to_your_database_connection_script.php';
 session_start();
