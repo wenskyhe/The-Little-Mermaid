@@ -32,6 +32,8 @@ CREATE TABLE `admins` (
   `fullAccess` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+INSERT INTO `admins` (`adminID`) VALUES
+(11);
 -- --------------------------------------------------------
 
 --
@@ -48,7 +50,8 @@ CREATE TABLE `professors` (
 --
 
 INSERT INTO `professors` (`professorID`, `Department`) VALUES
-(3, NULL);
+(3, NULL),
+(10, NULL);
 
 -- --------------------------------------------------------
 
