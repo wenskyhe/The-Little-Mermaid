@@ -1,16 +1,26 @@
 <?php
-// Assuming session_start() and database connection are included at the top of every script
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "aquademia";
+
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die("Connection Failed: " . $conn->connect_error);
+    
+
 require 'path_to_your_database_connection_script.php';
 session_start();
 
-// Check if the user is logged in as a student
 if ($_SESSION['userType'] != 'Student') {
-    // If not a student, redirect to the appropriate page
+
     header("Location: loginPage.php");
     exit();
 }
 
-$studentId = $_SESSION['studentId']; // Using the logged-in student's ID from the session
+$studentId = $_SESSION['studentId'];
 
 ?>
 <!DOCTYPE html>
