@@ -178,10 +178,10 @@ CREATE TABLE IF NOT EXISTS Users (
 
 
 CREATE TABLE IF NOT EXISTS Courses (
-    CourseID INT AUTO_INCREMENT PRIMARY KEY,
-    CourseName VARCHAR(255),
-    CourseDescription TEXT,
-    CoursePrequisteID TEXT,
+    courseID INT AUTO_INCREMENT PRIMARY KEY,
+    courseName VARCHAR(255),
+    courseDescription TEXT,
+    coursePrequisteID TEXT,
     professorID INT,
     isCourseActive BOOLEAN,
     FOREIGN KEY (professorID) REFERENCES Users(userID)
@@ -189,12 +189,12 @@ CREATE TABLE IF NOT EXISTS Courses (
 
 
 CREATE TABLE IF NOT EXISTS CoursePrerequisites (
-    PrequisiteID INT AUTO_INCREMENT PRIMARY KEY,
-    CourseID INT,
-    PrequisiteCourseID INT,
+    prequisiteID INT AUTO_INCREMENT PRIMARY KEY,
+    courseID INT,
+    prequisiteCourseID INT,
     MinimumGradeRequired DECIMAL(5,2),
-    FOREIGN KEY (CourseID) REFERENCES Courses(CourseID),
-    FOREIGN KEY (PrequisiteCourseID) REFERENCES Courses(CourseID)
+    FOREIGN KEY (courseID) REFERENCES Courses(courseID),
+    FOREIGN KEY (prequisiteCourseID) REFERENCES Courses(courseID)
 );
 
 CREATE TABLE IF NOT EXISTS Enrollments (
@@ -204,21 +204,21 @@ CREATE TABLE IF NOT EXISTS Enrollments (
     enrollmentDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     pending BOOLEAN,
     FOREIGN KEY (userID) REFERENCES Users(userID),
-    FOREIGN KEY (courseID) REFERENCES Courses(CourseID)
+    FOREIGN KEY (courseID) REFERENCES Courses(courseID)
 );
 
 
 CREATE TABLE IF NOT EXISTS Assignments (
     AssignmentID INT AUTO_INCREMENT PRIMARY KEY,
-    CourseID INT,
-    Title VARCHAR(255) NOT NULL,
-    Description TEXT,
-    DueDate DATETIME NOT NULL,
+    courseID INT,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    dueDate DATETIME NOT NULL,
     weight DECIMAL(5,2) NOT NULL,
     type ENUM('quiz', 'project', 'homework', 'exam') NOT NULL,
     visibilityStatus BOOLEAN DEFAULT FALSE,
     assignmentFilePath TEXT,
-    FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
+    FOREIGN KEY (courseID) REFERENCES Courses(courseID)
 );
 
 
@@ -232,6 +232,21 @@ CREATE TABLE IF NOT EXISTS Submissions (
     feedback TEXT,
     FOREIGN KEY (assignmentID) REFERENCES Assignments(AssignmentID),
     FOREIGN KEY (userID) REFERENCES Users(userID)
+);
+
+CREATE TABLE IF NOT EXISTS QuizQuestions (
+    quizQuestionID INT AUTO_INCREMENT PRIMARY KEY, -- Added for easier referencing individual questions
+    courseID INT,
+    assignmentID INT,
+    QuestionNum INT,
+    QuestionText TEXT NOT NULL,
+    ChoiceA TEXT NOT NULL,
+    ChoiceB TEXT NOT NULL,
+    ChoiceC TEXT NOT NULL,
+    ChoiceD TEXT NOT NULL,
+    CorrectChoice ENUM('ChoiceA', 'ChoiceB', 'ChoiceC', 'ChoiceD') NOT NULL,
+    FOREIGN KEY (courseID) REFERENCES Courses(courseID),
+    FOREIGN KEY (AssignmentID) REFERENCES Assignments(AssignmentID) -- Adjusted to reference Assignments directly
 );
 
 
