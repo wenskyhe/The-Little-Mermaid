@@ -1,1 +1,1 @@
-{"version":1,"defects":[],"times":{"PHP_UnitTests\\signupPageTest::testClassConstructor":0.005}}
+{"version":1,"defects":[],"times":{"PHP_UnitTests\\signupPageTest::testClassConstructor":0.005,"signupPage\\signupPageTest::testRegisterStudent":0.363,"signupPage\\signupPageTest::testRegisterTeacher":0.02,"signupPage\\signupPageTest::testRegisterDuplicateUser":0.044,"signupPage\\signupPageTest::testNullInsertion":0.023}}

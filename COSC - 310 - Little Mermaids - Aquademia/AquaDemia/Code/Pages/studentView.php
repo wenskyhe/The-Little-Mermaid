@@ -14,7 +14,8 @@ session_start();
     <h1 style="text-align: center;">Welcome, <?php echo $_SESSION["Username"] ?></h1>
     
     <a href="registerCourse.html">Register for a course</a><br>
-    <a href="editDetails.php">Edit your details</a>
+    <a href="editDetails.php">Edit your details</a><br>
+    <a href="login.html">Logout</a>
 
 
 </body>

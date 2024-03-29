@@ -20,7 +20,8 @@ if($usertype == "Admin"){
     
     <a href="createCourses.html">Create a course</a><br>
     <a href="editDetails.php">Edit your details</a><br>
-    <a href="acceptStudent.php">Accept students into course</a>
+    <a href="acceptStudent.php">Accept students into course</a><br>
+    <a href="login.html">Logout</a>
 
 
 </body>
