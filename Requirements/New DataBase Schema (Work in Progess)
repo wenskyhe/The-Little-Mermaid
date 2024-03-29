@@ -167,12 +167,12 @@ DROP VIEW IF EXISTS StudentInformationAndGrades;
 
 CREATE TABLE IF NOT EXISTS Users (
     userID INT AUTO_INCREMENT PRIMARY KEY,
-    userType ENUM('student', 'professor', 'admin') NOT NULL,
+    userType ENUM('Student', 'Professor', 'Admin') NOT NULL,
     firstName VARCHAR(255) NOT NULL,
     lastName VARCHAR(255) NOT NULL,
     Email VARCHAR(255) NOT NULL UNIQUE,
     userName VARCHAR(255) NOT NULL DEFAULT '',
-    passwordHash VARCHAR(255) NOT NULL,
+    passwordHash VARCHAR(255) NOT NULL, UNIQUE
     phoneNumber VARCHAR(20)
 );
 
