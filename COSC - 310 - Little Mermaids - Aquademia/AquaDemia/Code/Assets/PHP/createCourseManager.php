@@ -18,9 +18,9 @@ final class courseCreation{
     }
 
     public function createCourse($subject, $courseNumber, $section, $credits, $location){
-        if (empty($subject) || empty($courseNumber) || empty($section) || empty($credits) || empty($location)) {
-            return "Please fill all fields";
-        }
+        // if (empty($subject) || empty($courseNumber) || empty($section) || empty($credits) || empty($location)) {
+        //     return "Please fill all fields";
+        // }
 
         if($this-> alreadyExists($subject, $courseNumber)){
             return "Already exists.";
