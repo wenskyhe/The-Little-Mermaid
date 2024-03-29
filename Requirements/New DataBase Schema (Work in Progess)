@@ -1,39 +1,53 @@
 #1. Users Table
-- **UserID** (Primary Key): Unique identifier for each user.
-- **Username**: User's chosen name.
-- **Password**: Encrypted password for user login.
-- **FirstName**: User's first name.
-- **LastName**: User's last name.
-- **Email**: User's email address.
-- **Role**: Distinguishes between students, instructors, and administrators.
+- **userID** (Primary Key): Unique identifier for each user. Auto increment. not null
+- **userType**: Distinguishes between students, instructors, and administrators. not null
+- **firstName**: User's first name. not null
+- **lastName**: User's last name. Not null
+- **Email**: User's email address. unique. not null
+- **userName**: User's chosen name. Default = FirstName + LastName. Not Null
+- **passwordHash**: Encrypted password for user login. Not null
+- **phoneNumber**: Users phone number
 
 #2. Courses Table
-- **CourseID** (Primary Key): Unique identifier for each course.
+- **CourseID** (Primary Key): Unique identifier for each course. auto increment
 - **CourseName**: Name of the course.
-- **CourseDescription**: A brief description of what the course is about.
-- **CoursePrequiste**: A statement describing the prequisite for the course.
-- **AdminID** (Foreign Key): ID of the instructor teaching the course.
+- **CourseDescription**: A brief description of what the course is about. text
+- **CoursePrequisteID**: text a
+- **professorID** (Foreign Key): ID of the instructor teaching the course.
+- **isCourseActive** Boolean if the course is currently active.
+
+#3. Course Prerequisites Table
+- **PrequisiteID** (Primary key) auto increment 
+- **CourseID** (Foreign key) The course that has a prerequisite
+- **PrequisiteCourseID** (Foreign key) The prerequsite course
+- **MinimumGradeRequired** Minimum grade required in the prerequisite as a percentage.
 
 #3. Enrollments Table
-- **EnrollmentID** (Primary Key): Unique identifier for each enrollment.
-- **UserID** (Foreign Key): ID of the user enrolled in the course.
-- **CourseID** (Foreign Key): ID of the course the user is enrolled in.
-- **EnrollmentDate**: Date when the user enrolled in the course.
-- **Pending**: Boolean: True if userID meets the courseID course prerequisites.
+- **enrollmentID** (Primary Key): Unique identifier for each enrollment. auto increment
+- **userID** (Foreign Key): ID of the user enrolled in the course.
+- **courseID** (Foreign Key): ID of the course the user is enrolled in.
+- **enrollmentDate**: Date when the user enrolled in the course. not null. Now()
+- **pending**: Boolean: True if userID meets the courseID course prerequisites.
 
 #4. Assignments Table
 - **AssignmentID** (Primary Key): Unique identifier for each assignment.
-- **CourseID** (Foreign Key): ID of the course the assignment is part of.
-- **Title**: Title of the assignment.
+- **CourseID** (Foreign Key): ID of the course the assignment is part of. 
+- **Title**: Title of the assignment. not null
 - **Description**: A brief description of the assignment.
-- **DueDate**: When the assignment is due.
+- **DueDate**: When the assignment is due. not null
+- **weight** How much is it weigthed compared to final course? as percentage not null
+- **type** What type of assignment is it. "quiz", "project", "homework", "Exam".... not null
+- **visibilityStatus** Boolean: If the students can see the assignment yet. default false 
+- **assignmentFilePath** The assignment file path
 
 #5. Submissions Table
-- **SubmissionID** (Primary Key): Unique identifier for each submission.
-- **AssignmentID** (Foreign Key): ID of the assignment being submitted to.
-- **UserID** (Foreign Key): ID of the user who made the submission.
-- **SubmissionDate**: Date when the assignment was submitted.
-- **Grade**: Grade awarded for the submission.
+- **submissionID** (Primary Key): Unique identifier for each submission.
+- **assignmentID** (Foreign Key): ID of the assignment being submitted to.
+- **userID** (Foreign Key): ID of the user who made the submission.
+- **submissionDate**: Date when the assignment was submitted. not null
+- **submissionFilePath** The submission filepath
+- **grade**: Grade awarded for the submission. decimal
+- **feedback** text for getting feedback.
 
 #6. Discussions Table
 - **DiscussionID** (Primary Key): Unique identifier for each discussion thread.
@@ -151,58 +165,75 @@ HERE IS THE MODIFIED SQL SCHEMA FOR THE DATABASE:
 -- Dropping existing view if it exists to avoid conflicts during recreation
 DROP VIEW IF EXISTS StudentInformationAndGrades;
 
--- 1. Users Table
 CREATE TABLE IF NOT EXISTS Users (
-    UserID INT AUTO_INCREMENT PRIMARY KEY,
-    Username VARCHAR(255) NOT NULL UNIQUE,
-    Password VARCHAR(255) NOT NULL, -- Assume passwords are securely hashed
-    FirstName VARCHAR(255) NOT NULL,
-    LastName VARCHAR(255),
+    userID INT AUTO_INCREMENT PRIMARY KEY,
+    userType ENUM('student', 'professor', 'admin') NOT NULL,
+    firstName VARCHAR(255) NOT NULL,
+    lastName VARCHAR(255) NOT NULL,
     Email VARCHAR(255) NOT NULL UNIQUE,
-    Role ENUM('Student', 'Instructor', 'Administrator') NOT NULL
+    userName VARCHAR(255) NOT NULL DEFAULT '',
+    passwordHash VARCHAR(255) NOT NULL,
+    phoneNumber VARCHAR(20)
 );
 
--- 2. Courses Table
+
 CREATE TABLE IF NOT EXISTS Courses (
     CourseID INT AUTO_INCREMENT PRIMARY KEY,
-    CourseName VARCHAR(255) NOT NULL,
+    CourseName VARCHAR(255),
     CourseDescription TEXT,
-    CoursePrerequisite TEXT,
-    InstructorID INT,
-    FOREIGN KEY (InstructorID) REFERENCES Users(UserID)
+    CoursePrequisteID TEXT,
+    professorID INT,
+    isCourseActive BOOLEAN,
+    FOREIGN KEY (professorID) REFERENCES Users(userID)
 );
 
--- 3. Enrollments Table
-CREATE TABLE IF NOT EXISTS Enrollments (
-    EnrollmentID INT AUTO_INCREMENT PRIMARY KEY,
-    UserID INT,
+
+CREATE TABLE IF NOT EXISTS CoursePrerequisites (
+    PrequisiteID INT AUTO_INCREMENT PRIMARY KEY,
     CourseID INT,
-    EnrollmentDate DATE NOT NULL,
-    Pending BOOLEAN NOT NULL DEFAULT TRUE,
-    FOREIGN KEY (UserID) REFERENCES Users(UserID),
-    FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
+    PrequisiteCourseID INT,
+    MinimumGradeRequired DECIMAL(5,2),
+    FOREIGN KEY (CourseID) REFERENCES Courses(CourseID),
+    FOREIGN KEY (PrequisiteCourseID) REFERENCES Courses(CourseID)
 );
 
--- 4. Assignments Table
+CREATE TABLE IF NOT EXISTS Enrollments (
+    enrollmentID INT AUTO_INCREMENT PRIMARY KEY,
+    userID INT,
+    courseID INT,
+    enrollmentDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    pending BOOLEAN,
+    FOREIGN KEY (userID) REFERENCES Users(userID),
+    FOREIGN KEY (courseID) REFERENCES Courses(CourseID)
+);
+
+
 CREATE TABLE IF NOT EXISTS Assignments (
     AssignmentID INT AUTO_INCREMENT PRIMARY KEY,
     CourseID INT,
     Title VARCHAR(255) NOT NULL,
     Description TEXT,
-    DueDate DATE NOT NULL,
+    DueDate DATETIME NOT NULL,
+    weight DECIMAL(5,2) NOT NULL,
+    type ENUM('quiz', 'project', 'homework', 'exam') NOT NULL,
+    visibilityStatus BOOLEAN DEFAULT FALSE,
+    assignmentFilePath TEXT,
     FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
 );
 
--- 5. Submissions Table
+
 CREATE TABLE IF NOT EXISTS Submissions (
-    SubmissionID INT AUTO_INCREMENT PRIMARY KEY,
-    AssignmentID INT,
-    UserID INT,
-    SubmissionDate DATE NOT NULL,
-    Grade INT,
-    FOREIGN KEY (AssignmentID) REFERENCES Assignments(AssignmentID),
-    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+    submissionID INT AUTO_INCREMENT PRIMARY KEY,
+    assignmentID INT,
+    userID INT,
+    submissionDate DATETIME NOT NULL,
+    submissionFilePath TEXT,
+    grade DECIMAL(5,2),
+    feedback TEXT,
+    FOREIGN KEY (assignmentID) REFERENCES Assignments(AssignmentID),
+    FOREIGN KEY (userID) REFERENCES Users(userID)
 );
+
 
 -- 6. Discussions Table
 CREATE TABLE IF NOT EXISTS Discussions (
