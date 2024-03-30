@@ -72,13 +72,13 @@
         $_SESSION["Username"] = $uname;
         $_SESSION["UserType"] = $user['UserType'];
 
-        if($user['UserType'] == "Admin"){
+        if($user['UserType'] == "admin"){
             header("Location: ../../Pages/adminView.php");
         }
-        elseif($user['UserType'] == "Student"){
+        elseif($user['UserType'] == "student"){
             header("Location: ../../Pages/studentView.php");
         }
-        elseif($user['UserType'] == "Professor"){
+        elseif($user['UserType'] == "professor"){
             header("Location: ../../Pages/professorView.php");
         }
     } else {

@@ -11,7 +11,7 @@ final class UserRegistration {
     public function registerUser($firstName,$lastName,$userName,$email,$phoneNumber,$userPassword,$systemType) {
         
         if (empty($firstName) || empty($lastName) || empty($email) || empty($phoneNumber) || empty($userPassword) || empty($systemType)) {
-            return "Please fill all fields (statement triggers regardless of unit test sucsess)   ";
+            return "Please fill all fields (statement triggers regardless of unit test success)   ";
         }
     
         $stmt = $this->conn->prepare("INSERT INTO Users (userType, firstName, lastName, userName, email, phoneNumber, passwordHash) VALUES (?, ?, ?, ?, ?, ?, ?)");

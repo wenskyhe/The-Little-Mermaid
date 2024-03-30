@@ -33,3 +33,17 @@ if($usertype == "admin"){
 else {echo 'ERROR! You must be an admin to access this page! <br>';
     echo '<a href="login.html">Go back to login</a>';}
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration View</title>
+    <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
+    <link rel="stylesheet" href="../Assets/CSS/central.css">
+</head>
+<body>
+    <Head></Head>
+    
+</body>
+</html>
