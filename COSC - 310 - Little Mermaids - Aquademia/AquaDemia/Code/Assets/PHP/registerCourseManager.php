@@ -14,9 +14,22 @@
         die("Connection Failed". $conn->connect_error);
     }
 
-    $course = $conn -> real_escape_string($_POST["courseId"]);
+    $courseID = $conn -> real_escape_string($_POST["courseId"]);
  
-    registerCourse($_SESSION["UserID"], $course, $conn);
+    $result = $conn->execute_query("SELECT CourseID FROM courses WHERE CourseID = ? LIMIT 1", [$courseID]);
+    if($result->num_rows == 1) {
+        // found
+        registerCourse($_SESSION["UserID"], $courseID, $conn);
+        //PENDING FUNCTION
+    }
+    else {
+        echo '<script>
+            alert("That course doesnt exist!");
+            window.location.href="../../Pages/registerCourse.html";
+            </script>';
+    }
+
+    
 
     $conn->close();
 

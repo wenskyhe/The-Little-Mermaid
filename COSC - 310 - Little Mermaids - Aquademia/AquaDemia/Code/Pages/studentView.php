@@ -13,12 +13,10 @@ session_start();
 <body>
     <h1 style="text-align: center;">Welcome, <?php echo $_SESSION["Username"] ?></h1>
     
+    <a href="registerCourse.html">Register for a course</a><br>
     <a href="editDetails.php">Edit your details</a><br>
-    <a href="registerCourse.php">Register for a course</a><br>
-    <a href="viewCourses.php">View Your Courses</a><br>
-    <a href="gradeAssignments.php">Assignments Graded</a><br>
-
-
+    <a href="login.html">Logout</a>
+    <a href="studentMP.php">studentMP</a>
     
 </body>
 </html>

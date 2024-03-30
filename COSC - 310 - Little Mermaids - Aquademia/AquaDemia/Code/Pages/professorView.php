@@ -1,6 +1,6 @@
 <?php 
 session_start();
-if ($_SESSION["Role"] !== "Teacher") {
+if ($_SESSION["UserType"] !== "Professor") {
     header("Location: unauthorizedAccess.php");
     exit();
 }
@@ -22,6 +22,7 @@ if ($_SESSION["Role"] !== "Teacher") {
         <a href="gradeAssignments.php">Grade Assignments</a><br>
         <a href="viewCourses.php">View Your Courses</a><br>
         <a href="editDetails.php">Edit Your Details</a><br>
+        <a href="login.html">Logout</a><br>
     </div>
 
 </body>

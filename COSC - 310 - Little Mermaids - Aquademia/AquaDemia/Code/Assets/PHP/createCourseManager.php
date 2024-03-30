@@ -1,5 +1,57 @@
 <?php
 
+final class courseCreation{
+    private $conn;
+
+    public function __construct(mysqli $conn) {
+        $this->conn = $conn;
+    }
+
+    public function alreadyExists($courseName){
+        $query = "SELECT CourseName FROM Courses WHERE CourseName = ? LIMIT 1";
+        $result = $this -> conn -> execute_query($query, [$courseName]);
+        if($result->num_rows == 1) {
+            //found
+            return true;
+        }
+        return false;
+    }
+
+    public function checkProf($profID){
+        $query = "SELECT professorID FROM professors WHERE professorID = ?";
+        $result = $this -> conn -> execute_query($query, [$profID]);
+        if($result->num_rows == 1) {
+            //found
+            return true;
+        }
+        return false;
+
+    }
+
+    public function createCourse($courseName, $courseDescription, $prereqs, $profID){
+        if($this-> alreadyExists($courseName)){
+            return "Already exists."; 
+        }
+
+        if(!$this->checkProf($profID)){
+            return "Invalid professor.";
+        }
+
+        $stmt = $this-> conn -> prepare("INSERT INTO Courses (CourseName, CourseDescription, CoursePrequisiteID, ProfessorID, isCourseActive) VALUES (?,?,?,?,1)");
+        $stmt ->bind_param("ssss",$courseName, $courseDescription, $prereqs, $profID);
+    
+        //Send an alert that the course has been created
+        if ($stmt->execute()) {
+          return "Course created.";
+        } else {
+            $stmt->close();
+            return "Error: ". $stmt->error;
+        }
+    }
+
+    
+}
+
     $servername = "localhost";
     $username = "root"; // default XAMPP MySQL username
     $password = ""; // default XAMPP MySQL password is empty
@@ -12,24 +64,29 @@
 
     $subject = $conn -> real_escape_string($_POST["subject"]);
     $courseNumber = $conn -> real_escape_string($_POST["courseNumber"]);
-    $section = $conn -> real_escape_string($_POST["section"]);
-    $credits = $conn -> real_escape_string($_POST["profID"]);
-    $location = $conn -> real_escape_string($_POST["location"]);
+    $courseName = $subject . $courseNumber;
+    $courseDescription = $conn -> real_escape_string($_POST["description"]);
+    $prereqs = $conn -> real_escape_string($_POST["prereqs"]);
+    $profID = $conn -> real_escape_string($_POST["profID"]);
 
-    $stmt = $conn -> prepare("INSERT INTO Courses (Subject, CourseNumber, Section, Credits, Location) VALUES (?,?,?,?,?)"); // Corrected SQL statement
-    $stmt ->bind_param("sssss",$subject, $courseNumber, $section, $credits, $location);
+    $creation = new courseCreation($conn);
+    $result = $creation->createCourse($courseName, $courseDescription, $prereqs, $profID);
 
-    //Send an alert that the course has been created
-    if ($stmt->execute()) {
+    if($result == "Course created."){
         echo '<script>
-        alert("Course created!");
-        window.location.href="../../Pages/createCourses.html";
-        </script>';
-    } else {
-     echo "Error: ". $stmt->error;
+            alert("Course created!");
+            </script>';
     }
+    elseif($result == "Already exists."){
+        echo '<script>
+        alert("Course already exists!");
+        </script>';
+    }
+    echo '<script>
+        window.location.href="../../Pages/createCourses.html"</script>';
 
-    $stmt->close();
+    
     $conn->close();
 
+    
 ?>
