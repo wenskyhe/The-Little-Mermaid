@@ -86,9 +86,6 @@
         $alertMessage = "The password you entered was incorrect!";
         echo $alertMessage;
         header("Location: ../../Pages/login.html");
-    }
-
-    } catch(PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
+        
     }
     ?>
