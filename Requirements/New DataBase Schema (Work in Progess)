@@ -162,17 +162,14 @@ Illustration and Explanation:
 
 HERE IS THE MODIFIED SQL SCHEMA FOR THE DATABASE:
 
--- Dropping existing view if it exists to avoid conflicts during recreation
-DROP VIEW IF EXISTS StudentInformationAndGrades;
-
 CREATE TABLE IF NOT EXISTS Users (
     userID INT AUTO_INCREMENT PRIMARY KEY,
-    userType ENUM('Student', 'Professor', 'Admin') NOT NULL,
+    userType ENUM('student', 'professor', 'admin') NOT NULL,
     firstName VARCHAR(255) NOT NULL,
     lastName VARCHAR(255) NOT NULL,
     Email VARCHAR(255) NOT NULL UNIQUE,
     userName VARCHAR(255) NOT NULL DEFAULT '',
-    passwordHash VARCHAR(255) NOT NULL, UNIQUE
+    passwordHash VARCHAR(255) NOT NULL,
     phoneNumber VARCHAR(20)
 );
 
@@ -247,6 +244,18 @@ CREATE TABLE IF NOT EXISTS QuizQuestions (
     CorrectChoice ENUM('ChoiceA', 'ChoiceB', 'ChoiceC', 'ChoiceD') NOT NULL,
     FOREIGN KEY (courseID) REFERENCES Courses(courseID),
     FOREIGN KEY (AssignmentID) REFERENCES Assignments(AssignmentID) -- Adjusted to reference Assignments directly
+);
+
+
+-- 6. Discussions Table
+CREATE TABLE IF NOT EXISTS Discussions (
+    DiscussionID INT AUTO_INCREMENT PRIMARY KEY,
+    CourseID INT,
+    UserID INT,
+    Title VARCHAR(255) NOT NULL,
+    InitialPost TEXT NOT NULL,
+    FOREIGN KEY (CourseID) REFERENCES Courses(CourseID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
 
