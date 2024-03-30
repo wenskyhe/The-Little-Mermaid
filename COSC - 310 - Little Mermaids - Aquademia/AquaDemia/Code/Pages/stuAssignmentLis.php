@@ -1,6 +1,6 @@
 <?php
-require_once 'Aquademia/AquaDemia/Code/Assets/PHP/config.php';
-require_once 'Aquademia/AquaDemia/Code/Assets/PHP/dbh.inc.php';
+require_once 'config.php';
+require_once 'dbh.inc.php';
 
 // just for the test
 $UserID = 1;
@@ -52,11 +52,12 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     // Check if the assignment name exists in the $assignmentsData array
     if (array_key_exists($assignmentName, $assignmentsData)) {
         // Update Grade and SubmissionTime for the assignment
-       $assignmentsData[$assignmentName]['Grade'] = $row['Grade'];
+        $assignmentsData[$assignmentName]['Grade'] = $row['Grade'];
         $assignmentsData[$assignmentName]['SubmissionTime'] = $row['SubmissionTime'];
     }
 }
 //print_r($assignmentsData);
+
 
 // Close the database connection
 $pdo = null;
@@ -87,9 +88,12 @@ if (isset($_SESSION['assignmentName'])) {
             // Create a link with assignment details using GET method
             $assignmentLink = "submitAssignmentPage.php?assignmentName=" . urlencode($assignmentName) . "&dueDate=" . urlencode($assignmentDetails['DueDate']);
             echo "<li><a href='$assignmentLink'>$assignmentName</a> (Due Date: {$assignmentDetails['DueDate']}) <br> Grade: {$assignmentDetails['Grade']}, Release Date: {$assignmentDetails['ReleaseDate']}, Submission Time: {$assignmentDetails['SubmissionTime']}</li>";
-        } else {
-            echo "no assignment";
-        }
+        } 
+        
+        /*else {
+            echo "no assignment <br>";
+            break;
+        }*/
 
 
     } ?>
@@ -102,7 +106,12 @@ if (isset($_SESSION['assignmentName'])) {
             // Create a link with assignment details using GET method
             $assignmentLink = "submitAssignmentPage.php?assignmentName=" . urlencode($assignmentName) . "&dueDate=" . urlencode($assignmentDetails['DueDate']);
             echo "<li><a href='$assignmentLink'>$assignmentName</a> (Due Date: {$assignmentDetails['DueDate']}) <br> Grade: {$assignmentDetails['Grade']}, Release Date: {$assignmentDetails['ReleaseDate']}, Submission Time: {$assignmentDetails['SubmissionTime']}</li>";
-        } 
+        }  
+        
+        /*else {
+            echo "no assignment <br>";
+            break;
+        }*/
     } ?>
 </ul>
 </body>
