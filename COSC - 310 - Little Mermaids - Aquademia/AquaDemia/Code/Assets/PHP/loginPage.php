@@ -32,8 +32,8 @@
         elseif($user['UserType'] == "Student"){
             header("Location: ../../Pages/studentView.php");
         }
-        elseif($user['UserType'] == "Teacher"){
-            header("Location: ../../Pages/teacherView.php");
+        elseif($user['UserType'] == "Professor"){
+            header("Location: ../../Pages/professorView.php");
         }
     } else {
         // Display an error message

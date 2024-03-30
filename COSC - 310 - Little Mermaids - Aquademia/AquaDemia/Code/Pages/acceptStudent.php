@@ -1,7 +1,7 @@
 <?php 
 
 require_once('../Assets/PHP/enrollmentManager.php');
-$query = "select * from enrollment where Accepted = false";
+$query = "select * from enrollment where Accepted = 0";
 $result = mysqli_query($conn, $query);
 
 ?>

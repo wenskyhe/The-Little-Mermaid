@@ -19,7 +19,7 @@
     $result = $conn->execute_query("SELECT CourseID FROM courses WHERE CourseID = ? LIMIT 1", [$courseID]);
     if($result->num_rows == 1) {
         // found
-        registerCourse($_SESSION["UserID"], $course, $conn);
+        registerCourse($_SESSION["UserID"], $courseID, $conn);
         //PENDING FUNCTION
     }
     else {

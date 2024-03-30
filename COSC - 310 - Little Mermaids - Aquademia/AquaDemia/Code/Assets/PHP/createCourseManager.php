@@ -7,9 +7,9 @@ final class courseCreation{
         $this->conn = $conn;
     }
 
-    public function alreadyExists($subject, $courseNumber){
-        $query = "SELECT Subject, CourseNumber FROM Courses WHERE Subject = ? AND CourseNumber = ? LIMIT 1";
-        $result = $this -> conn -> execute_query($query, [$subject, $courseNumber]);
+    public function alreadyExists($courseName){
+        $query = "SELECT CourseName FROM Courses WHERE CourseName = ? LIMIT 1";
+        $result = $this -> conn -> execute_query($query, [$courseName]);
         if($result->num_rows == 1) {
             //found
             return true;
@@ -17,18 +17,28 @@ final class courseCreation{
         return false;
     }
 
-    public function createCourse($subject, $courseNumber, $section, $credits, $location){
-        // if (empty($subject) || empty($courseNumber) || empty($section) || empty($credits) || empty($location)) {
-        //     return "Please fill all fields";
-        // }
+    public function checkProf($profID){
+        $query = "SELECT professorID FROM professors WHERE professorID = ?";
+        $result = $this -> conn -> execute_query($query, [$profID]);
+        if($result->num_rows == 1) {
+            //found
+            return true;
+        }
+        return false;
 
-        if($this-> alreadyExists($subject, $courseNumber)){
-            return "Already exists.";
-            
+    }
+
+    public function createCourse($courseName, $courseDescription, $prereqs, $profID){
+        if($this-> alreadyExists($courseName)){
+            return "Already exists."; 
         }
 
-        $stmt = $this-> conn -> prepare("INSERT INTO Courses (Subject, CourseNumber, Section, Credits, Location) VALUES (?,?,?,?,?)"); // Corrected SQL statement
-        $stmt ->bind_param("sssss",$subject, $courseNumber, $section, $credits, $location);
+        if(!$this->checkProf($profID)){
+            return "Invalid professor.";
+        }
+
+        $stmt = $this-> conn -> prepare("INSERT INTO Courses (CourseName, CourseDescription, CoursePrequisiteID, ProfessorID, isCourseActive) VALUES (?,?,?,?,1)");
+        $stmt ->bind_param("ssss",$courseName, $courseDescription, $prereqs, $profID);
     
         //Send an alert that the course has been created
         if ($stmt->execute()) {
@@ -54,13 +64,13 @@ final class courseCreation{
 
     $subject = $conn -> real_escape_string($_POST["subject"]);
     $courseNumber = $conn -> real_escape_string($_POST["courseNumber"]);
-    $section = $conn -> real_escape_string($_POST["section"]);
-    $credits = $conn -> real_escape_string($_POST["profID"]);
-    $location = $conn -> real_escape_string($_POST["location"]);
+    $courseName = $subject . $courseNumber;
+    $courseDescription = $conn -> real_escape_string($_POST["description"]);
+    $prereqs = $conn -> real_escape_string($_POST["prereqs"]);
+    $profID = $conn -> real_escape_string($_POST["profID"]);
 
     $creation = new courseCreation($conn);
-    $postData = $_POST;
-    $result = $creation->createCourse($subject, $courseNumber, $section, $credits, $location);
+    $result = $creation->createCourse($courseName, $courseDescription, $prereqs, $profID);
 
     if($result == "Course created."){
         echo '<script>

@@ -23,19 +23,18 @@ final class createCourseTest extends TestCase
             die("Connection Failed: " . $conn->connect_error);
         }
     
-        $subject = "TestSubject";
-        $courseNumber = "000";
-        $section = "000";
-        $credits = "10";
-        $location = "HELL";
+        $courseName = "TEST123";
+        $courseDescription = "BLANK";
+        $prereqs = "";
+        $profID = 3;
 
-        $deleteQuery1 = "DELETE courses FROM courses WHERE Subject = '$subject' AND CourseNumber = '$courseNumber'";
+        $deleteQuery1 = "DELETE courses FROM courses WHERE CourseName = '$courseName'";
         if ($conn->query($deleteQuery1) !== TRUE) {
             echo "Error deleting record: " . $conn->error;
         }
 
         
-        $checkQuery = "SELECT * FROM courses WHERE Subject = '$subject' AND CourseNumber = '$courseNumber'";
+        $checkQuery = "SELECT * FROM courses WHERE CourseName = '$courseName'";
         $result = $conn->query($checkQuery);
             $this->assertEquals(0, $result->num_rows, "Course was not deleted from the database.");
     
@@ -43,7 +42,7 @@ final class createCourseTest extends TestCase
         $conn->close();
     }
 
-
+    // Test to create a sample course: should pass
     public function testCreateCourse(): void
     {
         $servername = "localhost";
@@ -51,32 +50,26 @@ final class createCourseTest extends TestCase
         $password = "";
         $dbname = "aquademia";
 
-        
-
         $conn = new mysqli($servername, $username, $password, $dbname);
         if ($conn->connect_error) {
             die("Connection Failed: " . $conn->connect_error);
         }
-    
-        
-        $subject = "TestSubject";
-        $courseNumber = "000";
-        $section = "000";
-        $credits = "10";
-        $location = "HELL";
+
+        $courseName = "TEST123";
+        $courseDescription = "BLANK";
+        $prereqs = "";
+        $profID = 3;
 
         $creation = new courseCreation($conn);
-        $result = $creation->createCourse($subject, $courseNumber, $section, $credits, $location);
+        $result = $creation->createCourse($courseName, $courseDescription, $prereqs, $profID);
         $this->assertEquals($result, "Course created.");
 
         $this->ResetCourse();
 
         $conn->close();
-
-
-
     }
 
+    // Test to add a course that already exists. Should not add course
     public function testCreateDuplicateCourse() {
         $servername = "localhost";
         $username = "root";
@@ -87,24 +80,47 @@ final class createCourseTest extends TestCase
         if ($conn->connect_error) {
             die("Connection Failed: " . $conn->connect_error);
         }
-    
         
-        $subject = "TestSubject";
-        $courseNumber = "000";
-        $section = "000";
-        $credits = "10";
-        $location = "HELL";
+        $courseName = "TEST123";
+        $courseDescription = "BLANK";
+        $prereqs = "";
+        $profID = "3";
         
-
         $creation = new courseCreation($conn);
-        $insert = $creation->createCourse($subject, $courseNumber, $section, $credits, $location);
-        $duplicateInsert = $creation->createCourse($subject, $courseNumber, $section, $credits, $location);
+        $insert = $creation->createCourse($courseName, $courseDescription, $prereqs, $profID);
+        $duplicateInsert = $creation->createCourse($courseName, $courseDescription, $prereqs, $profID);
          
         $this->assertEquals($duplicateInsert, "Already exists.");
         $this->ResetCourse();
 
         $conn->close();
 
+    }
+
+    // Test to add a course when there is no matching professorID. Should return that prof is invald
+    public function testProfInvalid(){
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "aquademia";
+
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        if ($conn->connect_error) {
+            die("Connection Failed: " . $conn->connect_error);
+        }
+
+        $courseName = "TEST123";
+        $courseDescription = "BLANK";
+        $prereqs = "";
+        $profID = 2;
+
+        $creation = new courseCreation($conn);
+        $result = $creation->createCourse($courseName, $courseDescription, $prereqs, $profID);
+        $this->assertEquals($result, "Invalid professor.");
+
+        $this->ResetCourse();
+
+        $conn->close();
     }
 
 }
