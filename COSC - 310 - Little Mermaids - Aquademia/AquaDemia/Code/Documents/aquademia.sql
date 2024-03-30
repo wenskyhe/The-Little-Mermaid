@@ -32,6 +32,8 @@ CREATE TABLE `admins` (
   `fullAccess` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+INSERT INTO `admins` (`adminID`) VALUES
+(11);
 -- --------------------------------------------------------
 
 --
@@ -48,7 +50,8 @@ CREATE TABLE `professors` (
 --
 
 INSERT INTO `professors` (`professorID`, `Department`) VALUES
-(3, NULL);
+(3, NULL),
+(10, NULL);
 
 -- --------------------------------------------------------
 
@@ -98,7 +101,10 @@ INSERT INTO `users` (`userID`, `userType`, `firstName`, `lastName`, `userName`, 
 (3, 'Professor', 'Nelson', 'Ngumo', 'Nelson_Ngumo', 'ngurunelson@gmail.com', '12508630731', NULL, 0x2432792431302454326a3170622e7569416c535a2e484d71637735746567497767697763566c56744b7670585741314764774e2e7a45466b55416971),
 (5, 'Student', 'Adrian', 'Reid', 'Adrian_Reid', 'adrianReid@gmail.com', '12508630732', NULL, 0x2432792431302437465149744c4f7653525665657a2e6b57786259514f35655936687a562e69597663554c446e2e3149345844376d45465461613743),
 (7, 'Student', 'Ahmed', 'Mirza', 'Ahmed_Mirza', 'ahmedMirza@gmail.com', '12508630733', NULL, 0x2432792431302430334e38563070465a5649747a7778393239694f462e3933785463445343455965326d35326f4a466162496c792f39305339415553),
-(8, 'Student', 'Jermane', 'Cole', 'Jermane_Cole', 'JermaneCole@gmail.cok', '12508630734', NULL, 0x2432792431302443446e6d4d6c754131536b6a6f3559596f54704138656566343471343956345a747836636e4b43576b78645650704c344437325a6d);
+(8, 'Student', 'Jermane', 'Cole', 'Jermane_Cole', 'JermaneCole@gmail.cok', '12508630734', NULL, 0x2432792431302443446e6d4d6c754131536b6a6f3559596f54704138656566343471343956345a747836636e4b43576b78645650704c344437325a6d),
+(9, 'Student',  'test', 'student', 'test_student','teststudent@gmail.com', '12508630735', NULL, 'student'),
+(10, 'Professor',  'test', 'teacher', 'test_teacher','testteacher@gmail.com', '12508630736', NULL, 'teacher'),
+(11, 'Admin',  'test', 'admin', 'test_admin','testadmin@gmail.com', '12508630737', NULL, 'admin');
 
 --
 -- Triggers `users`

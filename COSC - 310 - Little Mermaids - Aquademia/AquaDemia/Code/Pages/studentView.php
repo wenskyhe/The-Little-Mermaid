@@ -7,7 +7,7 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin View</title>
+    <title>Student View</title>
     <link rel="stylesheet" href="../Assets/CSS/central.css">
 </head>
 <body>
@@ -17,6 +17,6 @@ session_start();
     <a href="editDetails.php">Edit your details</a><br>
     <a href="login.html">Logout</a>
     <a href="studentMP.php">studentMP</a>
-
+    
 </body>
 </html>
