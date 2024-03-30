@@ -1,69 +1,105 @@
 <?php 
 
-include_once 'Aquademia/AquaDemia/Code/Assets/PHP/config.php';
-include_once 'Aquademia/AquaDemia/Code/Assets/PHP/dbh.inc.php';
+include_once 'config.php';
+include_once 'dbh.inc.php';
 
 $UserID = 1;
+// Fetch enrolled courses for the student
 $sql = "SELECT CourseID
         FROM studentRegistration 
-        WHERE StudentID = $UserID"; 
+        WHERE StudentID = :UserID"; 
 
-$stmt = $pdo->query($sql);
-$courseIDs = array();
+$stmt = $pdo->prepare($sql);
+$stmt->bindParam(':UserID', $UserID, PDO::PARAM_INT);
+$stmt->execute();
+$courseIDs = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
-// Fetch data from the result set and store CourseIDs in the array
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $courseIDs[] = $row['CourseID'];
-}
-
-// Initialize an empty 2D array to store course details
+// Initialize an empty associative array to store course details
 $courseDetails = array();
 
 // Loop over each CourseID in $courseIDs
 foreach ($courseIDs as $courseID) {
     $sql = "SELECT CourseID, Subject, CourseNumber
             FROM courses
-            WHERE CourseID = $courseID";
+            WHERE CourseID = :CourseID";
 
-    $stmt = $pdo->query($sql);
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':CourseID', $courseID, PDO::PARAM_INT);
+    $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Store course details in the 2D array using proper keys
-    $courseDetails[] = array(
-        'CourseID' => $row['CourseID'],
+    // Store course details in the associative array using CourseID as the key
+    $courseDetails[$courseID] = array(
         'Subject' => $row['Subject'],
-        'CourseNumber' => $row['CourseNumber']
+        'CourseNumber' => $row['CourseNumber'],
+        'AverageGrade' => null // Initialize AverageGrade
     );
-}
-//print_r($courseDetails);
 
+    // Retrieve assignments and grades for the course
+    $sql = "SELECT A.AssignmentName, A.Grade, C.Weight
+            FROM Assignments A
+            INNER JOIN CourseAssignments C ON A.CourseID = C.CourseID AND A.AssignmentName = C.AssignmentName
+            WHERE A.CourseID = :CourseID
+            AND A.StudentID = :UserID";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':CourseID', $courseID, PDO::PARAM_INT);
+    $stmt->bindParam(':UserID', $UserID, PDO::PARAM_INT);
+    $stmt->execute();
+
+    // Initialize variables to calculate total grade, total weight, and count the number of assignments
+    $totalGrade = 0;
+    $totalWeight = 0;
+
+    // Fetch data for assignments and calculate total grade and total weight
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $grade = $row['Grade'];
+        $weight = $row['Weight'];
+
+        // Ignore assignments with grade -1 (not graded)
+        if ($grade >= 0) {
+            $totalGrade += $grade * $weight;
+            $totalWeight += $weight;
+        }
+    }
+
+    // Calculate average grade for the course
+    $averageGrade = $totalWeight > 0 ? round(($totalGrade / $totalWeight) * 100, 2) : 0;
+
+    // Update the AverageGrade in courseDetails array
+    $courseDetails[$courseID]['AverageGrade'] =( $averageGrade/100);
+}
+
+//print_r($courseDetails);
 // Initialize an empty array to store upcoming assignments
 $upcomingAssignments = array();
 
 // Loop over each CourseID in $courseIDs
-foreach ($courseDetails as $course) {
-    $courseID = $course['CourseID'];
-    // Retrieve assignments for the course where the due date is greater than the current time
-    $sql = "SELECT AssignmentName, DueDate
-            FROM CourseAssignments
-            WHERE CourseID = $courseID
-            AND DueDate > NOW()";
+foreach ($courseDetails as $courseID => $course) {
+  // Retrieve assignments for the course where the due date is greater than the current time
+  $sql_1 = "SELECT AssignmentName, DueDate
+          FROM CourseAssignments
+          WHERE CourseID = :CourseID
+          AND DueDate > NOW()";
 
-    $stmt = $pdo->query($sql);
-    
-    // Fetch data for upcoming assignments in this course
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $assignmentName = $row['AssignmentName'];
-        $dueDate = $row['DueDate'];
+  $stmt = $pdo->prepare($sql_1);
+  $stmt->bindParam(':CourseID', $courseID, PDO::PARAM_INT);
+  $stmt->execute();
+  
+  // Fetch data for upcoming assignments in this course
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $assignmentName = $row['AssignmentName'];
+      $dueDate = $row['DueDate'];
 
-        // Add the upcoming assignment to the array
-        $upcomingAssignments[] = array(
-            'CourseID' => $courseID,
-            'AssignmentName' => $assignmentName,
-            'DueDate' => $dueDate
-        );
-    }
+      // Add the upcoming assignment to the array
+      $upcomingAssignments[] = array(
+          'CourseID' => $courseID,
+          'AssignmentName' => $assignmentName,
+          'DueDate' => $dueDate
+      );
+  }
 }
+
 $pdo = null;
 ?>
 
@@ -134,18 +170,23 @@ $pdo = null;
 
 
 <div class="row">
-    <?php foreach ($courseDetails as $course) { ?>
+    <?php 
+    //print_r($courseDetails);
+    foreach ($courseDetails as $courseID => $course) { ?>
         <div class="column">
-            <a href="assignmentsLis.php?CourseID=<?php echo urlencode($course['CourseID']); ?>">
+            <a href="assignmentsLis.php?CourseID=<?php echo urlencode($courseID); ?>">
                 <img src="../Assets/Images/defaultPic.jpg" class="hover-shadow">
                 <div class="caption" >
                     <?php echo $course['Subject'] . ' ' . $course['CourseNumber']; ?>
-                </div>
-            </a>
+                    </a><?php echo "Current Grade: " . $course['AverageGrade']; ?>
+                  </div>
+             <br>
+            
         </div>
     <?php } ?>
 </div>
 
+<br>
 <br>
 <h3> Upcoming Assignments </h3>
 <!--contain assignments such that 1. due date>now 2. no submission records-->
