@@ -3,7 +3,7 @@ session_start();
 
 $usertype = $_SESSION["UserType"];
 // Only display this page if the user is an admin;
-if($usertype == "Admin"){
+if($usertype == "admin"){
     echo '
 
 <!DOCTYPE html>
