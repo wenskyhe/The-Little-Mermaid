@@ -11,7 +11,7 @@ final class UserRegistration {
     public function registerUser($firstName,$lastName,$userName,$email,$phoneNumber,$userPassword,$systemType) {
         
         if (empty($firstName) || empty($lastName) || empty($email) || empty($phoneNumber) || empty($userPassword) || empty($systemType)) {
-            return "Please fill all fields (statement triggers regardless of unit test sucsess)   ";
+            return "Please fill all fields (statement triggers regardless of unit test success)   ";
         }
     
         $stmt = $this->conn->prepare("INSERT INTO Users (userType, firstName, lastName, userName, email, phoneNumber, passwordHash) VALUES (?, ?, ?, ?, ?, ?, ?)");
@@ -19,8 +19,8 @@ final class UserRegistration {
     
         if ($stmt->execute()) {
             $stmt->close();
-            return "Welcome to AquaDemia " . $firstName . " " . $lastName . " ";
             header('Location: ../../Pages/login.html');
+            return "Welcome to AquaDemia " . $firstName . " " . $lastName . " ";
             
         } else {
             $stmt->close();
@@ -29,6 +29,16 @@ final class UserRegistration {
     }
 }
 
+// $servername = "aqb.h.filess.io";
+// $username = "aquademia_streetage"; // default XAMPP MySQL username
+// $password = "5c6a6f0224cbcb0385cbde21f8a5f83bf7c37b42"; // default XAMPP MySQL password is empty
+// $dbname = "aquademia_streetage";
+// $port = "3307";
+
+
+// $conn = new mysqli($servername, $username, $password, $dbname, $port);
+
+
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -36,6 +46,7 @@ $dbname = "aquademia";
 
 
 $conn = new mysqli($servername, $username, $password, $dbname);
+
 if ($conn->connect_error) {
     die("Connection Failed: " . $conn->connect_error);
 }

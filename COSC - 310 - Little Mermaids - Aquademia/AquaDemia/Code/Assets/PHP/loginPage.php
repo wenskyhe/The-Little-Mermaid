@@ -18,15 +18,15 @@
                 $_SESSION["Username"] = $uname;
                 // Redirect to welcome page
         
-                if($user['UserType'] == "Admin"){
+                if($user['UserType'] == "admin"){
                     header("Location: ../../Pages/adminView.php");
                     return "login code:1";  //returns 1 if admin
                 }
-                else if($user['UserType'] == "Student"){
+                else if($user['UserType'] == "student"){
                     header("Location: ../../Pages/studentView.php");
                     return "login code:2";  //returns 2 if student
                 }
-                else if($user['UserType'] == "Professor"){
+                else if($user['UserType'] == "professor"){
                     header("Location: ../../Pages/teacherView.php");
                     return "login code:3";  //returns 3 if teacher
                 }
@@ -40,12 +40,19 @@
     }
     session_save_path();
     session_start(); // Start the session.
+    // $servername = "aqb.h.filess.io";
+    // $username = "aquademia_streetage";
+    // $password = "5c6a6f0224cbcb0385cbde21f8a5f83bf7c37b42";
+    // $dbname = "aquademia_streetage";
+    // $port = "3307";
+    
+    
+    // $conn = new PDO("mysql:host=$servername; dbname=$dbname; port=$port", $username, $password);
+
     $servername = "localhost";
     $username = "root"; // default XAMPP MySQL username
     $password = ""; // default XAMPP MySQL password is empty
     $dbname = "aquademia";
-
-    
     
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
     
@@ -66,6 +73,7 @@
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user && ($psw == $user['PasswordHash'])) {
+       
         // Password is correct
         $_SESSION["loggedin"] = true;
         $_SESSION["UserID"] = $user['UserID'];
@@ -76,6 +84,7 @@
             header("Location: ../../Pages/adminView.php");
         }
         elseif($user['UserType'] == "Student"){
+            echo "student";
             header("Location: ../../Pages/studentView.php");
         }
         elseif($user['UserType'] == "Professor"){

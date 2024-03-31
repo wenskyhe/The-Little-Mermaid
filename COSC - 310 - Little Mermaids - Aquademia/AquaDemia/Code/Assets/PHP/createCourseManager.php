@@ -30,10 +30,16 @@ final class courseCreation{
 
     public function createCourse($courseName, $courseDescription, $prereqs, $profID){
         if($this-> alreadyExists($courseName)){
+            echo '<script>
+            alert("That course already exists!");
+            </script>';
             return "Already exists."; 
         }
 
         if(!$this->checkProf($profID)){
+            echo '<script>
+            alert("That is not a valid professor ID!");
+            </script>';
             return "Invalid professor.";
         }
 
