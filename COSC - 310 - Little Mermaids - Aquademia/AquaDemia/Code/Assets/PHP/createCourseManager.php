@@ -30,14 +30,20 @@ final class courseCreation{
 
     public function createCourse($courseName, $courseDescription, $prereqs, $profID){
         if($this-> alreadyExists($courseName)){
+            echo '<script>
+            alert("That course already exists!");
+            </script>';
             return "Already exists."; 
         }
 
         if(!$this->checkProf($profID)){
+            echo '<script>
+            alert("That is not a valid professor ID!");
+            </script>';
             return "Invalid professor.";
         }
 
-        $stmt = $this-> conn -> prepare("INSERT INTO Courses (courseName, courseDescription,  coursePrequisteID , professorID, isCourseActive) VALUES (?,?,?,?,1)");
+        $stmt = $this-> conn -> prepare("INSERT INTO Courses (CourseName, CourseDescription, CoursePrequisiteID, ProfessorID, isCourseActive) VALUES (?,?,?,?,1)");
         $stmt ->bind_param("ssss",$courseName, $courseDescription, $prereqs, $profID);
     
         //Send an alert that the course has been created
