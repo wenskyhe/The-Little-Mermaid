@@ -37,17 +37,20 @@ final class signupPageTest extends TestCase
         $deleteQuery1 = "DELETE students FROM students JOIN users ON users.userID = students.studentID WHERE users.userName = '$userName'";
         if ($conn->query($deleteQuery1) !== TRUE) {
             echo "Error deleting record: " . $conn->error;
+            $this->AssertTrue(false);
+
         }
 
-        $deleteQuery2 = "DELETE FROM users WHERE username = '$userName'";
+        $deleteQuery2 = "DELETE FROM users WHERE userName = '$userName'";
         if ($conn->query($deleteQuery2) !== TRUE) {
             echo "Error deleting record: " . $conn->error;
+            $this->AssertTrue(false);
         }
-        $checkQuery = "SELECT * FROM users WHERE username = '$userName'";
+        $checkQuery = "SELECT * FROM users WHERE userName = '$userName'";
         $result = $conn->query($checkQuery);
             $this->assertEquals(0, $result->num_rows, "User was not deleted from the database.");
     
-       
+        
         $conn->close();
     }
     public function ResetTeacher(){
@@ -75,11 +78,15 @@ final class signupPageTest extends TestCase
         $deleteQuery1 = "DELETE professors FROM professors JOIN users ON users.userID = professors.professorID WHERE users.userName = '$userName'";
         if ($conn->query($deleteQuery1) !== TRUE) {
             echo "Error deleting record: " . $conn->error;
+            $this->AssertTrue(false);
+
         }
 
         $deleteQuery2 = "DELETE FROM users WHERE username = '$userName'";
         if ($conn->query($deleteQuery2) !== TRUE) {
             echo "Error deleting record: " . $conn->error;
+            $this->AssertTrue(false);
+
         }
         $checkQuery = "SELECT * FROM users WHERE username = '$userName'";
 $result = $conn->query($checkQuery);

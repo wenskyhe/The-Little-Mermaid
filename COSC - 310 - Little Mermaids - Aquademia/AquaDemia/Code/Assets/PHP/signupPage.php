@@ -19,8 +19,8 @@ final class UserRegistration {
     
         if ($stmt->execute()) {
             $stmt->close();
-            return header('Location: ../../Pages/login.html');
-            
+            header('Location: ../../Pages/login.html');
+            return "Welcome to AquaDemia " . $firstName . " " . $lastName . " ";
         } else {
             $stmt->close();
             return "Error: " . $stmt->error;

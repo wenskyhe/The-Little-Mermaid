@@ -37,7 +37,7 @@ final class courseCreation{
             return "Invalid professor.";
         }
 
-        $stmt = $this-> conn -> prepare("INSERT INTO Courses (CourseName, CourseDescription, CoursePrequisiteID, ProfessorID, isCourseActive) VALUES (?,?,?,?,1)");
+        $stmt = $this-> conn -> prepare("INSERT INTO Courses (courseName, courseDescription,  coursePrequisteID , professorID, isCourseActive) VALUES (?,?,?,?,1)");
         $stmt ->bind_param("ssss",$courseName, $courseDescription, $prereqs, $profID);
     
         //Send an alert that the course has been created
