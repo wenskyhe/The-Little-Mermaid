@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS Courses (
     courseID INT AUTO_INCREMENT PRIMARY KEY,
     courseName VARCHAR(255),
     courseDescription TEXT,
-    coursePrequisteID TEXT,
+    coursePrequisiteID TEXT,
     professorID INT,
     isCourseActive BOOLEAN,
     FOREIGN KEY (professorID) REFERENCES Users(userID)
