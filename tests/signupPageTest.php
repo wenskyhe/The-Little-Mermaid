@@ -98,6 +98,7 @@ $this->assertEquals(0, $result->num_rows, "User was not deleted from the databas
 
     public function testRegisterStudent(): void
     {
+        //segsyees
         $servername = "localhost";
         $username = "root";
         $password = "";
