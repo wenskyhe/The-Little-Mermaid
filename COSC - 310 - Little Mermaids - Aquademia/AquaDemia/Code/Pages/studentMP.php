@@ -7,7 +7,7 @@ include_once 'dbh.inc.php';
 function fetchEnrolledCourses($pdo, $UserID)
 {
     $sql = "SELECT CourseID
-            FROM enrollments 
+            FROM enrollment 
             WHERE UserID = :UserID";
 
     $stmt = $pdo->prepare($sql);

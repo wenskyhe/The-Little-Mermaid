@@ -30,16 +30,16 @@ final class courseCreation{
 
     public function createCourse($courseName, $courseDescription, $prereqs, $profID){
         if($this-> alreadyExists($courseName)){
-            echo '<script>
-            alert("That course already exists!");
-            </script>';
+            // echo '<script>
+            // alert("That course already exists!");
+            // </script>';
             return "Already exists."; 
         }
 
         if(!$this->checkProf($profID)){
-            echo '<script>
-            alert("That is not a valid professor ID!");
-            </script>';
+            // echo '<script>
+            // alert("That is not a valid professor ID!");
+            // </script>';
             return "Invalid professor.";
         }
 
@@ -87,6 +87,11 @@ final class courseCreation{
         echo '<script>
         alert("Course already exists!");
         </script>';
+    }
+    elseif($result == "Invalid professor."){
+        echo '<script>
+            alert("That is not a valid professor ID!");
+            </script>';
     }
     echo '<script>
         window.location.href="../../Pages/createCourses.html"</script>';
