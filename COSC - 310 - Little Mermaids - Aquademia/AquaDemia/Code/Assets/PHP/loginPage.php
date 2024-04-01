@@ -27,7 +27,7 @@
                     return "login code:2";  //returns 2 if student
                 }
                 else if($user['UserType'] == "Professor"){
-                    header("Location: ../../Pages/teacherView.php");
+                    header("Location: ../../Pages/professorView.php");
                     return "login code:3";  //returns 3 if teacher
                 }
                  } else {

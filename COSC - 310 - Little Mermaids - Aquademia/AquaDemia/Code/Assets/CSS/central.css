@@ -9,14 +9,18 @@ h1,h2,h3,p,b,h4,a {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-
+textarea {
+  width: 280px;
+  height: 150px;
+  font-family: Arial, Helvetica, sans-serif;
+}
 
 
 .logo{
 font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 
-input[type=text], input[type=password] {
+input[type=text], input[type=password], input[type=number] {
  border: 2px solid black;
  border-radius: 5px;  
  margin-top: 10px;

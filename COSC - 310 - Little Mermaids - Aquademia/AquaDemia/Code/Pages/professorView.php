@@ -1,6 +1,6 @@
 <?php 
 session_start();
-if ($_SESSION["UserType"] !== "professor") {
+if ($_SESSION["UserType"] !== "Professor") {
     header("Location: unauthorizedAccess.php");
     exit();
 }
