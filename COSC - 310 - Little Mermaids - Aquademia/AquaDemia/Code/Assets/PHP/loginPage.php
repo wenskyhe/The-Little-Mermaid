@@ -18,16 +18,16 @@
                 $_SESSION["Username"] = $uname;
                 // Redirect to welcome page
         
-                if($user['UserType'] == "admin"){
+                if($user['UserType'] == "Admin"){
                     header("Location: ../../Pages/adminView.php");
                     return "login code:1";  //returns 1 if admin
                 }
-                else if($user['UserType'] == "student"){
+                else if($user['UserType'] == "Student"){
                     header("Location: ../../Pages/studentView.php");
                     return "login code:2";  //returns 2 if student
                 }
-                else if($user['UserType'] == "professor"){
-                    header("Location: ../../Pages/teacherView.php");
+                else if($user['UserType'] == "Professor"){
+                    header("Location: ../../Pages/professorView.php");
                     return "login code:3";  //returns 3 if teacher
                 }
                  } else {

@@ -36,7 +36,7 @@
 
     //function that takes in a courseID and userID and adds a pending enrollment to the enrollment table.
     function registerCourse($userID, $courseID, $connection){
-        $stmt = $connection -> prepare("INSERT INTO Enrollment (UserID, CourseID, EnrollmentDate, Accepted) VALUES (?,?,CURDATE(),0)");
+        $stmt = $connection -> prepare("INSERT INTO Enrollment (UserID, CourseID, EnrollmentDate, Accepted) VALUES (?,?,CURDATE(),'0')");
         $stmt ->bind_param("ss",$userID, $courseID);
 
         if ($stmt->execute()) {

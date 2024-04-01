@@ -1,7 +1,7 @@
 <?php 
 
 require_once('../Assets/PHP/enrollmentManager.php');
-$query = "select * from enrollment where Accepted = 0";
+$query = "select * from enrollment where Accepted = '0'";
 $result = mysqli_query($conn, $query);
 
 ?>
@@ -51,7 +51,8 @@ need it, each element has it's own style. -->
                             <td><?php $userID = $row['UserID']; echo $userID?></td>
                             <td><?php $courseID = $row['CourseID']; echo $courseID?></td>
                             <td><?php echo $row['EnrollmentDate']; ?></td>
-                            <td><a href="../Assets/PHP/acceptEnrollment.php?userid=<?php echo $userID; ?>&courseid=<?php echo $courseID ?>" class="btn btn-primary">Accept</td>    
+                            <td><a href="../Assets/PHP/acceptEnrollment.php?userid=<?php echo $userID; ?>&courseid=<?php echo $courseID ?>" class="btn btn-primary">Accept    
+                            <a href="../Assets/PHP/rejectEnrollment.php?userid=<?php echo $userID; ?>&courseid=<?php echo $courseID ?>" class="btn btn-danger float-right">Reject</td>    
                             </tr>    
                             <?php
                                     }

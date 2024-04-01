@@ -95,8 +95,9 @@ public function testinvalidLogin(){
     $psw = null;
 
     $result = $newLogin->loginAttempt($conn,$uname,$psw);
-    $this->assertStringStartsWith($result,"login code:4->error");
+    // $this->assertStringStartsWith($result,"login code:4->error");
     $conn = NULL; //null is how to close PDO connections
+    $this->assertEquals(0,1);
 }
 
 }
