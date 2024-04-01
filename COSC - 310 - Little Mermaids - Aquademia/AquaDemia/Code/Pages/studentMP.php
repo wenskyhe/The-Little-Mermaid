@@ -35,16 +35,17 @@ function fetchCourseDetails($pdo, $courseID)
 
 function fetchAverageGrade($pdo, $courseID, $UserID)
 {
-    $sql = "SELECT A.assignmentID, A.Grade, C.Weight
-            FROM Submissions A
-            INNER JOIN Assignments C ON A.CourseID = C.CourseID AND A.assignmentID = C.assignmentID
-            WHERE A.CourseID = :CourseID
-            AND A.UserID = :UserID";
+    $sql = "SELECT A.assignmentID, S.grade, A.Weight
+            FROM submissions AS S
+            INNER JOIN assignments AS A ON A.assignmentID = S.assignmentID
+            WHERE A.CourseID = :courseID AND S.UserID = :userID";
 
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':CourseID', $courseID, PDO::PARAM_INT);
-    $stmt->bindParam(':UserID', $UserID, PDO::PARAM_INT);
-    $stmt->execute();
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':courseID', $courseID, PDO::PARAM_INT);
+            $stmt->bindParam(':userID', $UserID, PDO::PARAM_INT);
+            $stmt->execute();
+
+    
 
     $totalGrade = 0;
     $totalWeight = 0;
