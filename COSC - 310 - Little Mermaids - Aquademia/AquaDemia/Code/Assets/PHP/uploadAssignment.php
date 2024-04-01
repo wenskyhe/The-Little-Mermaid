@@ -1,16 +1,17 @@
 
 <?php
+//ruby
 
-include_once 'Aquademia/AquaDemia/Code/Assets/PHP/config.php';
-include_once 'Aquademia/AquaDemia/Code/Assets/PHP/dbh.inc.php';
+require_once 'config.php';
+require_once 'dbh.inc.php';
 
 
 // Function to handle file upload and insertion into the database
-function uploadAssignmentFile($pdo, $assignmentName, $userID)
+function uploadAssignmentFile($pdo, $assignmentID, $userID)
 {
     /*
-    if (isset($_SESSION['assignmentName']) && isset($_SESSION['userID'])) {
-    $assignmentName = $_SESSION['assignmentName'];
+    if (isset($_SESSION['assignmentID']) && isset($_SESSION['userID'])) {
+    $assignmentID = $_SESSION['assignmentID'];
     $userID = $_SESSION['userID'];
     */
     if (isset($_FILES['assignmentFile']) && $_FILES['assignmentFile']['error'] === 0) {
@@ -21,18 +22,18 @@ function uploadAssignmentFile($pdo, $assignmentName, $userID)
             $fileName = $_FILES['assignmentFile']['name'];
 
             // Check if the assignment already exists for the student
-            $stmtCheck = $pdo->prepare("SELECT COUNT(*) AS count FROM Assignments WHERE AssignmentName = ? AND StudentID = ?");
-            $stmtCheck->execute([$assignmentName, $userID]);
+            $stmtCheck = $pdo->prepare("SELECT COUNT(*) AS count FROM Submissions WHERE assignmentID = ? AND userID = ?");
+            $stmtCheck->execute([$assignmentID, $userID]);
             $rowCount = $stmtCheck->fetch(PDO::FETCH_ASSOC)['count'];
 
             if ($rowCount > 0) {
-                // Assignment already exists, update the FilePath
-                $stmtUpdate = $pdo->prepare("UPDATE Assignments SET FilePath = ? WHERE AssignmentName = ? AND StudentID = ?");
-                $stmtUpdate->execute([$fileName, $assignmentName, $userID]);
+                // Assignment already exists, update the submissionFilePath
+                $stmtUpdate = $pdo->prepare("UPDATE Submissions SET submissionFilePath = ? WHERE assignmentID = ? AND userID = ?");
+                $stmtUpdate->execute([$fileName, $assignmentID, $userID]);
             } else {
                 // Insert the file into the database
-                $stmtInsert = $pdo->prepare("INSERT INTO Assignments (AssignmentName, StudentID, FilePath) VALUES (?, ?, ?)");
-                $stmtInsert->execute([$assignmentName, $userID, $fileName]);
+                $stmtInsert = $pdo->prepare("INSERT INTO Submissions (assignmentID, userID, submissionFilePath) VALUES (?, ?, ?)");
+                $stmtInsert->execute([$assignmentID, $userID, $fileName]);
             }
 
             $uploadDir = 'uploads/'; // Directory to store uploaded files
@@ -58,8 +59,8 @@ function uploadAssignmentFile($pdo, $assignmentName, $userID)
 /*
 }
 */
-// $assignmentName and $UserID are obtained from session
-$assignmentName = $_SESSION['assignmentName'];
+// $assignmentID and $UserID are obtained from session
+$assignmentID = $_SESSION['assignmentID'];
 $UserID = 1; 
 //$UserID = $_SESSION['UserID']
 
@@ -69,7 +70,7 @@ echo "Form submitted successfully."; // Debug message to verify form submission
 
 // Handle file upload and insertion into the database
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    uploadAssignmentFile($pdo, $assignmentName, $UserID);
+    uploadAssignmentFile($pdo, $assignmentID, $UserID);
 }
 
 // Close the database connection
