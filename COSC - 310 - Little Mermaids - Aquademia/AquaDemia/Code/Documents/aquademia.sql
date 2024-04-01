@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS CoursePrerequisites (
     FOREIGN KEY (prequisiteCourseID) REFERENCES Courses(courseID)
 );
 
-CREATE TABLE IF NOT EXISTS Enrollments (
+CREATE TABLE IF NOT EXISTS Enrollment (
     enrollmentID INT AUTO_INCREMENT PRIMARY KEY,
     userID INT,
     courseID INT,
