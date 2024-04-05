@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 session_start();
 $servername = "localhost";
@@ -14,17 +14,25 @@ try {
     $uname = $_SESSION["Username"];
     
     //SQL statement to grab user's existing firstname, lastname, phonenumber, email and password. These are what will be updated
-    $stmt = $conn->prepare("SELECT FirstName, LastName, PhoneNumber, Email, PasswordHash FROM Users WHERE Username = :uname");
+    $stmt = $conn->prepare("SELECT userID, FirstName, LastName, PhoneNumber, Email, PasswordHash FROM Users WHERE Username = :uname");
     $stmt->bindParam(':uname', $uname);
     $stmt->execute();
 
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     //Assign these to variables that will be used in the html code down below
-    $firstname = $user["FirstName"];
-    $lastname = $user["LastName"];
-    $email = $user["Email"];
-    $phonenumber = $user["PhoneNumber"];
+    
+    $userID = isset($user["userID"]) ? $user["userID"] : ''; // Assigning user ID from database to a variable
+    $_SESSION["userID"] = $userID; // Storing user ID in session variable
+
+    $uPassword = isset($user["PasswordHash"]) ? $user["PasswordHash"] : ''; // Assigning user password from database to a variable
+    $_SESSION["Password"] = $uPassword; // Storing user password in session variable
+
+    $firstname = isset($user["FirstName"]) ? $user["FirstName"] : ''; // Assigning user's first name from database to a variable
+    $lastname = isset($user["LastName"]) ? $user["LastName"] : ''; // Assigning user's last name from database to a variable
+    $email = isset($user["Email"]) ? $user["Email"] : ''; // Assigning user's email from database to a variable
+    $phonenumber = isset($user["PhoneNumber"]) ? $user["PhoneNumber"] : ''; // Assigning user's phone number from database to a variable
+    
 }
 catch (Exception $e){
     echo "Connection failed: " . $e->getMessage();
@@ -54,10 +62,11 @@ catch (Exception $e){
         <input type="text" value="<?= $phonenumber?>" id="phoneNumber" name="phoneNumber" hidden><input type="checkbox" id="editPnum"><br>
     <!-- Once we get the database working, the placeholder will be the user's previous details     -->
     <!-- Add eye option -->
-    <input type="password" placeholder="Enter your old password" id="password" name="oldPassword"><br>
+    <input type="password" placeholder="Enter your old password" id="oldPassword" name="oldPassword"><br>
         <input type="password" placeholder="Create a password" id="password" name="password"><br>  
         <input type="password" placeholder="Confirm your password" id="confirmPassword" name="confirmPassword"><br>
     <button class="button button1" style="margin-top: 5%;" id="buttonSaveChanges">Save changes</button>
+    <input type="hidden" name="Back" value="../../Pages/editDetails.php">
 </form> 
     <button class="button button1" id="buttonGoBack" onclick="history.back()">Back</button>
 
