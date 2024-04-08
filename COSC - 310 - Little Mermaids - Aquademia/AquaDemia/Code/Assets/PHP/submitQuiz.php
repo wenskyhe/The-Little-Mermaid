@@ -1,6 +1,6 @@
 <?php
 //ruby
-require_once 'config.php';
+session_start();
 require_once 'dbh.inc.php';
 
 // Function to calculate the grade based on user's answers

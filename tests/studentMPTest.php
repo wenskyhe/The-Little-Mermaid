@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-include_once "..\The-Little-Mermaid\COSC - 310 - Little Mermaids - Aquademia\AquaDemia\Code\Pages\studentMP.php";
+require_once "..\The-Little-Mermaid\COSC - 310 - Little Mermaids - Aquademia\AquaDemia\Code\Pages\studentMP.php";
 
 
 class studentMPTest extends TestCase

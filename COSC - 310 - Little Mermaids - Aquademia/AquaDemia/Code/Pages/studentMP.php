@@ -1,13 +1,20 @@
 <?php
-// ruby
+session_start();
+require_once 'dbh.inc.php';
 
-include_once 'config.php';
-include_once 'dbh.inc.php';
+
+if (!isset($_SESSION["UserID"])) {
+    echo "_SESSION[UserID] is not setted";
+    header("Location: ../../Code/");
+} else {
+    echo "_SESSION[UserID] is " . $_SESSION["UserID"];
+    $UserID = $_SESSION["UserID"];
+}
 
 function fetchEnrolledCourses($pdo, $UserID)
 {
-    $sql = "SELECT CourseID
-            FROM enrollment 
+    $sql = "SELECT courseID
+            FROM enrollments
             WHERE UserID = :UserID";
 
     $stmt = $pdo->prepare($sql);
@@ -18,12 +25,12 @@ function fetchEnrolledCourses($pdo, $UserID)
 
 function fetchCourseDetails($pdo, $courseID)
 {
-    $sql = "SELECT CourseID, courseName
+    $sql = "SELECT courseID, courseName
             FROM courses
-            WHERE CourseID = :CourseID";
+            WHERE courseID = :courseID";
 
     $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':CourseID', $courseID, PDO::PARAM_INT);
+    $stmt->bindParam(':courseID', $courseID, PDO::PARAM_INT);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -35,33 +42,35 @@ function fetchCourseDetails($pdo, $courseID)
 
 function fetchAverageGrade($pdo, $courseID, $UserID)
 {
-    $sql = "SELECT A.assignmentID, S.grade, A.Weight
+    $sql = "SELECT S.grade AS grade, A.Weight AS weight
             FROM submissions AS S
             INNER JOIN assignments AS A ON A.assignmentID = S.assignmentID
-            WHERE A.CourseID = :courseID AND S.UserID = :userID";
+            WHERE A.courseID = :courseID AND S.UserID = :userID";
 
-            $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(':courseID', $courseID, PDO::PARAM_INT);
-            $stmt->bindParam(':userID', $UserID, PDO::PARAM_INT);
-            $stmt->execute();
-
-    
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':courseID', $courseID, PDO::PARAM_INT);
+    $stmt->bindParam(':userID', $UserID, PDO::PARAM_INT);
+    $stmt->execute();
 
     $totalGrade = 0;
     $totalWeight = 0;
 
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $grade = $row['A.Grade'];
-        $weight = $row['C.Weight'];
+        // Check if the keys exist in the result set before accessing them
+        if (isset($row['grade'], $row['weight'])) {
+            $grade = $row['grade'];
+            $weight = $row['weight'];
 
-        if ($grade >= 0) {
-            $totalGrade += $grade * $weight;
-            $totalWeight += $weight;
+            if ($grade >= 0) {
+                $totalGrade += $grade * $weight;
+                $totalWeight += $weight;
+            }
         }
     }
 
     return $totalWeight > 0 ? round(($totalGrade / $totalWeight) * 100, 2) / 100 : 0;
 }
+
 
 function fetchUpcomingAssignments($pdo, $courseIDs)
 {
@@ -70,11 +79,11 @@ function fetchUpcomingAssignments($pdo, $courseIDs)
     foreach ($courseIDs as $courseID) {
         $sql = "SELECT Title, DueDate, AssignmentID
                 FROM Assignments
-                WHERE CourseID = :CourseID
+                WHERE courseID = :courseID
                 AND DueDate > NOW()";
 
         $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':CourseID', $courseID, PDO::PARAM_INT);
+        $stmt->bindParam(':courseID', $courseID, PDO::PARAM_INT);
         $stmt->execute();
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -84,7 +93,7 @@ function fetchUpcomingAssignments($pdo, $courseIDs)
 
             $upcomingAssignments[] = [
                 'AssignmentID' => $AssignmentID,
-                'CourseID' => $courseID,
+                'courseID' => $courseID,
                 'Title' => $assignmentName,
                 'DueDate' => $dueDate
             ];
@@ -94,9 +103,7 @@ function fetchUpcomingAssignments($pdo, $courseIDs)
     return $upcomingAssignments;
 }
 
-$UserID = $_SESSION["UserID"];
-
-// $UserID = 9; //_GET
+// execute functions and prepare data for this page1
 $courseIDs = fetchEnrolledCourses($pdo, $UserID);
 $courseDetails = [];
 
@@ -117,37 +124,39 @@ $pdo = null;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Main Page</title>
-    <link rel="stylesheet" href="../Assets/CSS/central.css"> <!-- Link external CSS file -->
-    <link rel="stylesheet" href="../Assets/CSS/studentMP.css"> <!-- Link external CSS file -->
+    <link rel="stylesheet" href="..\Assets\CSS\studentMP.css"> <!-- Link external CSS file -->
 </head>
 
 <body>
-
-    <h3>Enrolled Courses</h3>
+<p style="text-align: right;">
+    <a href="studentView.php"><?php echo $_SESSION["Username"] ?></a><?php echo "  " ?>
+    <a href="login.html">Logout</a>
+</p>
+    
+    <h2 style='color:#deb9fb ;'>Enrolled Courses</h2>
  
     <div class="row">
         <?php //print_r($courseDetails);
         foreach ($courseDetails as $courseID => $course) : ?>
             <div class="column">
-                <a href="index_assignmentLis.php?CourseID=<?php echo urlencode($courseID); ?>">
+                <a href="assignmentList.php?courseID=<?php echo urlencode($courseID); ?>">
                     <img src="../Assets/Images/default.jpg" class="hover-shadow">
                     <div class="caption">
                         <?php echo $course['courseName']; ?>
-                        <?php echo "Current Grade: " . $course['AverageGrade']; ?>
                     </div>
                 </a>
-                <br>
+                <p><?php echo "Current Grade: " . $course['AverageGrade']; ?></p>
+
             </div>
         <?php endforeach; ?>
     </div>
 
     <br>
-    <br>
-    <h3>Upcoming Assignments</h3>
+    <h2 style='color:#deb9fb ;'>Upcoming Assignments</h2>
     <ul>
         <?php foreach ($upcomingAssignments as $assignment) : ?>
-            <?php $assignmentLink = "fcn_submitAssignmentPage.php?assignmentID=" . urlencode($assignment['AssignmentID']) . "&dueDate=" . urlencode($assignment['DueDate']); ?>
-            <li><a href="<?php echo $assignmentLink; ?>"><?php echo $assignment['Title']; ?></a> - Due Date: <?php echo $assignment['DueDate']; ?></li>
+            <?php $assignmentLink = "submitAssignmentPage.php?assignmentID=" . urlencode($assignment['AssignmentID']); ?>
+            <li style='color: white;'><a href="<?php echo $assignmentLink; ?>"><?php echo $assignment['Title']; ?></a>  Due Date: <?php echo $assignment['DueDate']; ?></li>
         <?php endforeach; 
         $pdo = null; ?>
     </ul>

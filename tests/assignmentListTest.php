@@ -1,35 +1,47 @@
 <?php
-namespace cn_assignmentList;
+namespace assignmentListFcn; // Namespace declaration for the test file
 use PHPUnit\Framework\TestCase;
 use PDO;
-use retrieveAssignmentData;
+
 // Include the file that contains the function to be tested
-include("..\The-Little-Mermaid\COSC - 310 - Little Mermaids - Aquademia\AquaDemia\Code\Assets\PHP\cn_assignmentList.php");
+require_once("../The-Little-Mermaid/COSC - 310 - Little Mermaids - Aquademia/AquaDemia/Code/Assets/PHP/assignmentListFcn.php");
+
 class assignmentListTest extends TestCase
 {
-    public function testGetAssignmentsData()
+    private $pdo;
+
+    protected function setUp(): void
     {
-        session_save_path();
-        session_start(); // Start the session.
         $servername = "localhost";
         $username = "root"; // default XAMPP MySQL username
         $password = ""; // default XAMPP MySQL password is empty
         $dbname = "aquademia";
-        $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-    
-        if ($conn->errorCode()) {
-            die("Connection Failed: " . $conn->errorCode());
-        }
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        // Establish a connection to the database for testing
+        $this->pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+    }
+
+    public function testGetAssignmentsData()
+    {
         // Call the function with test data
         $CourseID = 1; // Assuming CourseID 1 for testing
         $UserID = 1; // Assuming UserID 1 for testing
-        $assignmentData = new retrieveAssignmentData($conn);
-        $result = $assignmentData->getAssignmentsData($conn, $CourseID, $UserID);
+        $result = getAssignmentsData($this->pdo, $CourseID, $UserID);
 
         // Assertions
         $this->assertIsArray($result);
-        // Add more specific assertions based on your expected output
-        $conn = null;
+
+        // Call the function with test data
+        $CourseID = 2; // Assuming CourseID 1 for testing
+        $UserID = 1; // Assuming UserID 1 for testing
+        $result = getAssignmentsData($this->pdo, $CourseID, $UserID);
+        
+        // Assertions
+        $this->assertIsArray($result);
+    }
+
+    protected function tearDown(): void
+    {
+        // Close the database connection after testing
+        $this->pdo = null;
     }
 }
