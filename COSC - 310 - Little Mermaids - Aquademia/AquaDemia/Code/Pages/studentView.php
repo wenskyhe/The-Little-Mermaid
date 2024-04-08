@@ -9,14 +9,16 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student View</title>
     <link rel="stylesheet" href="../Assets/CSS/central.css">
+    <style>
+    </style>
 </head>
 <body>
-    <h1 style="text-align: center;">Welcome, <?php echo $_SESSION["Username"] ?></h1>
-    
-    <a href="registerCourse.html">Register for a course</a><br>
-    <a href="editDetails.php">Edit your details</a><br>
+    <h1 style="text-align: center; color:#deb9fb ;">Welcome, <?php echo $_SESSION["Username"] ?></h1>
+    <h3 style="text-align: center;">
+    <a href="editDetails.php">Edit my details</a><br><br>
+    <a href="registerCourse.html">Register for a course</a><br><br>
+    <a href="studentMP.php">View my courses</a><br><br>
     <a href="login.html">Logout</a>
-    <a href="studentMP.php">studentMP</a>
-    
+    </h3>
 </body>
 </html>
