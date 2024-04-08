@@ -66,7 +66,6 @@ catch (Exception $e){
         <input type="password" placeholder="Create a password" id="password" name="password"><br>  
         <input type="password" placeholder="Confirm your password" id="confirmPassword" name="confirmPassword"><br>
     <button class="button button1" style="margin-top: 5%;" id="buttonSaveChanges">Save changes</button>
-    <input type="hidden" name="Back" value="../../Pages/editDetails.php">
 </form> 
     <button class="button button1" id="buttonGoBack" onclick="history.back()">Back</button>
 

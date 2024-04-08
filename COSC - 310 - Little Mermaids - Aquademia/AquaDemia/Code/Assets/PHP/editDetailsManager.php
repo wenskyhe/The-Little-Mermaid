@@ -45,6 +45,10 @@ $conn = new mysqli($servername, $username, $password, $dbname);
         die("Connection Failed". $conn->connect_error);
     }
 
+
+    
+$_SESSION["Password"] = $uPassword;
+
 $firstName = $conn -> real_escape_string($_POST["fname"]);
 $lastName = $conn -> real_escape_string($_POST["lname"]);
 $email = $conn -> real_escape_string($_POST["email"]);
@@ -57,9 +61,8 @@ $confirmPassword = $conn -> real_escape_string($_POST["confirmPassword"]);
 
 
 $detailAlteration =new newDetails($conn);
-$resutlt = $detailAlteration->changeDetails($conn,$firstName,$lastName,$email,$phoneNumber,$password,$oldpassword,$confirmPassword,$userID);
-header("Location: {$_POST['Back']}");
+$detailAlteration->changeDetails($conn,$firstName,$lastName,$email,$phoneNumber,$password,$oldpassword,$confirmPassword,$userID);
+header("Location: ../../Pages/editDetails.php");
 $_SESSION["Password"] = [""]; //empty password from the session for security 
-exit();//will likeley not reach this line, but exists in case of error
 
 ?>

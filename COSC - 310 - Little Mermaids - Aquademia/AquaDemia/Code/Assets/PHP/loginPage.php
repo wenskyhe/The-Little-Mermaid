@@ -65,27 +65,5 @@
     
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user && ($psw == $user['PasswordHash'])) {
-        // Password is correct
-        $_SESSION["loggedin"] = true;
-        $_SESSION["UserID"] = $user['UserID'];
-        $_SESSION["Username"] = $uname;
-        $_SESSION["UserType"] = $user['UserType'];
-
-        if($user['UserType'] == "admin"){
-            header("Location: ../../Pages/adminView.php");
-        }
-        elseif($user['UserType'] == "student"){
-            header("Location: ../../Pages/studentView.php");
-        }
-        elseif($user['UserType'] == "professor"){
-            header("Location: ../../Pages/professorView.php");
-        }
-    } else {
-        // Display an error message
-        $alertMessage = "The password you entered was incorrect!";
-        echo $alertMessage;
-        header("Location: ../../Pages/login.html");
-        
-    }
+    
     ?>

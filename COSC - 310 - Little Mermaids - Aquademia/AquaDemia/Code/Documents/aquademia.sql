@@ -260,6 +260,7 @@ INSERT INTO `users` (`userID`, `userType`, `firstName`, `lastName`, `Email`, `us
 (8, 'Student', 'Jermane', 'Cole', 'JermaneCole@gmail.cok', 'Jermane_Cole', 'jcole', '12508630734'),
 (9, 'Student', 'test', 'student', 'teststudent@gmail.com', 'test_student', 'student', '12508630735'),
 (10, 'Professor', 'test', 'teacher', 'testteacher@gmail.com', 'test_teacher', 'teacher', '12508630736'),
+(12, 'Student', 'firstname', 'lastname', 'example@gmail.com', 'firstname_lastname', 'password', '12508630738'),
 (11, 'Admin', 'test', 'admin', 'testadmin@gmail.com', 'test_admin', 'admin', '12508630737');
 
 --
