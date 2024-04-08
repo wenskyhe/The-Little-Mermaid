@@ -94,7 +94,9 @@ function fetchUpcomingAssignments($pdo, $courseIDs)
     return $upcomingAssignments;
 }
 
-$UserID = 1; //_GET
+$UserID = $_SESSION["UserID"];
+
+// $UserID = 9; //_GET
 $courseIDs = fetchEnrolledCourses($pdo, $UserID);
 $courseDetails = [];
 
@@ -115,7 +117,8 @@ $pdo = null;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Main Page</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link external CSS file -->
+    <link rel="stylesheet" href="../Assets/CSS/central.css"> <!-- Link external CSS file -->
+    <link rel="stylesheet" href="../Assets/CSS/studentMP.css"> <!-- Link external CSS file -->
 </head>
 
 <body>
@@ -127,7 +130,7 @@ $pdo = null;
         foreach ($courseDetails as $courseID => $course) : ?>
             <div class="column">
                 <a href="index_assignmentLis.php?CourseID=<?php echo urlencode($courseID); ?>">
-                    <img src="../Assets/Images/defaultPic.jpg" class="hover-shadow">
+                    <img src="../Assets/Images/default.jpg" class="hover-shadow">
                     <div class="caption">
                         <?php echo $course['courseName']; ?>
                         <?php echo "Current Grade: " . $course['AverageGrade']; ?>

@@ -4,12 +4,12 @@
 // ruby
 include_once 'config.php';
 include_once 'dbh.inc.php';
-require_once 'C:\xampp\htdocs\The-Little-Mermaid\COSC - 310 - Little Mermaids - Aquademia\AquaDemia\Code\Assets\PHP\fcn_assignmentLis.php';
+require_once '..\Assets\PHP\cn_assignmentList.php';
 
-$UserID = 1;
+$UserID = $_SESSION['UserID'];
 $CourseID = $_GET['CourseID'];
 
-$assignmentsData = getAssignmentsData($pdo, $CourseID, $UserID);
+$assignmentsData = getAssignmentData($pdo, $CourseID, $UserID);
 
 $pdo = null;
 ?>

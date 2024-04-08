@@ -1,0 +1,22 @@
+
+.darkened-image {
+    filter: brightness(50%);
+    background-image: url("../Images/login_bg.jpg");
+    background-repeat:no-repeat;
+    background-size:cover;
+}
+
+body{
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url("../Images/login_bg.jpg");
+    background:
+           /* top, transparent black, faked with gradient */ 
+           linear-gradient(
+             rgba(0, 0, 0, 0.7), 
+             rgba(0, 0, 0, 0.7)
+           ),
+           /* bottom, image */
+           url("../Images/login_bg.jpg"),
+           ;
+       }
