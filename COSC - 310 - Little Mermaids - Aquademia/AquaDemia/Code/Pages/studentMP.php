@@ -14,7 +14,7 @@ if (!isset($_SESSION["UserID"])) {
 function fetchEnrolledCourses($pdo, $UserID)
 {
     $sql = "SELECT courseID
-            FROM enrollments
+            FROM enrollment
             WHERE UserID = :UserID";
 
     $stmt = $pdo->prepare($sql);
