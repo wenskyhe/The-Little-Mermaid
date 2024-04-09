@@ -4,9 +4,14 @@ body {
   background-color: rgb(31, 31, 31);
 }
 
-h1,h2,h3,p,b,h4,a {
+h1,h2,h3,p,b,h4,a, label {
   color: white;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+label {
+  font-size: 20px;
+  display:inline-block;
 }
 
 textarea {
@@ -18,6 +23,7 @@ textarea {
 
 .logo{
 font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+vertical-align: center;
 }
 
 input[type=text], input[type=password], input[type=number] {
@@ -52,8 +58,13 @@ input[type=text], input[type=password], input[type=number] {
   background-color: #40026f;
   color: white;
 }
+
+
 header{
-  background-color: #20475c;
+  background-color: #613980d0;
+  width: 100.8%;
+  margin:-0.5%;
+  /* margin-bottom: 1%; */
 }
 header::after{
   content:'';
@@ -62,25 +73,32 @@ header::after{
 }
 .src{
   margin: right;
-  padding: 10px 10px;
+  /* padding: 10px 10px; */
 }
 navBar{
   display: inline-block;
-  padding: bottom 23px;   
+  /* padding: bottom 2px;    */
 }
-navBar navBarElements{
+/* navBar navBarElements{
   list-style: none;
   padding: 10px;
   margin: 7px;;
-}
+} */
 navBarElements li{
   position: relative;
   z-index: 1;
   display: inline-block;
-  padding: 5px 130px;
+  padding: 5px 152px;
+  vertical-align: middle;
 }
+
+navBarElements img{
+  width: 4.5%;
+  vertical-align: middle;
+}
+
 navBarElements a{
-  top: -25px;
+  /* top: -5px; */
   text-decoration: none;
   text-transform: uppercase;
   color:rgb(255, 255, 255);  
@@ -88,7 +106,7 @@ navBarElements a{
 
 navBarElements li  {
   position: relative; 
-  top: -25px; 
+  /* top: -2px;  */
 }
 
 .container navBarElements li::after {
