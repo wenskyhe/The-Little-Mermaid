@@ -119,11 +119,57 @@ $pdo = null;
     <title>Student Main Page</title>
     <link rel="stylesheet" href="../Assets/CSS/central.css"> <!-- Link external CSS file -->
     <link rel="stylesheet" href="../Assets/CSS/studentMP.css"> <!-- Link external CSS file -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
 
-    <h3>Enrolled Courses</h3>
+<header>  
+        <div class="container">
+            <navBar>
+              <navBarElements>
+              <img src="../Assets/Images/logo.png" class = "logo">
+              <li>
+                    <a href="studentMP.php">
+                    <div>
+                        <i class="fa fa-home" style="font-size:36px; color:white;"></i>
+                        Home
+                    </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="registerCourse.html">
+                    <div>
+                        <i class="fa fa-plus" style="font-size:36px; color:white;"></i>
+                        Register
+                    </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="editDetails.php">
+                    <div>
+                        <i class="fa fa-user-circle" style="font-size:36px; color:white;"></i>
+                        Profile
+                    </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="login.html">
+                    <div>
+                        <i class="fa fa-close" style="font-size:36px; color:white;"></i>
+                        Logout
+                    </div>
+                    </a>
+                </li>
+              </navBarElements>
+            </navbar>
+        </div>
+</header>
+
+
+<h1 style="text-align: center; color:#deb9fb ;">Welcome, <?php echo $_SESSION["Username"] ?></h1>
+
+    <h2>Enrolled Courses</h2>
  
     <div class="row">
         <?php //print_r($courseDetails);
