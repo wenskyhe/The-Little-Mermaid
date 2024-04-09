@@ -1,10 +1,7 @@
 <?php
+    session_start();
 
-final class retrieveAssignmentData{
-    public function __construct(PDO $conn) {
-        $this->conn = $conn;
-    }
-    public function getAssignmentsData($pdo, $CourseID, $UserID) {
+     function getAssignmentsData($pdo, $CourseID, $UserID) {
         $sql_1 = "SELECT AssignmentID, Title, DueDate
                 FROM Assignments
                 WHERE CourseID = $CourseID AND visibilityStatus = 1";
@@ -43,8 +40,7 @@ final class retrieveAssignmentData{
     }
 
 
-}
 
 
  
-?>
+
