@@ -23,7 +23,7 @@
                     return "login code:1";  //returns 1 if admin
                 }
                 else if($user['UserType'] == "Student"){
-                    header("Location: ../../Pages/studentView.php");
+                    header("Location: ../../Pages/studentMP.php");
                     return "login code:2";  //returns 2 if student
                 }
                 else if($user['UserType'] == "Professor"){
@@ -65,5 +65,4 @@
     
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    
     ?>

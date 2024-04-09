@@ -48,28 +48,85 @@ catch (Exception $e){
     <link rel="stylesheet" href="../Assets/CSS/central.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body style="padding-left: 10%;">
-    <h1 style="padding-top: 5%;">Edit your details</h1>
+
+<!-- Only show the header if student -->
+<?php
+$usertype = $_SESSION["UserType"];
+if($usertype == "Student"){
+    echo '<header>  
+        <div class="container">
+            <navBar>
+              <navBarElements>
+              <img src="../Assets/Images/logo.png" class = "logo">
+              <li>
+                    <a href="studentMP.php">
+                    <div>
+                        <i class="fa fa-home" style="font-size:36px; color:white;"></i>
+                        Home
+                    </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="registerCourse.html">
+                    <div>
+                        <i class="fa fa-plus" style="font-size:36px; color:white;"></i>
+                        Register
+                    </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="editDetails.php">
+                    <div>
+                        <i class="fa fa-user-circle" style="font-size:36px; color:white;"></i>
+                        Profile
+                    </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="login.html">
+                    <div>
+                        <i class="fa fa-close" style="font-size:36px; color:white;"></i>
+                        Logout
+                    </div>
+                    </a>
+                </li>
+              </navBarElements>
+            </navbar>
+        </div>
+</header>';
+}
+?>
+
+
+<body>
+
+<div style="padding-left: 5%;">
+    <h1 style="">Edit your details</h1>
 
     <form action="../Assets/PHP/editDetailsManager.php" method="post" id="editDetailsForm">
-    <a id = "fnameLabel"><?= $firstname?></a>    
-        <input type="text" value="<?= $firstname?>"  id="fname" name="fname" hidden><input type="checkbox" id="editFname"><br>
-    <a id = "lnameLabel"><?= $lastname?></a>
-        <input type="text" value="<?= $lastname?>" id="lname" name="lname" hidden><input type="checkbox" id="editLname"><br>
-    <a id = "emailLabel"><?= $email?></a>
-        <input type="text" value="<?= $email?>" id="email" name="email" hidden><input type="checkbox" id="editEmail"><br>
-    <a id = "pnumLabel"><?= $phonenumber?></a>
-        <input type="text" value="<?= $phonenumber?>" id="phoneNumber" name="phoneNumber" hidden><input type="checkbox" id="editPnum"><br>
-    <!-- Once we get the database working, the placeholder will be the user's previous details     -->
-    <!-- Add eye option -->
+        
+    <label id = "fnameLabel" style="padding-right: 20%">First Name</label>   
+    <label id = "lnameLabel">Last Name</label><br>
+    <input type="text" value="<?= $firstname?>"  id="fname" name="fname" style="margin-right: 6.75%">
+    <input type="text" value="<?= $lastname?>" id="lname" name="lname"><br>
+
+    <label id = "emailLabel" style="padding-right: 22.2%; padding-top:2%">Email</label>
+    <label id = "pnumLabel">Phone Number</label><br>
+    <input type="text" value="<?= $email?>" id="email" name="email" style="margin-right: 6.75%">
+    <input type="text" value="<?= $phonenumber?>" id="phoneNumber" name="phoneNumber"><br>
+
+    <label id = "passwordLabel" style="margin-top: 2%;">Password</label><br>
     <input type="password" placeholder="Enter your old password" id="oldPassword" name="oldPassword"><br>
-        <input type="password" placeholder="Create a password" id="password" name="password"><br>  
-        <input type="password" placeholder="Confirm your password" id="confirmPassword" name="confirmPassword"><br>
+    <input type="password" placeholder="Create a password" id="password" name="password"><br>  
+    <input type="password" placeholder="Confirm your password" id="confirmPassword" name="confirmPassword"><br>
     <button class="button button1" style="margin-top: 5%;" id="buttonSaveChanges">Save changes</button>
-</form> 
+
     <button class="button button1" id="buttonGoBack" onclick="history.back()">Back</button>
 
-    <script>
+</div>
+
+
+    <!-- <script>
         // Get references to form elements
         const editFname = document.getElementById('editFname');
         const editLname = document.getElementById('editLname');
@@ -93,8 +150,7 @@ catch (Exception $e){
         editPnum.addEventListener('change', function() {
             pnum.hidden = !this.checked;
             pnumLabel.hidden = this.checked;});
-
-    </script>
+    </script> -->
 
 </body>
 </html>
