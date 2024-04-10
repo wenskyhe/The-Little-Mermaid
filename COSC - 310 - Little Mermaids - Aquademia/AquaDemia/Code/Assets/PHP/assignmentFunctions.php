@@ -179,7 +179,7 @@ class AssignmentManager {
 }
 
 
-$professorID = 10; //Example professorID
+$professorID = $_SESSION["UserID"]; // Grab the professor's ID
 $dbConnection = DBConnection::getConnection();
 $assignmentManager = new AssignmentManager($dbConnection);
 

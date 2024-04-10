@@ -8,17 +8,17 @@ if (!isset($_SESSION["UserID"])) {
     echo "_SESSION[UserID] is not setted";
     header("Location: ../../Code/");
 } else {
-    echo "_SESSION[UserID] is " . $_SESSION["UserID"];
+    // echo "_SESSION[UserID] is " . $_SESSION["UserID"];
     $UserID = $_SESSION["UserID"];
 }
 
 if (isset($_GET['assignmentID']) && !empty($_GET['assignmentID'])) {
     $assignmentID = $_GET['assignmentID'];
     $_SESSION['assignmentID'] = $assignmentID;
-    echo "'assignmentID' is set to" . " $assignmentID by get ";
+    // echo "'assignmentID' is set to" . " $assignmentID by get ";
 } else {
     $assignmentID = $_SESSION['assignmentID'];
-    echo "'assignmentID' is set to" . " $assignmentID by SESSION ";
+    // echo "'assignmentID' is set to" . " $assignmentID by SESSION ";
 }
 
 
@@ -106,9 +106,9 @@ $SubmissionInfo = getSubmissionInfo($pdo, $UserID, $assignmentID);
 //print_r($SubmissionInfo);
 
 $allowSubmit = isSubmissionAllowed($assignmentData['DueDate']);
-echo "allowSubmit" . $allowSubmit;
+// echo "allowSubmit" . $allowSubmit;
 
-echo "SubmissionInfo: ";
+// echo "SubmissionInfo: ";
 print_r($SubmissionInfo);
 
 if (!isset($SubmissionInfo['SubmissionDate']) ) {
