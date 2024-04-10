@@ -1,3 +1,21 @@
+body {
+  background-color: rgb(31, 31, 31);
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+h1,h2,h3,p,b,h4,a {
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+textarea {
+  width: 280px;
+  height: 150px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
 .row {
     display: flex;
     flex-wrap: wrap;
