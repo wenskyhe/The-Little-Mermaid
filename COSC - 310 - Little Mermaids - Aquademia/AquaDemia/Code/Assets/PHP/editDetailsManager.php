@@ -1,44 +1,65 @@
+```php
 <?php  
 final class newDetails{
+    private $conn;
 
-    //connection insulating method, *an obligitory method* 
+    // Connection insulating method, an obligatory method
     public function __construct(mysqli $conn) {
         $this->conn = $conn;
     }
 
-    //Method to update user details
-    public function changeDetails($conn,$firstName,$lastName,$email,$phoneNumber,$password,$oldPassword,$confirmPassword,$userID){
-        $userName = $firstName."_".$lastName;
+    // Method to update user details
+    public function changeDetails($conn, $firstName, $lastName, $email, $phoneNumber, $password, $oldPassword, $confirmPassword, $userID){
+        $userName = $firstName . "_" . $lastName;
         
-        
-        if(empty($password)){
-            $password = $_SESSION["Password"]; //checks if no new password has been provided, verifies session password is unaltered if so
+        try {
+            if(empty($password)){
+                $password = $_SESSION["Password"]; // Checks if no new password has been provided, uses session password if so
+            } else if($oldPassword != $_SESSION["Password"] || $confirmPassword != $password){ 
+                return "Error: enter correct password details"; // Error for incorrect password details
+            }
+
+            $sql = "UPDATE users SET firstName = ?, lastName = ?, Email = ?, phoneNumber = ?, passwordHash = ?, userName = ? 
+            WHERE users.userID = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("sssssss", $firstName, $lastName, $email, $phoneNumber, $password, $userName, $userID);
+            
+            if ($stmt->execute()) { 
+                $_SESSION["Username"] = $userName;
+                return "Details updated"; // Success message
+            } else {
+                return "Error: Failed to update details"; // Generic error message
+            }
+        } catch (mysqli_sql_exception $e) {
+            if ($e->getCode() == 1062) { // Check for duplicate entry error code
+                // Identify which field caused the duplicate entry
+                if (strpos($e->getMessage(), 'Email') !== false) {
+
+                    echo '<script>
+            alert("That email is already in use");
+            </script>';
+                    return "Error: This email is already in use.";
+                } else if (strpos($e->getMessage(), 'phoneNumber') !== false) {
+                    echo '<script>
+                    alert("That phone number is already in use");
+                    </script>';
+                    return "Error: This phone number is already in use.";
+                }
+            } else {
+                // For other SQL errors
+                return "An error occurred: " . $e->getMessage();
+            }
+        } finally {
+            if (isset($stmt)) {
+                $stmt->close();
+            }
+            $conn->close();
         }
-        else if($oldPassword != $_SESSION["Password"] || $confirmPassword != $password){ 
-            return "Error: enter correct password details";  //if old password is incorrect OR Confirm New Password is incorrect, returns error string 
-            //redirects to update page
-        }
-        $sql = "UPDATE users SET firstName = ?, lastName = ?, Email = ?, phoneNumber = ?, passwordHash = ?, userName = ? 
-        WHERE users.userID = ?";
-        $stmt = $conn -> prepare($sql);
-        $stmt -> bind_param("sssssss", $firstName, $lastName, $email, $phoneNumber, $password,$userName,$userID);
-        
-        if ($stmt->execute()) { 
-            $_SESSION["Username"] = $userName;
-            $stmt->close();
-            $conn->close();       
-            return "Details updated"; //returns pass string, redirects to update page
-           } else {
-            $stmt->close();
-            $conn->close();     
-             return "Error: Failed to update details"; //returns error string if there is an update error, redirects to update page
-           }
-           
-    
     }
-    
-    }
-    session_start();
+}
+$message = "Details updated!";
+// Your existing session_start() and connection logic here...
+session_start();
 $servername = "localhost";
 $username = "root"; // default XAMPP MySQL username
 $password = ""; // default XAMPP MySQL password is empty
@@ -54,7 +75,6 @@ $conn = new mysqli($servername, $username, $password, $dbname); //will end if co
 
 
     
-$_SESSION["Password"] = $uPassword;
 
 //retreives input from editDetails.php html form
 $firstName = $conn -> real_escape_string($_POST["fname"]);
@@ -68,9 +88,14 @@ $confirmPassword = $conn -> real_escape_string($_POST["confirmPassword"]);
 
 
 
-$detailAlteration =new newDetails($conn); //class instantiation (needed for testing at a minimum, but it is good practice)
-$detailAlteration->changeDetails($conn,$firstName,$lastName,$email,$phoneNumber,$password,$oldpassword,$confirmPassword,$userID); //detail update method
-header("Location: ../../Pages/editDetails.php"); //refreshing update page 
-$_SESSION["Password"] = [""]; //empty password from the session for security 
+
+
+$detailAlteration = new newDetails($conn);
+$message = $detailAlteration->changeDetails($conn, $firstName, $lastName, $email, $phoneNumber, $password, $oldPassword, $confirmPassword, $userID);
+header("Location: ../../Pages/editDetails.php"); // Refreshing update page
+$_SESSION["Password"] = ""; // Clear password from the session for security
 
 ?>
+```
+
+
