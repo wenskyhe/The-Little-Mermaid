@@ -4,18 +4,18 @@ require_once 'dbh.inc.php';
 
 
 if (!isset($_SESSION["UserID"])) {
-    echo "_SESSION[UserID] is not setted";
+    // echo "_SESSION[UserID] is not setted";
     header("Location: ../../Code/");
 } else {
-    echo "_SESSION[UserID] is " . $_SESSION["UserID"];
+    // echo "_SESSION[UserID] is " . $_SESSION["UserID"];
     $UserID = $_SESSION["UserID"];
 }
 
 function fetchEnrolledCourses($pdo, $UserID)
 {
     $sql = "SELECT courseID
-            FROM enrollments
-            WHERE UserID = :UserID";
+            FROM enrollment
+            WHERE UserID = :UserID AND Accepted='1'";
 
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':UserID', $UserID, PDO::PARAM_INT);

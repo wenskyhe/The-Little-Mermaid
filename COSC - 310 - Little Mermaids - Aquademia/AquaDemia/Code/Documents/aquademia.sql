@@ -390,6 +390,18 @@ ALTER TABLE `courseprerequisites`
 --
 ALTER TABLE `courses`
   MODIFY `courseID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
+CREATE TABLE IF NOT EXISTS Assignments (
+    AssignmentID INT AUTO_INCREMENT PRIMARY KEY,
+    courseID INT,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    dueDate DATETIME NOT NULL,
+    weight DECIMAL(5,2) NOT NULL,
+    type ENUM('quiz', 'essay') NOT NULL,
+    visibilityStatus BOOLEAN DEFAULT FALSE,
+    assignmentFilePath TEXT,
+    FOREIGN KEY (courseID) REFERENCES Courses(courseID)
+);
 
 --
 -- AUTO_INCREMENT for table `discussionresponses`
