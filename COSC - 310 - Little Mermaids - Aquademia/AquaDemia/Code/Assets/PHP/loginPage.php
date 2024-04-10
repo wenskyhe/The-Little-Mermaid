@@ -16,6 +16,7 @@
                 $_SESSION["loggedin"] = true;
                 $_SESSION["UserID"] = $user['UserID'];
                 $_SESSION["Username"] = $uname;
+                $_SESSION["UserType"] = $user['UserType'];
                 // Redirect to welcome page
         
                 if($user['UserType'] == "Admin"){

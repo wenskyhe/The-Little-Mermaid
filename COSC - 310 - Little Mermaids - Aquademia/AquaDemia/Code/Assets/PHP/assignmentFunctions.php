@@ -31,7 +31,7 @@ class AssignmentManager {
     // This is where the courses related to the professor is fetched so assignments can be picked
     public function fetchCourse($professorID) {
         $stmt = $this->dbConn->prepare("SELECT courseID, courseName FROM courses WHERE professorID = ?");
-        $stmt->bind_param("i", $professorID);
+        $stmt->bind_param("s", $professorID);
         $stmt->execute();
         $result = $stmt->get_result();
         $courses = [];

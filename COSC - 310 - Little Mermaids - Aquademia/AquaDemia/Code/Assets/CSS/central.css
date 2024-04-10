@@ -88,7 +88,7 @@ navBarElements li{
   position: relative;
   z-index: 1;
   display: inline-block;
-  padding: 5px 152px;
+  padding: 5px 120px;
   vertical-align: middle;
 }
 
