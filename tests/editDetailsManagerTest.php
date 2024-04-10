@@ -24,10 +24,10 @@ final class editDetailsManagerTest extends TestCase{
     $_SESSION["UserID"]  = 12;
     $userID = 12; //userID = 12 is the test user
     //grabs test user data
-        $stmt = $conn->prepare("SELECT userID, firstName, lastName, phoneNumber, email, passwordHash FROM users WHERE users.userID= ?");
+        $stmt = $conn->prepare("SELECT userID, firstName, lastName, phoneNumber, email, passwordHash, userName FROM users WHERE users.userID= ?");
             $stmt->bind_param("s",$userID);
             if($stmt->execute()){
-                $stmt->bind_result($ActualUserID, $ActualFirstName, $ActualLastName, $ActualPhoneNumber, $ActualEmail, $ActualPasswordHash);
+                $stmt->bind_result($ActualUserID, $ActualFirstName, $ActualLastName, $ActualPhoneNumber, $ActualEmail, $ActualPasswordHash, $userName);
 
                 
     // Fetch rows and store them in the array
@@ -40,6 +40,7 @@ final class editDetailsManagerTest extends TestCase{
             'lastName' => $ActualLastName,
             'phoneNumber' => $ActualPhoneNumber,
             'email' => $ActualEmail,
+            'userName' => $userName,
             'passwordHash' => $ActualPasswordHash
         );
         return $user;
@@ -75,7 +76,7 @@ public function testAllNewDetails(){
     
     
     $userID = $_SESSION["UserID"];
-
+//new values in update
     $firstName = "newFirstName";
     $lastName = "newLastName";
     $email = "newEmail";
@@ -95,6 +96,7 @@ public function testAllNewDetails(){
     $this->assertEquals($email,$user['email']);//comparing sql query of email vs excpected
     $this->assertEquals($phoneNumber,$user['phoneNumber']);//comparing sql query of phone number vs excpected
     $this->assertEquals($Upassword,$user['passwordHash']);//comparing sql query of password vs excpected
+    $this->assertEquals($firstName."_".$lastName,$user["userName"]); //verfies username got updated via the firstname and lastname updates
     $this->assertEquals($userID,$user['userID']);// verifying the primary key userID is identical verifying the sae objects were compared
 
     $this->testNoChanges(); //can use the test to reset the dummy user to default values
@@ -133,5 +135,69 @@ public function testNoChanges(){
     $this->assertEquals("Details updated", $resutlt); //verifies method return of no errors, only makes a return if the statement goes through without erros
     session_destroy();
 
+}
+
+public function testIncorrectConfirmPassword(){ //Tests that when user enters "confirm new password" incorrectly, no updates go through
+
+    session_start();
+
+    $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "aquademia";
+
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        if ($conn->connect_error) {
+            die("Connection Failed: " . $conn->connect_error);
+        }
+    $_SESSION["Password"] = "password"; //makes sure session details remain constant across tests
+    $_SESSION["UserID"]  = 12; //makes sure session details remain constant across tests
+    //default values
+    $firstName = "firstname";
+    $lastName = "lastname";
+    $email = "test@gmail.com";
+    $phoneNumber = "12508630738";
+    $password = "password";
+    $oldpassword = "password";
+    $confirmPassword = "WrongPassword"; //User enters incorrect "confirm  password"
+    $userID = $_SESSION["UserID"];
+    //
+    //class object creation
+    $detailAlteration =new newDetails($conn);
+    //method to be tested
+    $resutlt = $detailAlteration->changeDetails($conn,$firstName,$lastName,$email,$phoneNumber,$password,$oldpassword,$confirmPassword,$userID);
+    $this->assertEquals("Error: enter correct password details", $resutlt); //verifies the failed password info message is returned
+    $user = $this->checkUserInfo();
+    
+    session_destroy();
+
+
+}
+//METHOD USED TO RESET OBJECT TO DEFAULT TESTING VALUES/ATRIBUTES
+public function resetTestObject(){
+ session_start();
+
+    $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "aquademia";
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        if ($conn->connect_error) {
+            die("Connection Failed: " . $conn->connect_error);
+        }
+    $_SESSION["Password"] = "password"; //makes sure session details remain constant across tests
+    $_SESSION["UserID"]  = 12; //makes sure session details remain constant across tests
+    //default values
+    $firstName = "firstname";
+    $lastName = "lastname";
+    $email = "test@gmail.com";
+    $phoneNumber = "12508630738";
+    $password = "password";
+    $oldpassword = "password";
+    $confirmPassword = "password";
+    $userID = $_SESSION["UserID"];
+    $detailAlteration =new newDetails($conn);
+    $resutlt = $detailAlteration->changeDetails($conn,$firstName,$lastName,$email,$phoneNumber,$password,$oldpassword,$confirmPassword,$userID);
+    session_destroy();
 }
 }
