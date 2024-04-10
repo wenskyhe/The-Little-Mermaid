@@ -367,7 +367,8 @@ ALTER TABLE `submissions`
 ALTER TABLE `users`
   ADD PRIMARY KEY (`userID`),
   ADD UNIQUE KEY `Email` (`Email`),
-  ADD UNIQUE KEY `passwordHash` (`passwordHash`);
+  ADD UNIQUE KEY `passwordHash` (`passwordHash`),
+  ADD UNIQUE KEY `phoneNumber`  (`phoneNumber`);
 
 --
 -- AUTO_INCREMENT for dumped tables

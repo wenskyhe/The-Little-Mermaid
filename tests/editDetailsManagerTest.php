@@ -100,7 +100,7 @@ public function testAllNewDetails(){
     $this->assertEquals($userID,$user['userID']);// verifying the primary key userID is identical verifying the sae objects were compared
 
     $this->testNoChanges(); //can use the test to reset the dummy user to default values
-    
+    $this->resetTestObject();
 
 session_destroy();
 }
@@ -197,7 +197,8 @@ public function resetTestObject(){
     $confirmPassword = "password";
     $userID = $_SESSION["UserID"];
     $detailAlteration =new newDetails($conn);
-    $resutlt = $detailAlteration->changeDetails($conn,$firstName,$lastName,$email,$phoneNumber,$password,$oldpassword,$confirmPassword,$userID);
+    $result = $detailAlteration->changeDetails($conn,$firstName,$lastName,$email,$phoneNumber,$password,$oldpassword,$confirmPassword,$userID);
+    $this->assertEquals($result, "Details updated");
     session_destroy();
 }
 }

@@ -12,10 +12,10 @@ try {
 
     //Grab the username from the universal global variable "Username"
     $uname = $_SESSION["Username"];
-    
+    $userID = $_SESSION["UserID"];
     //SQL statement to grab user's existing firstname, lastname, phonenumber, email and password. These are what will be updated
-    $stmt = $conn->prepare("SELECT userID, FirstName, LastName, PhoneNumber, Email, PasswordHash FROM Users WHERE Username = :uname");
-    $stmt->bindParam(':uname', $uname);
+    $stmt = $conn->prepare("SELECT userID, FirstName, LastName, PhoneNumber, Email, PasswordHash FROM Users WHERE userID = :ID");
+    $stmt->bindParam(':ID', $userID);
     $stmt->execute();
 
     $user = $stmt->fetch(PDO::FETCH_ASSOC);

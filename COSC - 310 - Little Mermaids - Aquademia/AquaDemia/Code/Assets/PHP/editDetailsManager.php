@@ -34,14 +34,13 @@ final class newDetails{
             if ($e->getCode() == 1062) { // Check for duplicate entry error code
                 // Identify which field caused the duplicate entry
                 if (strpos($e->getMessage(), 'Email') !== false) {
-
                     echo '<script>
-            alert("That email is already in use");
-            </script>';
+                    alert("That email is already in use!");
+                    </script>';
                     return "Error: This email is already in use.";
                 } else if (strpos($e->getMessage(), 'phoneNumber') !== false) {
                     echo '<script>
-                    alert("That phone number is already in use");
+                    alert("That phone number is already in use!");
                     </script>';
                     return "Error: This phone number is already in use.";
                 }
@@ -57,7 +56,6 @@ final class newDetails{
         }
     }
 }
-$message = "Details updated!";
 // Your existing session_start() and connection logic here...
 session_start();
 $servername = "localhost";
@@ -92,7 +90,9 @@ $confirmPassword = $conn -> real_escape_string($_POST["confirmPassword"]);
 
 $detailAlteration = new newDetails($conn);
 $message = $detailAlteration->changeDetails($conn, $firstName, $lastName, $email, $phoneNumber, $password, $oldPassword, $confirmPassword, $userID);
-header("Location: ../../Pages/editDetails.php"); // Refreshing update page
+
+//header("Location: ../../Pages/editDetails.php"); // Refreshing update page
+echo '<script>window.location.href="../../Pages/editDetails.php"</script>';
 $_SESSION["Password"] = ""; // Clear password from the session for security
 
 ?>
