@@ -8,17 +8,17 @@ if (!isset($_SESSION["UserID"])) {
     echo "_SESSION[UserID] is not setted";
     header("Location: ../../Code/");
 } else {
-    echo "_SESSION[UserID] is " . $_SESSION["UserID"];
+    // echo "_SESSION[UserID] is " . $_SESSION["UserID"];
     $UserID = $_SESSION["UserID"];
 }
 
 if (isset($_GET['assignmentID']) && !empty($_GET['assignmentID'])) {
     $assignmentID = $_GET['assignmentID'];
     $_SESSION['assignmentID'] = $assignmentID;
-    echo "'assignmentID' is set to" . " $assignmentID by get ";
+    // echo "'assignmentID' is set to" . " $assignmentID by get ";
 } else {
     $assignmentID = $_SESSION['assignmentID'];
-    echo "'assignmentID' is set to" . " $assignmentID by SESSION ";
+    // echo "'assignmentID' is set to" . " $assignmentID by SESSION ";
 }
 
 
@@ -26,7 +26,7 @@ if (isset($_GET['assignmentID']) && !empty($_GET['assignmentID'])) {
 function getAssignmentData($pdo, $assignmentID) {
     $sql = "SELECT Description, DueDate, type, title
             FROM Assignments
-            WHERE assignmentID = :assignmentID";
+            WHERE assignmentID = :assignmentID AND visibilityStatus = 1";
 
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':assignmentID', $assignmentID, PDO::PARAM_STR);
@@ -36,7 +36,7 @@ function getAssignmentData($pdo, $assignmentID) {
 
 // Function to fetch submission data
 function getSubmissionInfo($pdo, $UserID, $assignmentID) {
-    $sql = "SELECT Grade, SubmissionDate
+    $sql = "SELECT Grade, SubmissionDate, feedback
             FROM Submissions
             WHERE UserID = :UserID AND assignmentID = :assignmentID";
 
@@ -60,8 +60,11 @@ function generateStatus($allowSubmit, $SubmissionInfo) {
         if ($SubmissionInfo['Grade'] == -1) {
             $message = $message . "The instructor has not graded your assignment yet.";
         } else {
-            $message = $message . "Your grade is " . $SubmissionInfo['Grade'];
+            $message = $message . "Your grade is " . $SubmissionInfo['Grade'] .".";
         }
+    if(!empty($SubmissionInfo['feedback'])){
+        $message = $message . " Instructor's words: " . $SubmissionInfo['feedback'];
+    }
     
     return $message;
 }
@@ -106,9 +109,9 @@ $SubmissionInfo = getSubmissionInfo($pdo, $UserID, $assignmentID);
 //print_r($SubmissionInfo);
 
 $allowSubmit = isSubmissionAllowed($assignmentData['DueDate']);
-echo "allowSubmit" . $allowSubmit;
+// echo "allowSubmit" . $allowSubmit;
 
-echo "SubmissionInfo: ";
+// echo "SubmissionInfo: ";
 print_r($SubmissionInfo);
 
 if (!isset($SubmissionInfo['SubmissionDate']) ) {

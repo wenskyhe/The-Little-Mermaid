@@ -16,6 +16,7 @@
                 $_SESSION["loggedin"] = true;
                 $_SESSION["UserID"] = $user['UserID'];
                 $_SESSION["Username"] = $uname;
+                $_SESSION["UserType"] = $user['UserType'];
                 // Redirect to welcome page
         
                 if($user['UserType'] == "Admin"){
@@ -39,7 +40,9 @@
         }
     }
     session_save_path();
+    //session_unset(); // Unset all session variables
     session_start(); // Start the session.
+    
     $servername = "localhost";
     $username = "root"; // default XAMPP MySQL username
     $password = ""; // default XAMPP MySQL password is empty

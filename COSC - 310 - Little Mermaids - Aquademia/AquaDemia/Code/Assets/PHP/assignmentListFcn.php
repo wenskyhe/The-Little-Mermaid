@@ -1,5 +1,4 @@
 <?php
-    session_start();
 
      function getAssignmentsData($pdo, $CourseID, $UserID) {
         $sql_1 = "SELECT AssignmentID, Title, DueDate
