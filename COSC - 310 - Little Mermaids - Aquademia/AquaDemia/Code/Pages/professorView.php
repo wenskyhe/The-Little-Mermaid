@@ -15,14 +15,14 @@ if ($_SESSION["UserType"] !== "Professor") {
     <link rel="stylesheet" href="../Assets/CSS/central.css">
 </head>
 <body>
-    <h1 style="text-align: center;">Welcome, <?php echo $_SESSION["Username"] ?></h1>
     
-    <div style="text-align: center; padding-top: 20px;">
-        <a href="createAssignments.php">Create Assignments</a><br>
-        <a href="gradeAssignments.php">Grade Assignments</a><br>
-        <a href="viewCourses.php">View Your Courses</a><br>
-        <a href="editDetails.php">Edit Your Details</a><br>
-        <a href="login.html">Logout</a><br>
+
+    <div style="text-align:center; vertical-align:center; top: 0px;">
+    <h1>Welcome, <?php echo $_SESSION["Username"] ?></h1>
+        <button onclick="location.href = 'createAssignments.php';" type="button" class="button button1">Create Assignments</button>
+        <button onclick="location.href = 'gradeAssignments.php';" type="button" class="button button1">Grade Assignments</button>
+        <button onclick="location.href = 'editDetails.php';" type="button" class="button button1">Edit your details</button>
+        <button onclick="location.href = 'login.html';" type="button" class="button button1">Logout</button>
     </div>
 
 </body>
