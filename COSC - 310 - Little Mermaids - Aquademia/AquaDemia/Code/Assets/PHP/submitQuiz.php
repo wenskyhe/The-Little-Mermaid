@@ -3,6 +3,40 @@
 session_start();
 require_once 'dbh.inc.php';
 
+// fetch necessary data
+if (!isset($_SESSION["UserID"])) {
+    echo "_SESSION[UserID] is not setted";
+    //header("Location: ../../Code/");
+} else {
+    $UserID = $_SESSION["UserID"];
+}
+
+if (!isset($_SESSION['courseID'])) {
+    $courseID = $_GET['courseID'];
+    $_SESSION['courseID'] = $courseID;
+} else {
+    $courseID = $_SESSION['courseID'];
+}
+echo "courseID" . $courseID;
+echo 'UserID' . $UserID;
+
+if (!isset($_SESSION['assignmentID'])) {
+    if (isset($_GET['assignmentID']) && !empty($_GET['assignmentID'])) {
+        $assignmentID = $_GET['assignmentID'];
+        $_SESSION['assignmentID'] = $assignmentID;
+    } else {
+        // Handle case when 'assignmentID' is not provided in the URL
+        echo "Error: 'assignmentID' is missing.";
+        exit; // Stop further execution
+    }
+} else {
+    $assignmentID = $_SESSION['assignmentID'];
+}
+
+$answers = $_POST['answers']; // Array containing user's answers for each question
+print_r($answers);
+unset($_SESSION['upload_message']);
+
 // Function to calculate the grade based on user's answers
 // Function to calculate the grade based on user's answers
 function calculateGrade($pdo, $assignmentID, $courseID, $answers) {
@@ -44,7 +78,8 @@ function calculateGrade($pdo, $assignmentID, $courseID, $answers) {
 // Function to update the grade in the database
 function updateGrade($pdo, $assignmentID, $courseID, $userID, $grade) {
     // First, check if there is an existing submission for this assignment and user
-    $sqlCheckSubmission = "SELECT submissionID FROM Submissions WHERE assignmentID = :assignmentID AND userID = :userID";
+    $sqlCheckSubmission = "SELECT submissionID FROM Submissions 
+                           WHERE assignmentID = :assignmentID AND userID = :userID";
     $stmtCheckSubmission = $pdo->prepare($sqlCheckSubmission);
     $stmtCheckSubmission->bindParam(':assignmentID', $assignmentID, PDO::PARAM_INT);
     $stmtCheckSubmission->bindParam(':userID', $userID, PDO::PARAM_INT);
@@ -58,10 +93,13 @@ function updateGrade($pdo, $assignmentID, $courseID, $userID, $grade) {
     // Update or insert grade based on whether a submission exists
     if ($submissionID !== null) {
         // Submission exists, update the grade
-        $sqlUpdateGrade = "UPDATE Submissions SET grade = :grade WHERE submissionID = :submissionID";
+        $sqlUpdateGrade = "UPDATE Submissions 
+                           SET grade = :grade, submissionDate = NOW() 
+                           WHERE submissionID = :submissionID";
         $stmtUpdateGrade = $pdo->prepare($sqlUpdateGrade);
         $stmtUpdateGrade->bindParam(':grade', $grade, PDO::PARAM_INT);
         $stmtUpdateGrade->bindParam(':submissionID', $submissionID, PDO::PARAM_INT);
+        //echo "sql for update is " . $sqlUpdateGrade;
         return $stmtUpdateGrade->execute();
     } else {
         // No submission exists, insert a new record
@@ -71,28 +109,29 @@ function updateGrade($pdo, $assignmentID, $courseID, $userID, $grade) {
         $stmtInsertGrade->bindParam(':assignmentID', $assignmentID, PDO::PARAM_INT);
         $stmtInsertGrade->bindParam(':userID', $userID, PDO::PARAM_INT);
         $stmtInsertGrade->bindParam(':grade', $grade, PDO::PARAM_INT);
+        //echo "sql for insert is " . $sqlInsertGrade;
         return $stmtInsertGrade->execute();
     }
 }
 
-// Assuming you have received the necessary data
-$assignmentID = $_SESSION['assignmentID'];
-$courseID = 2;
-$userID = 1;
-$answers = $_POST['answers']; // Array containing user's answers for each question
-//print_r($answers);
+
 // Calculate the grade
 $grade = calculateGrade($pdo, $assignmentID, $courseID, $answers);
 echo $grade;
+
 // Update or insert the grade in the database
-if (updateGrade($pdo, $assignmentID, $courseID, $userID, $grade)) {
+if (updateGrade($pdo, $assignmentID, $courseID, $UserID, $grade)) {
     $_SESSION['upload_message'] = "Grade updated successfully.";
+    $_SESSION['assignmentID'] = $assignmentID;
 } else {
     $_SESSION['upload_message'] = "Error updating grade.";
+    $_SESSION['assignmentID'] = $assignmentID;
 }
 
 // Close the database connection
 $pdo = null;
 
-header("refresh:10;url=fcn_submitAssignmentPage.php");
+
+header("Location: ../../../Code/Pages/submitAssignmentPage.php");
+
 ?>

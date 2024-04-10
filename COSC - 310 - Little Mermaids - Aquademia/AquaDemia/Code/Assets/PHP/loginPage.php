@@ -39,7 +39,9 @@
         }
     }
     session_save_path();
+    //session_unset(); // Unset all session variables
     session_start(); // Start the session.
+    
     $servername = "localhost";
     $username = "root"; // default XAMPP MySQL username
     $password = ""; // default XAMPP MySQL password is empty
