@@ -99,7 +99,6 @@ public function testAllNewDetails(){
     $this->assertEquals($firstName."_".$lastName,$user["userName"]); //verfies username got updated via the firstname and lastname updates
     $this->assertEquals($userID,$user['userID']);// verifying the primary key userID is identical verifying the sae objects were compared
 
-    $this->testNoChanges(); //can use the test to reset the dummy user to default values
     $this->resetTestObject();
 
 session_destroy();
@@ -157,7 +156,7 @@ public function testIncorrectConfirmPassword(){ //Tests that when user enters "c
     $lastName = "lastname";
     $email = "test@gmail.com";
     $phoneNumber = "12508630738";
-    $password = "password";
+    $password = "newPassword";
     $oldpassword = "password";
     $confirmPassword = "WrongPassword"; //User enters incorrect "confirm  password"
     $userID = $_SESSION["UserID"];
@@ -168,12 +167,50 @@ public function testIncorrectConfirmPassword(){ //Tests that when user enters "c
     $resutlt = $detailAlteration->changeDetails($conn,$firstName,$lastName,$email,$phoneNumber,$password,$oldpassword,$confirmPassword,$userID);
     $this->assertEquals("Error: enter correct password details", $resutlt); //verifies the failed password info message is returned
     $user = $this->checkUserInfo();
-    
+    $this->assertEquals($oldpassword,$user["passwordHash"]);
+    $this->assertNotEquals($password, $user["passwordHash"]);
     session_destroy();
 
 
 }
-//METHOD USED TO RESET OBJECT TO DEFAULT TESTING VALUES/ATRIBUTES
+
+public function testIncorrectOldPassword(){
+    session_start();
+
+    $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "aquademia";
+
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        if ($conn->connect_error) {
+            die("Connection Failed: " . $conn->connect_error);
+        }
+    $_SESSION["Password"] = "password"; //makes sure session details remain constant across tests
+    $_SESSION["UserID"]  = 12; //makes sure session details remain constant across tests
+    //default values
+    $firstName = "firstname";
+    $lastName = "lastname";
+    $email = "test@gmail.com";
+    $phoneNumber = "12508630738";
+    $password = "newPassword";
+    $oldpassword = "wrongOldPassword";
+    $confirmPassword = "newPassword"; //User enters incorrect "confirm  password"
+    $userID = $_SESSION["UserID"];
+    //
+    //class object creation
+    $detailAlteration =new newDetails($conn);
+    //method to be tested
+    $resutlt = $detailAlteration->changeDetails($conn,$firstName,$lastName,$email,$phoneNumber,$password,$oldpassword,$confirmPassword,$userID);
+    $this->assertEquals("Error: enter correct password details", $resutlt); //verifies the failed password info message is returned
+    $user = $this->checkUserInfo();
+    $this->assertEquals("password",$user["passwordHash"]);
+    $this->assertNotEquals($oldpassword, $user["passwordHash"]);
+
+    session_destroy();
+
+}
+//METHOD USED TO RESET OBJECT TO DEFAULT TESTING VALUES/ATTRIBUTES
 public function resetTestObject(){
  session_start();
 
