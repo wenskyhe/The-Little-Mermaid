@@ -81,7 +81,7 @@ $email = $conn -> real_escape_string($_POST["email"]);
 $phoneNumber = $conn -> real_escape_string($_POST["phoneNumber"]);
 
 $password = $conn -> real_escape_string($_POST["password"]);
-$oldpassword = $conn -> real_escape_string($_POST["oldPassword"]);
+$oldPassword = $conn -> real_escape_string($_POST["oldPassword"]);
 $confirmPassword = $conn -> real_escape_string($_POST["confirmPassword"]);
 
 
