@@ -7,6 +7,21 @@
             $this->conn = $conn;
         }
 
+        public function findID($courseName){
+            // $query = "SELECT CourseID FROM Courses WHERE CourseName = ? LIMIT 1";
+            // $stmt = $this -> conn -> execute_query($query, [$courseName]);
+            // $result = $stmt->get_result();
+            // return $result['courseID'];
+
+            $stmt = $this->conn->prepare('SELECT courseID FROM Courses WHERE CourseName = ? LIMIT 1');
+            $stmt->bind_param('s', $courseName);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $value = mysqli_fetch_array($result);
+            return $value['courseID'];
+            
+        }
+
         public function alreadyEnrolled($userID, $courseID){
             $query = "SELECT EnrollmentID FROM Enrollment WHERE UserID = ? AND CourseID = ? LIMIT 1";
             $result = $this -> conn -> execute_query($query, [$userID, $courseID]);
@@ -75,10 +90,11 @@
         die("Connection Failed". $conn->connect_error);
     }
 
-    $courseID = $conn -> real_escape_string($_POST["courseId"]);
+    $courseName = $conn -> real_escape_string($_POST["courseName"]);
     $userID = $_SESSION["UserID"];
 
     $registration = new courseRegistration($conn);
+    $courseID = $registration-> findID($courseName);
     // $result = $registration->execute_query("SELECT CourseID FROM courses WHERE CourseID = ? LIMIT 1", [$courseID]);
     $result = $registration->registerCourse($userID, $courseID, $conn);
     

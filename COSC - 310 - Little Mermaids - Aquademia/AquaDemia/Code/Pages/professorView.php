@@ -22,7 +22,7 @@ if ($_SESSION["UserType"] !== "Professor") {
         <button onclick="location.href = 'createAssignments.php';" type="button" class="button button1">Create Assignments</button>
         <button onclick="location.href = 'gradeAssignments.php';" type="button" class="button button1">Grade Assignments</button>
         <button onclick="location.href = 'editDetails.php';" type="button" class="button button1">Edit your details</button>
-        <button onclick="location.href = 'login.html';" type="button" class="button button1">Logout</button>
+        <button onclick="location.href = 'login.html';" type="button" class="button buttonLogout">Logout</button>
     </div>
 
 </body>

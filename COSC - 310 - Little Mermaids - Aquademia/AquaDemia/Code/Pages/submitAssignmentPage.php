@@ -112,7 +112,7 @@ $allowSubmit = isSubmissionAllowed($assignmentData['DueDate']);
 // echo "allowSubmit" . $allowSubmit;
 
 // echo "SubmissionInfo: ";
-print_r($SubmissionInfo);
+// print_r($SubmissionInfo);
 
 if (!isset($SubmissionInfo['SubmissionDate']) ) {
     $submissionStatus = "You have not submitted this assignment. ";
@@ -158,8 +158,9 @@ $pdo = null;
 </head>
 <body>
 <p style="text-align: right;">
-    <a href="studentView.php"><?php echo $_SESSION["Username"] ?></a><?php echo "  " ?>
-    <a href="login.html">Logout</a>
+    <!-- <a href="studentMP.php"><?php echo $_SESSION["Username"] ?></a><?php echo "  " ?> -->
+    <button onclick="location.href = 'studentMP.html';" type="button" class="button button1">Home</button>
+    <button onclick="location.href = 'login.html';" type="button" class="button buttonLogout">Logout</button>
 </p>
     <!-- Assignment name, due date, and status -->
     <h1 style='color:#deb9fb ;'><?php echo $assignmentData['title'] ?></h1>

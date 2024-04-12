@@ -59,6 +59,17 @@ input[type=text], input[type=password], input[type=number] {
   color: white;
 }
 
+.buttonLogout {
+  background-color: white; 
+  color: black;
+  border-radius: 5px;
+}
+
+.buttonLogout:hover {
+  background-color: #ff0000;
+  color: white;
+}
+
 
 header{
   background-color: #613980d0;
