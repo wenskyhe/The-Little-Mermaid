@@ -17,8 +17,9 @@ if ($_SESSION["UserType"] !== "Professor") {
 <body>
     
 
-    <div style="text-align:center; vertical-align:center; top: 0px;">
+    
     <h1>Welcome, <?php echo $_SESSION["Username"] ?></h1>
+    <div style="text-align:center; vertical-align:center; top: 0px;">
         <button onclick="location.href = 'createAssignments.php';" type="button" class="button button1">Create Assignments</button>
         <button onclick="location.href = 'gradeAssignments.php';" type="button" class="button button1">Grade Assignments</button>
         <button onclick="location.href = 'editDetails.php';" type="button" class="button button1">Edit your details</button>

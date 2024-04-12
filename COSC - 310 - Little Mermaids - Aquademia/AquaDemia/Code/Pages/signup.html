@@ -9,7 +9,7 @@
 <body>
 
 <body>
-    <canvas id='gridwormCanvas' style='position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1;'></canvas>
+    <canvas id='SnakeCanvas' style='position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1;'></canvas>
   
     <img src="../Assets/Images/logo.png" style="display: block; margin-left: auto; margin-right: auto;">
     <h1 class="h1 logo" style="text-align: center; padding-top: 0%;">AQUADEMIA</h1>
@@ -37,7 +37,7 @@
         <p>Already a member? <a href="login.html">Sign In</a> </p>
     </div>
     <script>
-        class GridWorm
+        class Snake
 { 
     constructor(point,interval,pointsList,screenWidth,screenHeight)
     {      
@@ -111,12 +111,7 @@
         } 
         return {x:x, y:y};
     }
-    /**
-    * Returns a random number between min (inclusive) and max (exclusive)
-    * @param  {number} min The lesser of the two numbers. 
-    * @param  {number} max The greater of the two numbers.  
-    * @return {number} A random number between min (inclusive) and max (exclusive)
-    */
+    
     getRandomNumber(min, max) 
     {
         return Math.random() * (max - min) + min;
@@ -349,20 +344,14 @@
     }
     
     
-    /**
-    * Let node correspond to window resizing.
-    * @param  {number} screenHeight The height of the screen. 
-    * @param  {number} screenWidth  The width of the screen.  
-    * @param  {number} dy           The percentage change in browser window height 
-    * @param  {number} dx           The percentage change in browser window width  .  
-    */
+   
     refreshScreenSize(screenHeight,screenWidth,dx,dy,points)
     {     
         
     }   
 }
 
-
+/*test*/
 class Painter
 {
     constructor(screenWidth,screenHeight)
@@ -371,25 +360,25 @@ class Painter
         this.screenHeight   = screenHeight;   
         this.interval       = 40;
         this.points         = this.createPoints(); 
-        this.gridWorms      = this.createGridWorms(); 
+        this.Snakes      = this.createSnakes(); 
         this.color          = this.getRandomColor(0.1);
         document.addEventListener('click',(event)=>
         {   
             this.points     = this.createPoints();
-            this.gridWorms  = this.createGridWorms();
+            this.Snakes  = this.createSnakes();
             this.color          = this.getRandomColor(0.1);
         });
     } 
-    createGridWorms() 
+    createSnakes() 
     {
-        let gridworms = [],
-            numOfGridWorms = 30; 
-        for(var i = 0; i < numOfGridWorms; i++)
+        let Snakes = [],
+            numOfSnakes = 30; 
+        for(var i = 0; i < numOfSnakes; i++)
         { 
             let point = this.points[Math.floor(this.getRandomNumber(0,this.points.length-1))];
-            gridworms.push(new GridWorm(point,this.interval,this.points,this.screenWidth,this.screenHeight));
+            Snakes.push(new Snake(point,this.interval,this.points,this.screenWidth,this.screenHeight));
         }
-        return gridworms; 
+        return Snakes; 
     }
     createPoints()
     {
@@ -452,14 +441,14 @@ class Painter
             this.screenHeight   = screenHeight;  
             this.screenWidth    = screenWidth;   
             this.points         = this.createPoints(); 
-            this.gridWorms      = this.createGridWorms();  
+            this.Snakes      = this.createSnakes();  
         } 
     }  
     update(deltaTime)
     {     
-       this.gridWorms.forEach(function(gridworm)
+       this.Snakes.forEach(function(Snake)
         {
-            gridworm.update(deltaTime); 
+            Snake.update(deltaTime); 
         }); 
     }  
     draw(ctx)
@@ -472,9 +461,9 @@ class Painter
             ctx.fillRect(point.x,point.y,this.interval,this.interval);
         }
         */
-        this.gridWorms.forEach(function(gridworm)
+        this.Snakes.forEach(function(Snake)
         {
-            gridworm.draw(ctx); 
+            Snake.draw(ctx); 
         }); 
     }   
 }
@@ -492,7 +481,7 @@ function getBrowserWindowSize()
     return {x:browserWindowWidth-offset,y:browserWindowHeight-offset}; 
 } 
 let browserWindowSize   = getBrowserWindowSize(),
-c   = document.getElementById("gridwormCanvas"),
+c   = document.getElementById("SnakeCanvas"),
 ctx = c.getContext("2d"); 
 
 c.width          = browserWindowSize.x; 
@@ -529,16 +518,5 @@ function doAnimationLoop(timestamp)
 } 
 requestAnimationFrame(doAnimationLoop); 
     </script>
-
-    <header>
-    </header>
-    <footer>
-    </footer>
-</body>
-</html>
-
-      </script>
-    
-    
 </body>
 </html>

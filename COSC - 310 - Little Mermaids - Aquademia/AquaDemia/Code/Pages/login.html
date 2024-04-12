@@ -135,9 +135,9 @@
   </style>
 </head>
 <body>
-  <canvas id='gridwormCanvas' style='position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1;'></canvas>
+  <canvas id='SnakeCanvas' style='position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1;'></canvas>
   <script>
-    class GridWorm
+    class Snake
 { 
     constructor(point,interval,pointsList,screenWidth,screenHeight)
     {      
@@ -448,14 +448,6 @@
         return distance; 
     }
     
-    
-    /**
-    * Let node correspond to window resizing.
-    * @param  {number} screenHeight The height of the screen. 
-    * @param  {number} screenWidth  The width of the screen.  
-    * @param  {number} dy           The percentage change in browser window height 
-    * @param  {number} dx           The percentage change in browser window width  .  
-    */
     refreshScreenSize(screenHeight,screenWidth,dx,dy,points)
     {     
         
@@ -471,25 +463,25 @@ class Painter
         this.screenHeight   = screenHeight;   
         this.interval       = 40;
         this.points         = this.createPoints(); 
-        this.gridWorms      = this.createGridWorms(); 
+        this.Snakes      = this.createSnakes(); 
         this.color          = this.getRandomColor(0.1);
         document.addEventListener('click',(event)=>
         {   
             this.points     = this.createPoints();
-            this.gridWorms  = this.createGridWorms();
+            this.Snakes  = this.createSnakes();
             this.color          = this.getRandomColor(0.1);
         });
     } 
-    createGridWorms() 
+    createSnakes() 
     {
-        let gridworms = [],
-            numOfGridWorms = 30; 
-        for(var i = 0; i < numOfGridWorms; i++)
+        let Snakes = [],
+            numOfSnakes = 30; 
+        for(var i = 0; i < numOfSnakes; i++)
         { 
             let point = this.points[Math.floor(this.getRandomNumber(0,this.points.length-1))];
-            gridworms.push(new GridWorm(point,this.interval,this.points,this.screenWidth,this.screenHeight));
+            Snakes.push(new Snake(point,this.interval,this.points,this.screenWidth,this.screenHeight));
         }
-        return gridworms; 
+        return Snakes; 
     }
     createPoints()
     {
@@ -552,29 +544,22 @@ class Painter
             this.screenHeight   = screenHeight;  
             this.screenWidth    = screenWidth;   
             this.points         = this.createPoints(); 
-            this.gridWorms      = this.createGridWorms();  
+            this.Snakes      = this.createSnakes();  
         } 
     }  
     update(deltaTime)
     {     
-       this.gridWorms.forEach(function(gridworm)
+       this.Snakes.forEach(function(Snake)
         {
-            gridworm.update(deltaTime); 
+            Snake.update(deltaTime); 
         }); 
     }  
     draw(ctx)
     {    
-        /*
-        for(var i = 0; i < this.points.length; i++)
+  
+        this.Snakes.forEach(function(Snake)
         {
-            let point = this.points[i];
-            ctx.fillStyle   = Math.random() > 0.5? this.color:'white';//creates a disco effect 
-            ctx.fillRect(point.x,point.y,this.interval,this.interval);
-        }
-        */
-        this.gridWorms.forEach(function(gridworm)
-        {
-            gridworm.draw(ctx); 
+            Snake.draw(ctx); 
         }); 
     }   
 }
@@ -592,7 +577,7 @@ function getBrowserWindowSize()
     return {x:browserWindowWidth-offset,y:browserWindowHeight-offset}; 
 } 
 let browserWindowSize   = getBrowserWindowSize(),
-c   = document.getElementById("gridwormCanvas"),
+c   = document.getElementById("SnakeCanvas"),
 ctx = c.getContext("2d"); 
 
 c.width          = browserWindowSize.x; 

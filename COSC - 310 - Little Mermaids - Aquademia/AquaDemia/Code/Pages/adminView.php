@@ -1,35 +1,30 @@
 <?php 
 session_start();
 
-$usertype = $_SESSION["UserType"];
-// Only display this page if the user is an admin;
-if($usertype == "Admin"){
-    echo '
+// Redirect unauthorized users to the login page
+if ($_SESSION["UserType"] !== "Admin") {
+    header("Location: unauthorizedAccess.php");
+    exit();
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin View</title>
+    <title>Admin Dashboard</title>
     <link rel="stylesheet" href="../Assets/CSS/central.css">
 </head>
 <body>
-
-    <h1 style="text-align: center;">Welcome, '. $_SESSION["Username"] . '</h1>
     
-    <a href="createCourses.html">Create a course</a><br>
-    <a href="editDetails.php">Edit your details</a><br>
-    <a href="acceptStudent.php">Accept students into course</a><br>
-    <a href="login.html">Logout</a>
-
+    <h1>Welcome, <?php echo $_SESSION["Username"] ?></h1>
+    <div style="text-align:center; vertical-align:center; top: 0px;">
+        <button onclick="location.href = 'createCourses.html';" type="button" class="button button1">Create a course</button>
+        <button onclick="location.href = 'editDetails.php';" type="button" class="button button1">Edit your details</button>
+        <button onclick="location.href = 'acceptStudent.php';" type="button" class="button button1">Accept students into course</button>
+        <button onclick="location.href = 'login.html';" type="button" class="button button1">Logout</button>
+    </div>
 
 </body>
 </html>
-';
-}
-
-//Else if the user is not an admin, give them an error;
-else {echo 'ERROR! You must be an admin to access this page! <br>';
-    echo '<a href="login.html">Go back to login</a>';}
-?>
