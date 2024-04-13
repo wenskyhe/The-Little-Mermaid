@@ -62,8 +62,9 @@ CREATE TABLE `assignments` (
 --
 
 INSERT INTO `assignments` (`AssignmentID`, `courseID`, `title`, `description`, `dueDate`, `weight`, `type`, `visibilityStatus`, `assignmentFilePath`) VALUES
-(1, 1, 'LMAO', 'lmao', '2024-11-11 01:01:00', 10.00, 'essay', 1, NULL),
-(2, 1, 'LMAO', 'lmao', '2024-11-11 01:01:00', 10.00, 'essay', 1, NULL);
+(1, 1, 'Essay1', 'lmao', '2024-11-11 01:01:00', 10.00, 'essay', 1, NULL),
+(2, 1, 'Essay2', 'lmao', '2024-11-11 01:01:00', 10.00, 'essay', 1, NULL),
+(3, 1, 'Quiz1', 'lmao', '2024-11-11 01:01:00', 10.00, 'quiz', 1, NULL);
 
 -- --------------------------------------------------------
 
