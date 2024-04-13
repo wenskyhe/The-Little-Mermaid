@@ -159,7 +159,7 @@ $pdo = null;
 <body>
 <p style="text-align: right;">
     <!-- <a href="studentMP.php"><?php echo $_SESSION["Username"] ?></a><?php echo "  " ?> -->
-    <button onclick="location.href = 'studentMP.html';" type="button" class="button button1">Home</button>
+    <button onclick="location.href = 'studentMP.php';" type="button" class="button button1">Home</button>
     <button onclick="location.href = 'login.html';" type="button" class="button buttonLogout">Logout</button>
 </p>
     <!-- Assignment name, due date, and status -->

@@ -37,7 +37,7 @@ unset($_SESSION['upload_message']);
                 
             if (in_array($fileExtension, $allowedExtensions)) {
                 $fileName = $_FILES['assignmentFile']['name'];
-                $uploadDir = '../UPLOADS/'; // Directory to store uploaded files
+                $uploadDir = '../Uploads/Student/'; // Directory to store uploaded files
 
                 // Check if the destination directory exists, if not, create it
                 if (!is_dir($uploadDir)) {
