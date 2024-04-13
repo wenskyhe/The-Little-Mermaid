@@ -37,7 +37,7 @@ unset($_SESSION['upload_message']);
                 
             if (in_array($fileExtension, $allowedExtensions)) {
                 $fileName = $_FILES['assignmentFile']['name'];
-                $uploadDir = '../Uploads/Student/'; // Directory to store uploaded files
+                $uploadDir = '../UPLOADS/'; // Directory to store uploaded files
 
                 // Check if the destination directory exists, if not, create it
                 if (!is_dir($uploadDir)) {
@@ -79,6 +79,9 @@ unset($_SESSION['upload_message']);
         // Redirect after processing the file upload
         header("Location: ../../../Code/Pages/submitAssignmentPage.php");
         //exit(); // Stop further execution
+    }else{
+        $_SESSION['upload_message'] = "No file uploaded.";
+        header("Location: ../../../Code/Pages/submitAssignmentPage.php");
     }
 }
 
@@ -92,5 +95,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     uploadAssignmentFile($pdo, $assignmentID, $UserID);
 }
 
+echo 'rlt';
 // Close the database connection
 $pdo = null;
