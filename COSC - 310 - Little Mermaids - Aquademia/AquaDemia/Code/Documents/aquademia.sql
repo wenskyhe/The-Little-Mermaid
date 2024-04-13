@@ -194,6 +194,8 @@ CREATE TABLE `quizquestions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
+INSERT INTO `quizquestions` (`quizQuestionID`, `courseID`, `assignmentID`, `QuestionNum`, `QuestionText`, `ChoiceA`, `ChoiceB`, `ChoiceC`, `ChoiceD`, `CorrectChoice`) VALUES 
+  ('1', '1', '3', '1', 'What is the capital of France?', 'Paris', 'London', 'Berlin', 'Rome', 'ChoiceA'), ('2', '1', '3', '2', 'What is the capital of German?', 'Paris', 'London', 'Berlin', 'Rome', 'ChoiceC');
 
 --
 -- Table structure for table `students`
