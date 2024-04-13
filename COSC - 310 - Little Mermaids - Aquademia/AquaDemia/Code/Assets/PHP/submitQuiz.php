@@ -3,9 +3,12 @@
 session_start();
 require_once 'dbh.inc.php';
 
+unset($_SESSION['upload_message']);
+//echo $_SESSION['upload_message'];
 $courseID = $_POST['courseID'];
 $UserID = $_POST['studentID'];
-
+$quizSize = $_POST['quizSize'];
+echo count($_POST['answers'])==$quizSize;
 
 if (!isset($_SESSION['assignmentID'])) {
     if (isset($_GET['assignmentID']) && !empty($_GET['assignmentID'])) {
@@ -20,14 +23,24 @@ if (!isset($_SESSION['assignmentID'])) {
     $assignmentID = $_SESSION['assignmentID'];
 }
 
-$answers = $_POST['answers']; // Array containing user's answers for each question
+if(isset($_POST['answers']) && count($_POST['answers'])==$quizSize){
+    $answers = $_POST['answers']; // Array containing user's answers for each question
+} else{
+    $_SESSION['upload_message'] = "please make choices before submission";
+    $_SESSION['assignmentID'] = $assignmentID;
+    header("Location: ../../../Code/Pages/submitAssignmentPage.php");
+    exit;
+}
+
+echo $_SESSION['upload_message'];
+
 print_r($answers);
-unset($_SESSION['upload_message']);
+
 
 // Function to calculate the grade based on user's answers
 // Function to calculate the grade based on user's answers
-function calculateGrade($pdo, $assignmentID, $courseID, $answers) {
-    $totalQuestions = count($answers);
+function calculateGrade($pdo, $assignmentID, $courseID, $answers, $quizSize) {
+    $totalQuestions = $quizSize;
     $correctAnswers = 0;
 
     foreach ($answers as $questionNum => $userAnswer) {
@@ -103,7 +116,7 @@ function updateGrade($pdo, $assignmentID, $courseID, $userID, $grade) {
 
 
 // Calculate the grade
-$grade = calculateGrade($pdo, $assignmentID, $courseID, $answers);
+$grade = calculateGrade($pdo, $assignmentID, $courseID, $answers, $quizSize);
 echo $grade;
 
 // Update or insert the grade in the database
