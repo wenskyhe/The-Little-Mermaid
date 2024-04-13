@@ -148,8 +148,7 @@ CREATE TABLE `enrollment` (
 --
 
 INSERT INTO `enrollment` (`EnrollmentID`, `UserID`, `CourseID`, `EnrollmentDate`, `Accepted`) VALUES
-(37, 2, 17, '2024-03-29', '-1'),
-(38, 2, 46, '2024-03-29', '1'),
+(38, 2, 1, '2024-03-29', '1'),
 (39, 2, 4, '2024-03-29', '1'),
 (40, 9, 1, '2024-03-31', '1'),
 (41, 9, 1, '2024-03-31', '1'),
