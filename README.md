@@ -26,3 +26,4 @@ Aquademia is an online leanring management system boasting the following feature
 
 ### Running the tests
 Composer must be installed to run the tests. It can be downloaded from [here](https://getcomposer.org/Composer-Setup.exe).
+after installation you must restart your pc in order for it to work.
