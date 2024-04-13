@@ -57,13 +57,15 @@ include '../Assets/PHP/assignmentFunctions.php';
 </head>
 <body>
     <header>
-        <h1>Assignment Management</h1>
+        <h1>Assignments Management Page</h1>
+        <br>
+        <p><a href="professorView.php">Home</a></p>
     </header>
 
     <div class="assignmentManagement" style="display:flex; overflow:hidden;">
         <div class="left" style="flex: 1;">
         <h2>Create an Assignment</h2>
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
             <input type="hidden" name="action" value="create">
             <!-- Course selection -->
             <label for="course">Select a Course:</label>
@@ -118,7 +120,7 @@ include '../Assets/PHP/assignmentFunctions.php';
         <?php endif; ?>
     </div>
     <div class="right" style="flex: 1; overflow:auto; max-height: 85vh;">
-        <h2>Edit Assignments</h2>
+        <h2>Manage Assignments</h2>
         <!-- Add form to handle course selection and button click -->
         <form method="POST">
             <label for="courseSelection">Select a Course:</label>
@@ -141,7 +143,7 @@ include '../Assets/PHP/assignmentFunctions.php';
                     <p>Due Date: <?= htmlspecialchars($assignment['dueDate']) ?></p>
                     <p>Weight: <?= htmlspecialchars($assignment['weight']) ?></p>
                     <!-- Add Edit button/link here if needed -->
-                    <button type="submit">Edit</button>
+                    <a href="viewAssignment.php?assignmentID=<?= htmlspecialchars($assignment['assignmentID']) ?>" class="button">View Assignment</a>
                     <br>
                 </div>
             <?php endforeach; ?>

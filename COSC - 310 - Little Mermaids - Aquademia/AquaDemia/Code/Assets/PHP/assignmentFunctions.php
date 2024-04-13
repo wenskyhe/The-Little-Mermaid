@@ -1,6 +1,8 @@
 <?php
 
+use PhpParser\Node\Stmt;
 use PHPUnit\Event\Test\Prepared;
+use SebastianBergmann\Environment\Console;
 
 session_start();
 
@@ -45,13 +47,6 @@ class AssignmentManager {
     // This is where assignments are created
     public function createAssignment($courseID, $title, $description, $dueDate, $weight, $type, $visibilityStatus, $assignmentFile) {
         if ($type == 'quiz') { // If it is type quiz then let the user be sent here
-            // Save information to session!
-            $_SESSION['assignmentDetails'] = [
-                'courseID' => $courseID,
-                'title' => $title,
-                'dueDate' => $dueDate,
-                'type' => $type
-            ];
 
             // Create quiz before sending to quiz creation
             $stmt = $this->dbConn->prepare("INSERT INTO assignments (courseID, title, description, dueDate, weight, type, visibilityStatus, assignmentFilePath) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
@@ -175,7 +170,94 @@ class AssignmentManager {
         $success = true;
         return $success;
     }
+
+    // Function to get the assignment detail before sending them to 
+    public function fetchAssignmentDetails($assignmentID) {
+        $stmt = $this->dbConn->prepare("SELECT * FROM assignments WHERE assignmentID = ?");
+        $stmt->bind_param("i", $assignmentID);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $stmt->close();
+            return $row;
+        } else {
+            $stmt->close();
+            return null; // No assignment found with the given ID
+        }
+    }
+
+    // Function to retrieve all the submissions fromm students
+    public function fetchSubmissionsForAssignment($assignmentID) {
+        $submissions = [];
+        $stmt = $this->dbConn->prepare("SELECT s.submissionID, s.assignmentID, s.userID, s.submissionDate, s.submissionFilePath, s.grade, s.feedback, u.firstName, u.lastName FROM submissions s JOIN users u ON s.userID = u.userID WHERE s.assignmentID = ?");
+        $stmt->bind_param("i", $assignmentID);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $submissions[] = $row;
+        }
+        $stmt->close();
+        return $submissions;
+    }
     
+    // Submit grade and feed back to database.
+    public function gradeSubmission($submissionID, $grade, $feedback, $assignmentID) {
+    $stmt = $this->dbConn->prepare("UPDATE submissions SET grade = ?, feedback = ? WHERE submissionID = ?");
+    $stmt->bind_param("dsi", $grade, $feedback, $submissionID);
+    if ($stmt->execute()) {
+        header("Location: viewAssignment.php?assignmentID=" . urldecode($assignmentID));
+        return true; // Success
+    } else {
+        header("Location: createAssignments.php");
+        return false; // Failure
+    }
+}
+    
+
+    // This is where the teacher will be able to edit an assignment
+    public function editAssignment($assignmentID, $title, $description, $dueDate, $weight, $type, $visibility, $assignmentFilePath) {
+        $stmt = $this->dbConn->prepare("UPDATE assignments SET title = ?, description = ?, dueDate = ?, weight = ?, type = ?, visibilityStatus = ?, assignmentFilePath = ? WHERE assignmentID = ?");
+        $stmt->bind_param("sssdsssi", $title, $description, $dueDate, $weight, $type, $visibility, $assignmentFilePath, $assignmentID);
+        if ($stmt->execute()) {
+            $stmt->close();
+            header("Location: viewAssignment.php?assignmentID=" . urldecode($assignmentID));
+            return true; // Success
+        } else {
+            $stmt->close();
+            header("Location: createAssignment.php");
+            return false; // Failure
+        }
+    }
+    public function uploadAssignmentDocument($userFileName) {
+        if (isset($_FILES[$userFileName])) {
+            if ($_FILES[$userFileName]['error'] === UPLOAD_ERR_OK) {
+                $allowedExtensions = ['pdf', 'doc', 'docx']; // Specify allowed file types
+                $fileExtension = strtolower(pathinfo($_FILES[$userFileName]['name'], PATHINFO_EXTENSION));
+                
+                if (in_array($fileExtension, $allowedExtensions)) {
+                    $uploadDir = 'C:/xampp/htdocs/Aquademia/The-Little-Mermaid/COSC - 310 - Little Mermaids - Aquademia/AquaDemia/Code/Assets/Uploads/Teacher/';  // Ensure this directory exists and is writable
+                    if (!is_dir($uploadDir)) {
+                        mkdir($uploadDir, 0777, true);
+                    }
+                    $fileName = time() . '-' . basename($_FILES[$userFileName]['name']); // Prefixing the filename with a timestamp to prevent name collisions
+                    $filePath = $uploadDir . $fileName;
+                    
+                    if (move_uploaded_file($_FILES[$userFileName]['tmp_name'], $filePath)) {
+                        echo "File uploaded successfully.";
+                    } else {
+                        echo "Failed to move the uploaded file.";
+                    }
+                } else {
+                    echo "Invalid file extension.";
+                }
+            } else {
+                echo "Error: " . $_FILES[$userFileName]['error'];
+            }
+        } else {
+            echo "File not found in upload request.";
+        }
+    }
+
 }
 
 
@@ -197,7 +279,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['a
     // What does it default to?
 }
 
-if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['action']) && $_POST['action'] == 'create') {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] == 'create') {
+    // Assuming you've already fetched courses and set $courses somewhere
 
     $courseID = $_POST['course'];
     $title = $_POST['title'];
@@ -205,15 +288,26 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['action']) && $_POST['a
     $dueDate = $_POST['dueDate'];
     $weight = $_POST['weight'];
     $type = $_POST['type'];
-    $visibility = $_POST['visibility'];
-    $assignmentFile = $_POST['assignmentFile'];
+    $visibility = ($_POST['visibility'] == 'true') ? 1 : 0;
+    $fileName = '';
 
-    if($assignmentManager->createAssignment($courseID, $title, $description, $dueDate, $weight, $type, $visibility, $assignmentFile)) {
+    // Handling file upload
+    if (isset($_FILES['assignmentFile']) && $_FILES['assignmentFile']['error'] == UPLOAD_ERR_OK) {
+        $assignmentManager->uploadAssignmentDocument('assignmentFile');
+        $fileName = basename($_FILES['assignmentFile']['name']); // Get the basename of the uploaded file
+    } else {
+        // Error handling if file isn't uploaded
+        echo "Error uploading file. Error Code: " . $_FILES['assignmentFile']['error'];
+    }
+
+    // Proceed to create the assignment with the uploaded file name
+    if ($assignmentManager->createAssignment($courseID, $title, $description, $dueDate, $weight, $type, $visibility, $fileName)) {
         
     } else {
-        $successNotify = "Failed to create an assignment.";
+        echo "<div class='error-message'>Failed to create an assignment.</div>";
     }
 }
+
 
 // Number of Questions for Quiz Post
 if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['numberOfQuestions'])) {
@@ -244,4 +338,31 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['questions'])) {
         echo "Failed to submit quiz.";
     }
 }
+$assignmentID = isset($_GET['assignmentID']) ? $_GET['assignmentID'] : null;
+$currentAssignmentDetails = null;
+if ($assignmentID) {
+    $currentAssignmentDetails = $assignmentManager->fetchAssignmentDetails($assignmentID);
+    // Fetch submissions for the assignment
+$submissions = $assignmentManager->fetchSubmissionsForAssignment($assignmentID);
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['grade']) && isset($_POST['feedback']) && isset($_POST['submissionID'])) {
+    $grade = floatval($_POST['grade']);
+    $feedback = $_POST['feedback'];
+    $submissionID = $_POST['submissionID'];
+
+    if ($assignmentManager->gradeSubmission($submissionID, $grade, $feedback, $assignmentID)) {
+        echo "<script>alert('Grade and feedback updated successfully.'); window.location.href = window.location.href;</script>";
+    } else {
+        echo "<script>alert('Failed to update grade and feedback.');</script>";
+    }
+}
+}
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['action'] == 'editAssignment') {
+    // Assuming assignmentID is fetched from the URL or session
+    if ($assignmentManager->editAssignment($assignmentID, $_POST['title'], $_POST['description'], $_POST['dueDate'], $_POST['weight'], $_POST['type'], $_POST['visibility'], $_POST['assignmentFilePath'])) {
+        echo "<script>alert('Assignment updated successfully.'); window.location.href = window.location.href;</script>";
+    } else {
+        echo "<script>alert('Failed to update the assignment.');</script>";
+    }
+}
+
 ?>
