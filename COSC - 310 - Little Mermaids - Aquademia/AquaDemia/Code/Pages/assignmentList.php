@@ -47,9 +47,10 @@ $pdo = null;
     <a href="login.html">Logout</a>
 </p>
     <h1 style='color:#deb9fb ;'>Assignments</h1>
-    <?php if (empty($assignmentsData)) {
+    <p style='color: white;'><?php if (empty($assignmentsData)) {
         echo "The teacher did not create any assignment. ";
     } ?>
+    </p>
 
     <h2 style='color:#deb9fb ;'>Current</h2>
 
