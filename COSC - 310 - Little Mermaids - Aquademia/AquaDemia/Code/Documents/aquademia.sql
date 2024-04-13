@@ -227,7 +227,7 @@ CREATE TABLE `submissions` (
   `submissionID` int(11) NOT NULL,
   `assignmentID` int(11) DEFAULT NULL,
   `userID` int(11) DEFAULT NULL,
-  `submissionDate` datetime NOT NULL,
+  `submissionDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `submissionFilePath` text DEFAULT NULL,
   `grade` decimal(5,2) DEFAULT NULL,
   `feedback` text DEFAULT NULL
