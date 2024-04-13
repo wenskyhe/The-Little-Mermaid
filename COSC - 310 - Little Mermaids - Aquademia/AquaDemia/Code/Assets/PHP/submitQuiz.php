@@ -3,22 +3,9 @@
 session_start();
 require_once 'dbh.inc.php';
 
-// fetch necessary data
-if (!isset($_SESSION["UserID"])) {
-    echo "_SESSION[UserID] is not setted";
-    //header("Location: ../../Code/");
-} else {
-    $UserID = $_SESSION["UserID"];
-}
+$courseID = $_POST['courseID'];
+$UserID = $_POST['studentID'];
 
-if (!isset($_SESSION['courseID'])) {
-    $courseID = $_GET['courseID'];
-    $_SESSION['courseID'] = $courseID;
-} else {
-    $courseID = $_SESSION['courseID'];
-}
-echo "courseID" . $courseID;
-echo 'UserID' . $UserID;
 
 if (!isset($_SESSION['assignmentID'])) {
     if (isset($_GET['assignmentID']) && !empty($_GET['assignmentID'])) {
